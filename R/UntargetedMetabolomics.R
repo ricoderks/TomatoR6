@@ -27,12 +27,18 @@ UntargetedMetabolomics <- R6::R6Class(
     }
     
     
+    #---------------------------------------------------------- global info ----    
+    
+    
     #------------------------------------------------------- import methods ----
     
     
     #------------------------------------------ convert to standard methods ----
     # Rico: Methods to reshape / restructure the data to the standardized format
     # we specified.
+    
+    
+    #----------------------------------------------------- plotting methods ----
     
     
   )

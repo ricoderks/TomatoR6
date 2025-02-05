@@ -88,6 +88,12 @@ DataImport <- R6::R6Class(
     },
     
     
+    #----------------------------------------------- generic import methods ----
+    # Rico: I assume most import methods are platform specific and therefore 
+    # probably the method will be in their respective child class, but generic
+    # import methods can be placed here.
+    
+    
     #---------------------------------------------------- meta data methods ----
     #' @description
     #' Read all kind of meta data files (.csv, .txt, .xlsx).
