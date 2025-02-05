@@ -92,7 +92,7 @@ DataImport <- R6::R6Class(
     #' @description
     #' Read all kind of meta data files (.csv, .txt, .xlsx).
     #' 
-    #' @param file character(1), containg the full path to the meta data file.
+    #' @param file character(1), containing the full path to the meta data file.
     #' 
     #' @return data.frame containing the meta data.
     #' 

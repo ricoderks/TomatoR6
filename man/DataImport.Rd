@@ -97,7 +97,7 @@ Read all kind of meta data files (.csv, .txt, .xlsx).
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{file}}{character(1), containg the full path to the meta data file.}
+\item{\code{file}}{character(1), containing the full path to the meta data file.}
 }
 \if{html}{\out{</div>}}
 }
