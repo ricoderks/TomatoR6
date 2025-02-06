@@ -18,6 +18,7 @@ Yassene Mohammed
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-UntargetedLipidomics-new}{\code{UntargetedLipidomics$new()}}
+\item \href{#method-UntargetedLipidomics-run_msdial}{\code{UntargetedLipidomics$run_msdial()}}
 \item \href{#method-UntargetedLipidomics-plot_qc_rsd_class}{\code{UntargetedLipidomics$plot_qc_rsd_class()}}
 \item \href{#method-UntargetedLipidomics-clone}{\code{UntargetedLipidomics$clone()}}
 }
@@ -26,14 +27,13 @@ Yassene Mohammed
 <details><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="combat_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-combat_bc'><code>TomatoR6::DataImport$combat_bc()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="import"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-import'><code>TomatoR6::DataImport$import()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="loess_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-loess_bc'><code>TomatoR6::DataImport$loess_bc()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="make_table_long"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-make_table_long'><code>TomatoR6::DataImport$make_table_long()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="make_table_wide"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-make_table_wide'><code>TomatoR6::DataImport$make_table_wide()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="median_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-median_bc'><code>TomatoR6::DataImport$median_bc()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_rsd"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_rsd'><code>TomatoR6::DataImport$plot_qc_rsd()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_trend"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_trend'><code>TomatoR6::DataImport$plot_qc_trend()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="print"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-print'><code>TomatoR6::DataImport$print()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="read_meta_data"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-read_meta_data'><code>TomatoR6::DataImport$read_meta_data()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="set_parameters"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-set_parameters'><code>TomatoR6::DataImport$set_parameters()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -57,6 +57,17 @@ Initialization function for DataImport class.
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-UntargetedLipidomics-run_msdial"></a>}}
+\if{latex}{\out{\hypertarget{method-UntargetedLipidomics-run_msdial}{}}}
+\subsection{Method \code{run_msdial()}}{
+Running command line MSDIAL from R. MSDIAL needs to be installed to be 
+able to use this.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$run_msdial()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-UntargetedLipidomics-plot_qc_rsd_class"></a>}}

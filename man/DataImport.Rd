@@ -28,6 +28,8 @@ E. Nevedomskaya
 \item{\code{tables}}{list() containing all data tables.}
 
 \item{\code{indices}}{list() containing all kind of indices.}
+
+\item{\code{params}}{list(), containing all kind of parameter settings for the methods.}
 }
 \if{html}{\out{</div>}}
 }
@@ -36,9 +38,8 @@ E. Nevedomskaya
 \itemize{
 \item \href{#method-DataImport-new}{\code{DataImport$new()}}
 \item \href{#method-DataImport-print}{\code{DataImport$print()}}
-\item \href{#method-DataImport-read_meta_data}{\code{DataImport$read_meta_data()}}
-\item \href{#method-DataImport-make_table_long}{\code{DataImport$make_table_long()}}
-\item \href{#method-DataImport-make_table_wide}{\code{DataImport$make_table_wide()}}
+\item \href{#method-DataImport-import}{\code{DataImport$import()}}
+\item \href{#method-DataImport-set_parameters}{\code{DataImport$set_parameters()}}
 \item \href{#method-DataImport-median_bc}{\code{DataImport$median_bc()}}
 \item \href{#method-DataImport-loess_bc}{\code{DataImport$loess_bc()}}
 \item \href{#method-DataImport-combat_bc}{\code{DataImport$combat_bc()}}
@@ -86,50 +87,55 @@ Print a nice summary of the class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataImport-read_meta_data"></a>}}
-\if{latex}{\out{\hypertarget{method-DataImport-read_meta_data}{}}}
-\subsection{Method \code{read_meta_data()}}{
-Read all kind of meta data files (.csv, .txt, .xlsx).
+\if{html}{\out{<a id="method-DataImport-import"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-import}{}}}
+\subsection{Method \code{import()}}{
+This method imports all data and meta data.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataImport$read_meta_data(file = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$import()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataImport-set_parameters"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-set_parameters}{}}}
+\subsection{Method \code{set_parameters()}}{
+Method to set all parameters
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$set_parameters(
+  columns = NULL,
+  regex = NULL,
+  imputation = NULL,
+  batch_correction = NULL,
+  blank_filtering = NULL,
+  normalization = NULL
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{file}}{character(1), containing the full path to the meta data file.}
+\item{\code{columns}}{list(), column names containing information about, sample id,
+sample type, group column, batch column. Valid entries are: id_col_meta, 
+id_col_sample, type_column, group_column, batch_column, order_column.}
+
+\item{\code{regex}}{list(), regular expressions to recognize blanks, qcs, qcpools and samples.
+Valid entries are blanks, qcs, qcpools and samples.}
+
+\item{\code{imputation}}{list(), imputation parameters.}
+
+\item{\code{batch_correction}}{list(), batch correction parameters.}
+
+\item{\code{blank_filtering}}{list(), blank filtering parameters.}
+
+\item{\code{normalization}}{list(), normalization parameters.}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Returns}{
-data.frame containing the meta data.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataImport-make_table_long"></a>}}
-\if{latex}{\out{\hypertarget{method-DataImport-make_table_long}{}}}
-\subsection{Method \code{make_table_long()}}{
-Function to pivot a data.frame into long (tidy) format.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataImport$make_table_long()}\if{html}{\out{</div>}}
+\subsection{Details}{
+Run this function first before importing the data.
 }
 
-\subsection{Returns}{
-data.frame in long format.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataImport-make_table_wide"></a>}}
-\if{latex}{\out{\hypertarget{method-DataImport-make_table_wide}{}}}
-\subsection{Method \code{make_table_wide()}}{
-Function to pivot a data.frame into wide format.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataImport$make_table_wide()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-data.frame in wide format.
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataImport-median_bc"></a>}}
