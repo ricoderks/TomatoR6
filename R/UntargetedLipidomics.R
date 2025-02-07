@@ -4,7 +4,10 @@
 #' @description
 #' Untargeted lipidomics class. This is a child class from DataImport class.
 #' 
+#' @field msdial_files list(), containing all file names / locations.
+#' 
 #' @import R6
+#' @importFrom tidyr pivot_wider pivot_longer
 #' 
 #' @export
 #' 
@@ -19,11 +22,49 @@ UntargetedLipidomics <- R6::R6Class(
     #' Initialization function for DataImport class.
     #' 
     #' @param name character(1), name.
-    #' @param filenames character(), containing the full file names.
-    #' @param meta_filename character(1), containing the full meta file name.
     #' 
-    initialize = function(name = NA, filenames = NA, meta_filename = NA) {
-      super$initialize(name, filenames, meta_filename)
+    initialize = function(name = NA) {
+      super$initialize(name)
+    },
+    
+    
+    #---------------------------------------------------------------- files ----
+    msdial_files = list(
+      data_folder = NULL,
+      parameter_file = NULL
+    ),
+    
+    #--------------------------------------------------------- file methods ----
+    #' @description
+    #' Set the file names for data and meta data.
+    #' 
+    #' @param data_files character(), containing the full file names.
+    #' @param meta_file character(1), containing the full meta file name.
+    #' @param msdial_folder character(1), containing the folder with all MS data.
+    #' @param msdial_parameter character(1), name of MSDIAL parameter file.
+    #' 
+    set_files = function(data_files = NULL, 
+                         meta_file = NULL, 
+                         msdial_folder = NULL,
+                         msdial_parameter = NULL) {
+      cat("Setting files:\n")
+      if(!is.null(data_files)) {
+        cat("  * data files\n")
+        self$files$data_files <- data_files
+      }
+      if(!is.null(meta_file)) {
+        cat("  * meta data file\n")
+        self$files$meta_filename <- meta_file
+      }
+      if(!is.null(msdial_folder)) {
+        cat("  * MSDIAL folder\n")
+        self$msdial_files$data_folder <- msdial_folder
+      }
+      if(!is.null(msdial_parameter)) {
+        cat("  * MSDIAL parameter file\n")
+        self$msdial_files$parameter_file <- msdial_parameter
+      }
+      cat("Done!")
     },
     
     
@@ -36,7 +77,10 @@ UntargetedLipidomics <- R6::R6Class(
     #' able to use this.
     #' 
     run_msdial = function() {
-      
+      TOMATO_MSDIAL_PATH <- Sys.getenv("TOMATO_MSDIAL_PATH")
+      if(TOMATO_MSDIAL_PATH != "") {
+        cat("MSDIAL path:", TOMATO_MSDIAL_PATH, "\n")
+      }
     },
     
     
@@ -58,8 +102,8 @@ UntargetedLipidomics <- R6::R6Class(
     import_data = function() {
       data_df <- data.frame()
       
-      for(a in 1:length(self$filenames)) {
-        tmp <- private$read_msdial(file = self$filenames[a])
+      for(a in 1:length(self$files$data_files)) {
+        tmp <- private$read_msdial(file = self$files$data_files[a])
         
         data_df <- rbind.data.frame(data_df, tmp)
       }

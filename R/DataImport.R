@@ -5,8 +5,7 @@
 #' Data import class. This will be the parent class for several other classes.
 #' 
 #' @field name character(1), containing a name.
-#' @field filenames character(), containing the full file names.
-#' @field meta_filename character(1), containing the full meta file name.
+#' @field files list(), containing all files.
 #' @field tables list() containing all data tables.
 #' @field indices list() containing all kind of indices.
 #' @field params list(), containing all kind of parameter settings for the methods.
@@ -23,18 +22,19 @@ DataImport <- R6::R6Class(
     #' Initialization function for DataImport class.
     #' 
     #' @param name character(1), name.
-    #' @param filenames character(), containing the full file names.
-    #' @param meta_filename character(1), containing the full meta file name.
     #' 
-    initialize = function(name = NA, filenames = NA, meta_filename = NA) {
+    initialize = function(name = NA) {
       self$name <- name
-      self$filenames <- filenames
-      self$meta_filename <- meta_filename
     },
     #---------------------------------------------------------- global info ----
     name = NULL,
-    filenames = NULL,
-    meta_filename = NULL,
+    
+    
+    #---------------------------------------------------------------- files ----
+    files = list(
+      data_files = NULL,
+      meta_filename = NULL  
+    ),
     
     
     #--------------------------------------------------------------- tables ----
@@ -115,9 +115,36 @@ DataImport <- R6::R6Class(
     #' @param ... not used at the moment.
     #'
     print = function(...) {
-      cat(self$name, "contains:\n")
-      cat("* data file(s):\t\t", paste(self$filenames, collapse = ", "), "\n")
-      cat("* meta data file:\t", self$meta_filename, "\n")
+      cat(self$name, ":\n")
+      cat("* Files:\n")
+      cat("\t* Data file(s):\t\t", paste(self$files$data_files, collapse = ", "), "\n")
+      cat("\t* Meta data file:\t", self$files$meta_filename, "\n")
+      cat("* Sample type:\n")
+      cat("\t* Number of blanks:\t", length(self$indices$index_blanks), "\n")
+      cat("\t* Number of qcs:\t", length(self$indices$index_qcs), "\n")
+      cat("\t* Number of pools:\t", length(self$indices$index_pools), "\n")
+      cat("\t* Number of samples:\t", length(self$indices$index_samples), "\n")
+    },
+    
+    
+    #--------------------------------------------------------- file methods ----
+    #' @description
+    #' Set the file names for data and meta data.
+    #' 
+    #' @param data_files character(), containing the full file names.
+    #' @param meta_file character(1), containing the full meta file name.
+    #' 
+    set_files = function(data_files = NULL, meta_file = NULL) {
+      cat("Setting files:\n")
+      if(!is.null(data_files)) {
+        cat("  * data files\n")
+        self$files$data_files <- data_files
+      }
+      if(!is.null(meta_file)) {
+        cat("  * meta data file\n")
+        self$files$meta_filename <- meta_file
+      }
+      cat("Done!")
     },
     
     
@@ -130,12 +157,23 @@ DataImport <- R6::R6Class(
     #' 
     import = function() {
       cat("Importing :\n")
+      
       # import meta data
       cat("  * meta data\n")
       private$read_meta_data()
+      
       # import data
       cat("  * experimental data\n")
       private$import_data()
+      
+      # extracting indices
+      cat("  * extracting indices\n")
+      private$extract_indices()
+      
+      # extracting tables
+      cat("  * extracting tables\n")
+      private$extract_tables()
+      
       cat("Done!")
     },
     
@@ -144,6 +182,8 @@ DataImport <- R6::R6Class(
     #' @description
     #' Method to set all parameters
     #' 
+    #' @param ids list(), column names containing information about, sample id,
+    #' feature id. Valid entries are: id_col_meta, id_col_sample.
     #' @param columns list(), column names containing information about, sample id,
     #' sample type, group column, batch column. Valid entries are: id_col_meta, 
     #' id_col_sample, type_column, group_column, batch_column, order_column.
@@ -156,13 +196,18 @@ DataImport <- R6::R6Class(
     #' 
     #' @details Run this function first before importing the data.
     #' 
-    set_parameters = function(columns = NULL,
+    set_parameters = function(ids = NULL,
+                              columns = NULL,
                               regex = NULL,
                               imputation = NULL,
                               batch_correction = NULL,
                               blank_filtering = NULL,
                               normalization = NULL) {
       cat("Setting parameters:\n")
+      if(!is.null(ids)) {
+        private$set_parameters_ids(params = ids)
+        cat("  * id's\n")
+      }
       if(!is.null(columns)) {
         private$set_parameters_columns(params = columns)
         cat("  * column names\n")
@@ -287,22 +332,31 @@ DataImport <- R6::R6Class(
     read_meta_data = function(file = NULL) {
       extension <- sub(pattern = ".*(csv|txt|xlsx)$",
                        replacement = "\\1",
-                       x = self$meta_filename)
+                       x = self$files$meta_file)
       
       meta_df <- switch(
         extension,
-        "csv" = read.csv(file = self$meta_filename,
+        "csv" = read.csv(file = self$files$meta_file,
                          header = TRUE),
-        "txt" = read.table(file = self$meta_filename,
+        "txt" = read.table(file = self$files$meta_file,
                            header = TRUE,
                            sep = "\t"),
-        "xlsx" = openxlsx::read.xlsx(xlsxFile = self$meta_filename)
+        "xlsx" = openxlsx::read.xlsx(xlsxFile = self$files$meta_file)
       )
       
       self$tables$meta_data <- meta_df
     },
     
     #---------------------------------------------------- parameter methods ----
+    set_parameters_ids = function(params = NULL) {
+      if(!is.null(params$id_col_meta)) {
+        self$indices$id_col_meta <- params$id_col_meta
+      }
+      if(!is.null(params$id_col_data)) {
+        self$indices$id_col_data <- params$id_col_data
+      }
+    },
+    
     set_parameters_columns = function(params = NULL) {
       if(!is.null(params$type_column)) {
         self$indices$type_column <- params$type_column
@@ -334,8 +388,65 @@ DataImport <- R6::R6Class(
     },
     
     extract_indices = function() {
-      # self$indices$index_blanks <- grep(pattern = self$params$regex$blanks,
-      #                                   x = colnames())
+      if(!is.null(self$tables$meta_data) & !is.null(self$indices$id_col_meta)) {
+        if(!is.null(self$params$regex$blanks)) {
+          self$indices$index_blanks <- 
+            self$tables$meta_data[grep(pattern = self$params$regex$blanks,
+                                       x = self$tables$meta_data[, self$indices$id_col_meta],
+                                       ignore.case = TRUE), self$indices$id_col_meta]
+        }
+        
+        if(!is.null(self$params$regex$qcs)) {
+          self$indices$index_qcs <- 
+            self$tables$meta_data[grep(pattern = self$params$regex$qcs,
+                                       x = self$tables$meta_data[, self$indices$id_col_meta],
+                                       ignore.case = TRUE), self$indices$id_col_meta]
+        }
+        
+        if(!is.null(self$params$regex$pools)) {
+          self$indices$index_pools <- 
+            self$tables$meta_data[grep(pattern = self$params$regex$pools,
+                                       x = self$tables$meta_data[, self$indices$id_col_meta],
+                                       ignore.case = TRUE), self$indices$id_col_meta]
+        }
+        
+        if(!is.null(self$params$regex$samples)) {
+          self$indices$index_samples <- 
+            self$tables$meta_data[grep(pattern = self$params$regex$samples,
+                                       x = self$tables$meta_data[, self$indices$id_col_meta],
+                                       ignore.case = TRUE), self$indices$id_col_meta]
+        }
+      }
+    },
+    
+    extract_tables = function() {
+      if(!is.null(self$indices$index_blanks)) {
+        self$tables$blank_data <- 
+          self$tables$all_data[self$tables$all_data[, self$indices$id_col_data, drop = TRUE] %in% self$indices$index_blanks, ]
+        self$tables$blank_data_long <- 
+          self$tables$all_data_long[self$tables$all_data_long[, self$indices$id_col_data, drop = TRUE] %in% self$indices$index_blanks, ]
+      }
+      
+      if(!is.null(self$indices$index_qcs)) {
+        self$tables$qc_data <- 
+          self$tables$all_data[self$tables$all_data[, self$indices$id_col_data, drop = TRUE] %in% self$indices$index_qcs, ]
+        self$tables$qc_data_long <- 
+          self$tables$all_data_long[self$tables$all_data_long[, self$indices$id_col_data, drop = TRUE] %in% self$indices$index_qcs, ]
+      }
+      
+      if(!is.null(self$indices$index_pools)) {
+        self$tables$pool_data <- 
+          self$tables$all_data[self$tables$all_data[, self$indices$id_col_data, drop = TRUE] %in% self$indices$index_pools, ]
+        self$tables$pool_data_long <- 
+          self$tables$all_data_long[self$tables$all_data_long[, self$indices$id_col_data, drop = TRUE] %in% self$indices$index_pools, ]
+      }
+      
+      if(!is.null(self$indices$index_samples)) {
+        self$tables$sample_data <- 
+          self$tables$all_data[self$tables$all_data[, self$indices$id_col_data, drop = TRUE] %in% self$indices$index_samples, ]
+        self$tables$sample_data_long <- 
+          self$tables$all_data_long[self$tables$all_data_long[, self$indices$id_col_data, drop = TRUE] %in% self$indices$index_samples, ]
+      }
     }
   )
 )

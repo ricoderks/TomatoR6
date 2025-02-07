@@ -19,11 +19,9 @@ UntargetedMetabolomics <- R6::R6Class(
     #' Initialization function for DataImport class.
     #' 
     #' @param name character(1), name.
-    #' @param filenames character(), containing the full file names.
-    #' @param meta_filename character(1), containing the full meta file name.
     #' 
-    initialize = function(name = NA, filenames = NA, meta_filename = NA) {
-      super$initialize(name, filenames, meta_filename)
+    initialize = function(name = NA) {
+      super$initialize(name)
     }
     
     

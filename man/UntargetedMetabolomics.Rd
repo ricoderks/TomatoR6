@@ -31,6 +31,7 @@ Yassene Mohammed
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_rsd"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_rsd'><code>TomatoR6::DataImport$plot_qc_rsd()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_trend"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_trend'><code>TomatoR6::DataImport$plot_qc_trend()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="print"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-print'><code>TomatoR6::DataImport$print()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="set_files"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-set_files'><code>TomatoR6::DataImport$set_files()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="set_parameters"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-set_parameters'><code>TomatoR6::DataImport$set_parameters()</code></a></span></li>
 </ul>
 </details>
@@ -41,17 +42,13 @@ Yassene Mohammed
 \subsection{Method \code{new()}}{
 Initialization function for DataImport class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedMetabolomics$new(name = NA, filenames = NA, meta_filename = NA)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{UntargetedMetabolomics$new(name = NA)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{name}}{character(1), name.}
-
-\item{\code{filenames}}{character(), containing the full file names.}
-
-\item{\code{meta_filename}}{character(1), containing the full meta file name.}
 }
 \if{html}{\out{</div>}}
 }

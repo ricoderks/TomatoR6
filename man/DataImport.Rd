@@ -21,9 +21,7 @@ E. Nevedomskaya
 \describe{
 \item{\code{name}}{character(1), containing a name.}
 
-\item{\code{filenames}}{character(), containing the full file names.}
-
-\item{\code{meta_filename}}{character(1), containing the full meta file name.}
+\item{\code{files}}{list(), containing all files.}
 
 \item{\code{tables}}{list() containing all data tables.}
 
@@ -38,6 +36,7 @@ E. Nevedomskaya
 \itemize{
 \item \href{#method-DataImport-new}{\code{DataImport$new()}}
 \item \href{#method-DataImport-print}{\code{DataImport$print()}}
+\item \href{#method-DataImport-set_files}{\code{DataImport$set_files()}}
 \item \href{#method-DataImport-import}{\code{DataImport$import()}}
 \item \href{#method-DataImport-set_parameters}{\code{DataImport$set_parameters()}}
 \item \href{#method-DataImport-median_bc}{\code{DataImport$median_bc()}}
@@ -54,17 +53,13 @@ E. Nevedomskaya
 \subsection{Method \code{new()}}{
 Initialization function for DataImport class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataImport$new(name = NA, filenames = NA, meta_filename = NA)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$new(name = NA)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{name}}{character(1), name.}
-
-\item{\code{filenames}}{character(), containing the full file names.}
-
-\item{\code{meta_filename}}{character(1), containing the full meta file name.}
 }
 \if{html}{\out{</div>}}
 }
@@ -87,6 +82,25 @@ Print a nice summary of the class.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataImport-set_files"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-set_files}{}}}
+\subsection{Method \code{set_files()}}{
+Set the file names for data and meta data.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$set_files(data_files = NULL, meta_file = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_files}}{character(), containing the full file names.}
+
+\item{\code{meta_file}}{character(1), containing the full meta file name.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataImport-import"></a>}}
 \if{latex}{\out{\hypertarget{method-DataImport-import}{}}}
 \subsection{Method \code{import()}}{
@@ -103,6 +117,7 @@ This method imports all data and meta data.
 Method to set all parameters
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataImport$set_parameters(
+  ids = NULL,
   columns = NULL,
   regex = NULL,
   imputation = NULL,
@@ -115,6 +130,9 @@ Method to set all parameters
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{ids}}{list(), column names containing information about, sample id,
+feature id. Valid entries are: id_col_meta, id_col_sample.}
+
 \item{\code{columns}}{list(), column names containing information about, sample id,
 sample type, group column, batch column. Valid entries are: id_col_meta, 
 id_col_sample, type_column, group_column, batch_column, order_column.}

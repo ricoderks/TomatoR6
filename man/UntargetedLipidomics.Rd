@@ -14,10 +14,18 @@ Yassene Mohammed
 \section{Super class}{
 \code{\link[TomatoR6:DataImport]{TomatoR6::DataImport}} -> \code{UntargetedLipidomics}
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{msdial_files}}{list(), containing all file names / locations.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-UntargetedLipidomics-new}{\code{UntargetedLipidomics$new()}}
+\item \href{#method-UntargetedLipidomics-set_files}{\code{UntargetedLipidomics$set_files()}}
 \item \href{#method-UntargetedLipidomics-run_msdial}{\code{UntargetedLipidomics$run_msdial()}}
 \item \href{#method-UntargetedLipidomics-plot_qc_rsd_class}{\code{UntargetedLipidomics$plot_qc_rsd_class()}}
 \item \href{#method-UntargetedLipidomics-clone}{\code{UntargetedLipidomics$clone()}}
@@ -43,17 +51,41 @@ Yassene Mohammed
 \subsection{Method \code{new()}}{
 Initialization function for DataImport class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$new(name = NA, filenames = NA, meta_filename = NA)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$new(name = NA)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{name}}{character(1), name.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-UntargetedLipidomics-set_files"></a>}}
+\if{latex}{\out{\hypertarget{method-UntargetedLipidomics-set_files}{}}}
+\subsection{Method \code{set_files()}}{
+Set the file names for data and meta data.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$set_files(
+  data_files = NULL,
+  meta_file = NULL,
+  msdial_folder = NULL,
+  msdial_parameter = NULL
+)}\if{html}{\out{</div>}}
+}
 
-\item{\code{filenames}}{character(), containing the full file names.}
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{data_files}}{character(), containing the full file names.}
 
-\item{\code{meta_filename}}{character(1), containing the full meta file name.}
+\item{\code{meta_file}}{character(1), containing the full meta file name.}
+
+\item{\code{msdial_folder}}{character(1), containing the folder with all MS data.}
+
+\item{\code{msdial_parameter}}{character(1), name of MSDIAL parameter file.}
 }
 \if{html}{\out{</div>}}
 }
