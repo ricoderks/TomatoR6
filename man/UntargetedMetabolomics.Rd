@@ -24,6 +24,7 @@ Yassene Mohammed
 \if{html}{\out{
 <details><summary>Inherited methods</summary>
 <ul>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="calc_qcpool"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-calc_qcpool'><code>TomatoR6::DataImport$calc_qcpool()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="combat_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-combat_bc'><code>TomatoR6::DataImport$combat_bc()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="import"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-import'><code>TomatoR6::DataImport$import()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="loess_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-loess_bc'><code>TomatoR6::DataImport$loess_bc()</code></a></span></li>
@@ -33,6 +34,9 @@ Yassene Mohammed
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="print"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-print'><code>TomatoR6::DataImport$print()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="set_files"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-set_files'><code>TomatoR6::DataImport$set_files()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="set_parameters"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-set_parameters'><code>TomatoR6::DataImport$set_parameters()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="show_data_info"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-show_data_info'><code>TomatoR6::DataImport$show_data_info()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="show_rsd_plot"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-show_rsd_plot'><code>TomatoR6::DataImport$show_rsd_plot()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="show_trend_plot"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-show_trend_plot'><code>TomatoR6::DataImport$show_trend_plot()</code></a></span></li>
 </ul>
 </details>
 }}

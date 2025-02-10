@@ -25,6 +25,25 @@ UntargetedLipidomics <- R6::R6Class(
     #' 
     initialize = function(name = NA) {
       super$initialize(name)
+      private$add_log(message = "Created untargeted lipidomics object")
+      
+      cli::cli_h2("Untargeted lipidomics")
+      cli::cli_text("Untarageted lipidomics object created.")
+      cli::cli_rule()
+      cli::cli_text("Please set the following with `set_files()`:")
+      files <- cli::cli_ul()
+      cli::cli_li("Data file names")
+      cli::cli_li("Meta data files")
+      cli::cli_end(files)
+      cli::cli_rule()
+      cli::cli_text("Please set the following with `set_parameters()`:")
+      params <- cli::cli_ul()
+      cli::cli_li("ID columns for data and meta data")
+      cli::cli_li("Column names, i.e. sample type, group, etc.")
+      cli::cli_li("Regular expression, to recognize the diifferent samples.")
+      cli::cli_end(params)
+      cli::cli_rule()
+      cli::cli_text("Next step: run `import()` to import all data.")
     },
     
     
@@ -47,24 +66,30 @@ UntargetedLipidomics <- R6::R6Class(
                          meta_file = NULL, 
                          msdial_folder = NULL,
                          msdial_parameter = NULL) {
-      cat("Setting files:\n")
+      cli::cli_h3("Setting files:")
+      cli::cli_ul()
       if(!is.null(data_files)) {
-        cat("  * data files\n")
+        cli::cli_li("data files")
         self$files$data_files <- data_files
+        private$add_log(message = "Set data file(s)")
       }
       if(!is.null(meta_file)) {
-        cat("  * meta data file\n")
+        cli::cli_li("meta data file")
         self$files$meta_filename <- meta_file
+        private$add_log(message = "Set meta data file")
       }
       if(!is.null(msdial_folder)) {
-        cat("  * MSDIAL folder\n")
+        cli::cli_li("MSDIAL folder")
         self$msdial_files$data_folder <- msdial_folder
+        private$add_log(message = "Set MSDIAL folder")
       }
       if(!is.null(msdial_parameter)) {
-        cat("  * MSDIAL parameter file\n")
+        cli::cli_li("MSDIAL parameter file")
         self$msdial_files$parameter_file <- msdial_parameter
+        private$add_log(message = "MSDIAL parameter file")
       }
-      cat("Done!")
+      cli::cli_end()
+      cli::cli_alert_success("Done!")
     },
     
     
@@ -140,8 +165,8 @@ UntargetedLipidomics <- R6::R6Class(
       
       # remove unknowns and others
       data_df <- data_df[!(grepl(pattern = "(unknown|no MS2|low score)",
-                                x = data_df$Metabolite.name,
-                                ignore.case = TRUE) |
+                                 x = data_df$Metabolite.name,
+                                 ignore.case = TRUE) |
                              grepl(pattern = "(unknown|others)",
                                    x = data_df$Ontology,
                                    ignore.case = TRUE)), ]
@@ -170,6 +195,8 @@ UntargetedLipidomics <- R6::R6Class(
       
       data_df$shortLipidName <- short
       data_df$longLipidname <- long
+      # for now keep all features
+      data_df$keep <- TRUE
       
       self$tables$feature_data <- data_df
     },
@@ -187,7 +214,7 @@ UntargetedLipidomics <- R6::R6Class(
           values_to = "peakArea"
         )
       
-      self$tables$all_data_long <- data_long
+      self$tables$all_data_long <- as.data.frame(data_long)
     },
     
     make_table_wide = function(data_long = NULL) {
@@ -198,7 +225,70 @@ UntargetedLipidomics <- R6::R6Class(
           values_from = "peakArea"
         )
       
-      self$tables$all_data <- data_wide
+      self$tables$all_data <- as.data.frame(data_wide)
+    },
+    
+    # @description
+    # Calculate the RSD values of all features.
+    #
+    # @param data_pools data.frame, containing the peak area's.
+    # @param data_meta data.frame, with all meta data.
+    #
+    calc_qcpool_rsd = function() {
+      if(!is.null(self$tables$pool_data_long)) {
+        pools_data <- self$tables$pool_data_long
+        qcpool_index <- self$indices$index_pools
+        
+        pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
+        
+        pools_data$rsd <- tapply(pools_data, list(pools_data[, "id"]), function(x) {
+          sd(x[, "peakArea"], na.rm = TRUE) / mean(x[, "peakArea"], na.rm = TRUE)
+        })
+       
+        pools_data$polarity <- gsub(pattern = "(pos|neg).*",
+                                    replacement = "\\1",
+                                    x = pools_data$id)
+        
+        self$tables$plot_rsd_data <- pools_data
+      }
+    },
+    
+    # @description
+    # Calculate the trend of all features.
+    #
+    calc_qcpool_trend = function() {
+      if(!is.null(self$tables$pool_data_long)) {
+        id_col_meta <- self$indices$id_col_meta
+        meta_data <- self$tables$meta_data
+        pools_data <- self$tables$pool_data_long
+        qcpool_index <- self$indices$index_pools
+        
+        pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
+        meta_data <- meta_data[meta_data[, id_col_meta] %in% qcpool_index, ]
+        
+        merge_data <- merge(
+          x = pools_data,
+          y = meta_data,
+          by.x = "sampleName",
+          by.y = id_col_meta
+        )
+        
+        ref_data <- merge_data[merge_data[, self$indices$order_column] == min(merge_data[, self$indices$order_column]), c("id", "peakArea")]
+        colnames(ref_data)[2] <- "refPeakArea"
+        
+        merge_data <- merge(
+          x = merge_data,
+          y = ref_data,
+          by = "id"
+        )
+        
+        merge_data$log2fc <- log2(merge_data$peakArea / merge_data$refPeakArea)
+        merge_data$polarity <- gsub(pattern = "(pos|neg).*",
+                                    replacement = "\\1",
+                                    x = merge_data$id)
+        
+        self$tables$plot_trend_data <- merge_data
+      }
     }
   )
 )

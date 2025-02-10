@@ -28,6 +28,8 @@ E. Nevedomskaya
 \item{\code{indices}}{list() containing all kind of indices.}
 
 \item{\code{params}}{list(), containing all kind of parameter settings for the methods.}
+
+\item{\code{history}}{data.frame() with the history of all steps.}
 }
 \if{html}{\out{</div>}}
 }
@@ -36,9 +38,13 @@ E. Nevedomskaya
 \itemize{
 \item \href{#method-DataImport-new}{\code{DataImport$new()}}
 \item \href{#method-DataImport-print}{\code{DataImport$print()}}
+\item \href{#method-DataImport-show_data_info}{\code{DataImport$show_data_info()}}
 \item \href{#method-DataImport-set_files}{\code{DataImport$set_files()}}
 \item \href{#method-DataImport-import}{\code{DataImport$import()}}
 \item \href{#method-DataImport-set_parameters}{\code{DataImport$set_parameters()}}
+\item \href{#method-DataImport-calc_qcpool}{\code{DataImport$calc_qcpool()}}
+\item \href{#method-DataImport-show_rsd_plot}{\code{DataImport$show_rsd_plot()}}
+\item \href{#method-DataImport-show_trend_plot}{\code{DataImport$show_trend_plot()}}
 \item \href{#method-DataImport-median_bc}{\code{DataImport$median_bc()}}
 \item \href{#method-DataImport-loess_bc}{\code{DataImport$loess_bc()}}
 \item \href{#method-DataImport-combat_bc}{\code{DataImport$combat_bc()}}
@@ -80,6 +86,16 @@ Print a nice summary of the class.
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataImport-show_data_info"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-show_data_info}{}}}
+\subsection{Method \code{show_data_info()}}{
+Show information about the data.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$show_data_info()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataImport-set_files"></a>}}
@@ -131,9 +147,9 @@ Method to set all parameters
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{ids}}{list(), column names containing information about, sample id,
-feature id. Valid entries are: id_col_meta, id_col_sample.}
+feature id. Valid entries are: id_col_meta, id_col_data.}
 
-\item{\code{columns}}{list(), column names containing information about, sample id,
+\item{\code{columns}}{list(), column names containing information about,
 sample type, group column, batch column. Valid entries are: id_col_meta, 
 id_col_sample, type_column, group_column, batch_column, order_column.}
 
@@ -154,6 +170,49 @@ Valid entries are blanks, qcs, qcpools and samples.}
 Run this function first before importing the data.
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataImport-calc_qcpool"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-calc_qcpool}{}}}
+\subsection{Method \code{calc_qcpool()}}{
+Run the QCpool calculations. Calculate RSD and Trend of all features.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$calc_qcpool()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataImport-show_rsd_plot"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-show_rsd_plot}{}}}
+\subsection{Method \code{show_rsd_plot()}}{
+Show the histogram of RSD values.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$show_rsd_plot(rsd_limit = 0.3)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rsd_limit}}{numeric(1), set a limit between 0 and 1.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+ggplot2 object, RSD histogram.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataImport-show_trend_plot"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-show_trend_plot}{}}}
+\subsection{Method \code{show_trend_plot()}}{
+Show the trend plot.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$show_trend_plot()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+ggplot2 object, RSD histogram.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataImport-median_bc"></a>}}
