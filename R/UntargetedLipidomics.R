@@ -226,69 +226,8 @@ UntargetedLipidomics <- R6::R6Class(
         )
       
       self$tables$all_data <- as.data.frame(data_wide)
-    },
-    
-    # @description
-    # Calculate the RSD values of all features.
-    #
-    # @param data_pools data.frame, containing the peak area's.
-    # @param data_meta data.frame, with all meta data.
-    #
-    calc_qcpool_rsd = function() {
-      if(!is.null(self$tables$pool_data_long)) {
-        pools_data <- self$tables$pool_data_long
-        qcpool_index <- self$indices$index_pools
-        
-        pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
-        
-        pools_data$rsd <- tapply(pools_data, list(pools_data[, "id"]), function(x) {
-          sd(x[, "peakArea"], na.rm = TRUE) / mean(x[, "peakArea"], na.rm = TRUE)
-        })
-       
-        pools_data$polarity <- gsub(pattern = "(pos|neg).*",
-                                    replacement = "\\1",
-                                    x = pools_data$id)
-        
-        self$tables$plot_rsd_data <- pools_data
-      }
-    },
-    
-    # @description
-    # Calculate the trend of all features.
-    #
-    calc_qcpool_trend = function() {
-      if(!is.null(self$tables$pool_data_long)) {
-        id_col_meta <- self$indices$id_col_meta
-        meta_data <- self$tables$meta_data
-        pools_data <- self$tables$pool_data_long
-        qcpool_index <- self$indices$index_pools
-        
-        pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
-        meta_data <- meta_data[meta_data[, id_col_meta] %in% qcpool_index, ]
-        
-        merge_data <- merge(
-          x = pools_data,
-          y = meta_data,
-          by.x = "sampleName",
-          by.y = id_col_meta
-        )
-        
-        ref_data <- merge_data[merge_data[, self$indices$order_column] == min(merge_data[, self$indices$order_column]), c("id", "peakArea")]
-        colnames(ref_data)[2] <- "refPeakArea"
-        
-        merge_data <- merge(
-          x = merge_data,
-          y = ref_data,
-          by = "id"
-        )
-        
-        merge_data$log2fc <- log2(merge_data$peakArea / merge_data$refPeakArea)
-        merge_data$polarity <- gsub(pattern = "(pos|neg).*",
-                                    replacement = "\\1",
-                                    x = merge_data$id)
-        
-        self$tables$plot_trend_data <- merge_data
-      }
     }
-  )
+    
+    
+  ) # end private
 )

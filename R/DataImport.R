@@ -97,6 +97,9 @@ DataImport <- R6::R6Class(
         pools = NULL,
         samples = NULL
       ),
+      rsd = list(
+        rsd_limit = NULL,
+      ),
       imputation = list(
         method = NULL
       ),
@@ -295,69 +298,6 @@ DataImport <- R6::R6Class(
     },
     
     
-    #' @description
-    #' Show the histogram of RSD values.
-    #'
-    #' @param rsd_limit numeric(1), set a limit between 0 and 1.
-    #'
-    #' @return ggplot2 object, RSD histogram.
-    #'
-    #' @importFrom ggplot2 ggplot aes geom_histogram .data theme_minimal labs
-    #'     geom_vline guide_legend theme
-    #'
-    show_rsd_plot = function(rsd_limit = 0.3) {
-      if(!is.null(self$tables$plot_rsd_data)) {
-        p <- self$tables$plot_rsd_data |> 
-          ggplot2::ggplot(ggplot2::aes(x = .data$rsd,
-                                       fill = .data$polarity)) +
-          ggplot2::geom_histogram(binwidth = 0.01,
-                                  alpha = 0.5) +
-          ggplot2::geom_vline(xintercept = rsd_limit,
-                              color = "red",
-                              linetype = 2) +
-          ggplot2::guides(fill = ggplot2::guide_legend(title = "Polarity",
-                                                       override.aes = list(alpha = 1))) +
-          ggplot2::labs(x = "RSD") +
-          ggplot2::theme_minimal() +
-          ggplot2::theme(legend.position = "bottom")
-        
-        return(p)
-      }
-    },
-    
-    
-    #' @description
-    #' Show the trend plot.
-    #'
-    #' @return ggplot2 object, RSD histogram.
-    #'
-    #' @importFrom ggplot2 ggplot aes geom_line .data theme_minimal labs
-    #'     guide_legend theme geom_hline
-    #'
-    show_trend_plot = function() {
-      if(!is.null(self$tables$plot_trend_data)) {
-        p <- self$tables$plot_trend_data |> 
-          ggplot2::ggplot(ggplot2::aes(x = .data$sampleName,
-                                       y = .data$log2fc,
-                                       group = .data$id,
-                                       colour = .data$polarity)) +
-          ggplot2::geom_hline(yintercept = c(-0.5, 0, 0.5),
-                              colour = c("black", "grey", "black"),
-                              linetype = c(2, 1, 2)) +
-          ggplot2::geom_line(alpha = 0.5) +
-          ggplot2::guides(colour = ggplot2::guide_legend(title = "Polarity",
-                                                         override.aes = list(alpha = 1))) +
-          ggplot2::labs(x = "Sample id",
-                        y = "Log2(fold change)") +
-          ggplot2::theme_minimal() +
-          ggplot2::theme(legend.position = "bottom",
-                         axis.text.x = ggplot2::element_text(angle = 45,
-                                                             hjust = 1))
-        
-        return(p)
-      }
-    },
-    
     #--------------------------------------------------- imputation methods ----
     
     
@@ -420,29 +360,74 @@ DataImport <- R6::R6Class(
     
     
     #---------------------------------------------- blank filtering methods ----
-    
+    blank_filtering = function() {
+      
+    },
     
     #------------------------------------------------ normalization methods ----
     
     
     #----------------------------------------------------- plotting methods ----
     #' @description
-    #' A histogram showing the RSD distribution of all features.
-    #' 
-    #' @return ggplot2 object, containing a histogram.
-    #' 
+    #' Show the histogram of RSD values.
+    #'
+    #' @param rsd_limit numeric(1), set a limit between 0 and 1.
+    #'
+    #' @return ggplot2 object, RSD histogram.
+    #'
+    #' @importFrom ggplot2 ggplot aes geom_histogram .data theme_minimal labs
+    #'     geom_vline guide_legend theme
+    #'
     plot_qc_rsd = function() {
-      
+      if(!is.null(self$tables$plot_rsd_data)) {
+        p <- self$tables$plot_rsd_data |> 
+          ggplot2::ggplot(ggplot2::aes(x = .data$rsd,
+                                       fill = .data$polarity)) +
+          ggplot2::geom_histogram(binwidth = 0.01,
+                                  alpha = 0.5) +
+          ggplot2::geom_vline(xintercept = self$params$rsd$rsd_limit,
+                              color = "red",
+                              linetype = 2) +
+          ggplot2::guides(fill = ggplot2::guide_legend(title = "Polarity",
+                                                       override.aes = list(alpha = 1))) +
+          ggplot2::labs(x = "RSD") +
+          ggplot2::theme_minimal() +
+          ggplot2::theme(legend.position = "bottom")
+        
+        return(p)
+      }
     },
     
     #' @description
-    #' Trend plot showing how each feature behaves in the pooled samples compared 
-    #' to the first pooled sample in the batch.
-    #' 
-    #' @return ggplot2 object, containing a trend plot.
-    #' 
+    #' Show the trend plot.
+    #'
+    #' @return ggplot2 object, RSD histogram.
+    #'
+    #' @importFrom ggplot2 ggplot aes geom_line .data theme_minimal labs
+    #'     guide_legend theme geom_hline
+    #'
     plot_qc_trend = function() {
-      
+      if(!is.null(self$tables$plot_trend_data)) {
+        p <- self$tables$plot_trend_data |> 
+          ggplot2::ggplot(ggplot2::aes(x = .data$sampleName,
+                                       y = .data$log2fc,
+                                       group = .data$id,
+                                       colour = .data$polarity)) +
+          ggplot2::geom_hline(yintercept = c(-0.5, 0, 0.5),
+                              colour = c("black", "grey", "black"),
+                              linetype = c(2, 1, 2)) +
+          ggplot2::geom_line(alpha = 0.5) +
+          ggplot2::guides(colour = ggplot2::guide_legend(title = "Polarity",
+                                                         override.aes = list(alpha = 1))) +
+          ggplot2::labs(x = "Sample id",
+                        y = "Log2(fold change)") +
+          ggplot2::theme_minimal() +
+          ggplot2::theme(legend.position = "bottom",
+                         axis.text.x = ggplot2::element_text(angle = 45,
+                                                             hjust = 1))
+        
+        return(p)
+      }
     }
   ), # end public
   #---------------------------------------------------------------- private ----
@@ -636,6 +621,69 @@ DataImport <- R6::R6Class(
           self$tables$all_data[self$tables$all_data[, self$indices$id_col_data] %in% self$indices$index_samples, ]
         self$tables$sample_data_long <- 
           self$tables$all_data_long[self$tables$all_data_long[, self$indices$id_col_data] %in% self$indices$index_samples, ]
+      }
+    },
+    
+    # @description
+    # Calculate the RSD values of all features.
+    #
+    # @param data_pools data.frame, containing the peak area's.
+    # @param data_meta data.frame, with all meta data.
+    #
+    calc_qcpool_rsd = function() {
+      if(!is.null(self$tables$pool_data_long)) {
+        pools_data <- self$tables$pool_data_long
+        qcpool_index <- self$indices$index_pools
+        
+        pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
+        
+        pools_data$rsd <- tapply(pools_data, list(pools_data[, "id"]), function(x) {
+          sd(x[, "peakArea"], na.rm = TRUE) / mean(x[, "peakArea"], na.rm = TRUE)
+        })
+        
+        pools_data$polarity <- gsub(pattern = "(pos|neg).*",
+                                    replacement = "\\1",
+                                    x = pools_data$id)
+        
+        self$tables$plot_rsd_data <- pools_data
+      }
+    },
+    
+    # @description
+    # Calculate the trend of all features.
+    #
+    calc_qcpool_trend = function() {
+      if(!is.null(self$tables$pool_data_long)) {
+        id_col_meta <- self$indices$id_col_meta
+        meta_data <- self$tables$meta_data
+        pools_data <- self$tables$pool_data_long
+        qcpool_index <- self$indices$index_pools
+        
+        pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
+        meta_data <- meta_data[meta_data[, id_col_meta] %in% qcpool_index, ]
+        
+        merge_data <- merge(
+          x = pools_data,
+          y = meta_data,
+          by.x = "sampleName",
+          by.y = id_col_meta
+        )
+        
+        ref_data <- merge_data[merge_data[, self$indices$order_column] == min(merge_data[, self$indices$order_column]), c("id", "peakArea")]
+        colnames(ref_data)[2] <- "refPeakArea"
+        
+        merge_data <- merge(
+          x = merge_data,
+          y = ref_data,
+          by = "id"
+        )
+        
+        merge_data$log2fc <- log2(merge_data$peakArea / merge_data$refPeakArea)
+        merge_data$polarity <- gsub(pattern = "(pos|neg).*",
+                                    replacement = "\\1",
+                                    x = merge_data$id)
+        
+        self$tables$plot_trend_data <- merge_data
       }
     }
     
