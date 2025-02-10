@@ -98,7 +98,7 @@ DataImport <- R6::R6Class(
         samples = NULL
       ),
       rsd = list(
-        rsd_limit = NULL,
+        rsd_limit = NULL
       ),
       imputation = list(
         method = NULL
@@ -221,6 +221,7 @@ DataImport <- R6::R6Class(
     #' id_col_sample, type_column, group_column, batch_column, order_column.
     #' @param regex list(), regular expressions to recognize blanks, qcs, qcpools and samples.
     #' Valid entries are blanks, qcs, qcpools and samples.
+    #' @param rsd list(), set rsd filtering parameters.
     #' @param imputation list(), imputation parameters.
     #' @param batch_correction list(), batch correction parameters.
     #' @param blank_filtering list(), blank filtering parameters.
@@ -231,6 +232,7 @@ DataImport <- R6::R6Class(
     set_parameters = function(ids = NULL,
                               columns = NULL,
                               regex = NULL,
+                              rsd = NULL,
                               imputation = NULL,
                               batch_correction = NULL,
                               blank_filtering = NULL,
@@ -251,6 +253,11 @@ DataImport <- R6::R6Class(
         private$set_parameters_regex(params = regex)
         private$add_log(message = "Set parameters: regular expression")
         cli::cli_li("regular expressions")
+      }
+      if(!is.null(rsd)) {
+        private$set_parameters_rsd(params = rsd)
+        private$add_log(message = "Set parameters: rsd")
+        cli::cli_li("rsd")
       }
       if(!is.null(imputation)) {
         # private$set_parameters_imputation(params = imputation)
@@ -360,6 +367,9 @@ DataImport <- R6::R6Class(
     
     
     #---------------------------------------------- blank filtering methods ----
+    #' @description
+    #' Perform sample blank / ratio filtering.
+    #'
     blank_filtering = function() {
       
     },
@@ -555,6 +565,17 @@ DataImport <- R6::R6Class(
       }
     },
     
+    # @description
+    # Set the rsd filtering parameters.
+    #
+    # @param params list(), containing all the different rsd parameters.
+    #
+    set_parameters_rsd = function(params = NULL) {
+      if(!is.null(params$rsd_limit)) {
+        self$params$rsd$rsd_limit <- params$rsd_limit
+      }
+    },
+    
     
     # @description
     # Extract the indices for the blanks, qcs, pools and samples.
@@ -644,8 +665,23 @@ DataImport <- R6::R6Class(
         pools_data$polarity <- gsub(pattern = "(pos|neg).*",
                                     replacement = "\\1",
                                     x = pools_data$id)
+        no_keep <- pools_data$id[pools_data$rsd > self$params$rsd$rsd_limit]
+        self$tables$feature_data$keep_rsd <- self$tables$feature_data$id %in% no_keep
+        private$check_filtering()
         
         self$tables$plot_rsd_data <- pools_data
+      }
+    },
+    
+    # @description
+    # Check which features to keep.
+    #
+    check_filtering = function() {
+      for(a in 1:nrow(self$tables$feature_data)) {
+        self$tables$feature_data$keep[a] <- all(
+          self$tables$feature_data$keep_rsd[a], 
+          self$tables$feature_data$keep_sample_blank[a]
+        )
       }
     },
     

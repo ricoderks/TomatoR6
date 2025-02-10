@@ -197,6 +197,8 @@ UntargetedLipidomics <- R6::R6Class(
       data_df$longLipidname <- long
       # for now keep all features
       data_df$keep <- TRUE
+      data_df$keep_rsd <- TRUE
+      data_df$keep_sample_blank <- TRUE
       
       self$tables$feature_data <- data_df
     },

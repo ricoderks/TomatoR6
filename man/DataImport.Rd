@@ -43,11 +43,10 @@ E. Nevedomskaya
 \item \href{#method-DataImport-import}{\code{DataImport$import()}}
 \item \href{#method-DataImport-set_parameters}{\code{DataImport$set_parameters()}}
 \item \href{#method-DataImport-calc_qcpool}{\code{DataImport$calc_qcpool()}}
-\item \href{#method-DataImport-show_rsd_plot}{\code{DataImport$show_rsd_plot()}}
-\item \href{#method-DataImport-show_trend_plot}{\code{DataImport$show_trend_plot()}}
 \item \href{#method-DataImport-median_bc}{\code{DataImport$median_bc()}}
 \item \href{#method-DataImport-loess_bc}{\code{DataImport$loess_bc()}}
 \item \href{#method-DataImport-combat_bc}{\code{DataImport$combat_bc()}}
+\item \href{#method-DataImport-blank_filtering}{\code{DataImport$blank_filtering()}}
 \item \href{#method-DataImport-plot_qc_rsd}{\code{DataImport$plot_qc_rsd()}}
 \item \href{#method-DataImport-plot_qc_trend}{\code{DataImport$plot_qc_trend()}}
 \item \href{#method-DataImport-clone}{\code{DataImport$clone()}}
@@ -136,6 +135,7 @@ Method to set all parameters
   ids = NULL,
   columns = NULL,
   regex = NULL,
+  rsd = NULL,
   imputation = NULL,
   batch_correction = NULL,
   blank_filtering = NULL,
@@ -155,6 +155,8 @@ id_col_sample, type_column, group_column, batch_column, order_column.}
 
 \item{\code{regex}}{list(), regular expressions to recognize blanks, qcs, qcpools and samples.
 Valid entries are blanks, qcs, qcpools and samples.}
+
+\item{\code{rsd}}{list(), set rsd filtering parameters.}
 
 \item{\code{imputation}}{list(), imputation parameters.}
 
@@ -180,39 +182,6 @@ Run the QCpool calculations. Calculate RSD and Trend of all features.
 \if{html}{\out{<div class="r">}}\preformatted{DataImport$calc_qcpool()}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataImport-show_rsd_plot"></a>}}
-\if{latex}{\out{\hypertarget{method-DataImport-show_rsd_plot}{}}}
-\subsection{Method \code{show_rsd_plot()}}{
-Show the histogram of RSD values.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataImport$show_rsd_plot(rsd_limit = 0.3)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{rsd_limit}}{numeric(1), set a limit between 0 and 1.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-ggplot2 object, RSD histogram.
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataImport-show_trend_plot"></a>}}
-\if{latex}{\out{\hypertarget{method-DataImport-show_trend_plot}{}}}
-\subsection{Method \code{show_trend_plot()}}{
-Show the trend plot.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataImport$show_trend_plot()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-ggplot2 object, RSD histogram.
-}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataImport-median_bc"></a>}}
@@ -273,30 +242,46 @@ data.frame with combat batch corrected data.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataImport-blank_filtering"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-blank_filtering}{}}}
+\subsection{Method \code{blank_filtering()}}{
+Perform sample blank / ratio filtering.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$blank_filtering()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataImport-plot_qc_rsd"></a>}}
 \if{latex}{\out{\hypertarget{method-DataImport-plot_qc_rsd}{}}}
 \subsection{Method \code{plot_qc_rsd()}}{
-A histogram showing the RSD distribution of all features.
+Show the histogram of RSD values.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataImport$plot_qc_rsd()}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rsd_limit}}{numeric(1), set a limit between 0 and 1.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
-ggplot2 object, containing a histogram.
+ggplot2 object, RSD histogram.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataImport-plot_qc_trend"></a>}}
 \if{latex}{\out{\hypertarget{method-DataImport-plot_qc_trend}{}}}
 \subsection{Method \code{plot_qc_trend()}}{
-Trend plot showing how each feature behaves in the pooled samples compared 
-to the first pooled sample in the batch.
+Show the trend plot.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataImport$plot_qc_trend()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-ggplot2 object, containing a trend plot.
+ggplot2 object, RSD histogram.
 }
 }
 \if{html}{\out{<hr>}}
