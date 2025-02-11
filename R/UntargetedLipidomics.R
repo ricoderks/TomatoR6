@@ -115,11 +115,41 @@ UntargetedLipidomics <- R6::R6Class(
     #' 
     #' @return ggplot2 object containing a violin plot.
     #' 
+    #' @importFrom ggplot2 ggplot aes geom_violin .data theme_minimal labs
+    #'     geom_hline guide_legend theme geom_jitter
+    #' 
     plot_qc_rsd_class = function() {
       # Rico: This might also useful for the untargeted metabolomics. MSDIAL 
       # also gives a class (ontology) for identified metabolites if available.
       # Maybe even for other child classes as well. Needs to be place in parent 
       # class then.
+      if(!is.null(self$tables$plot_rsd_data)) {
+        if(is.null(self$params$rsd$rsd_limit)) {
+          cli::cli_alert_info("No RSD limit set!")
+        }
+        
+        p <- self$tables$plot_rsd_data |> 
+          ggplot2::ggplot(ggplot2::aes(x = .data$Ontology,
+                                       y = .data$rsd)) +
+          ggplot2::geom_violin() +
+          ggplot2::geom_jitter(ggplot2::aes(colour = .data$polarity),
+                               alpha = 0.7) +
+          ggplot2::geom_hline(yintercept = self$params$rsd$rsd_limit,
+                              color = "red",
+                              linetype = 2) +
+          ggplot2::guides(colour = ggplot2::guide_legend(title = "Polarity",
+                                                       override.aes = list(alpha = 1))) +
+          ggplot2::labs(x = "Class",
+                        y = "RSD") +
+          ggplot2::theme_minimal() +
+          ggplot2::theme(legend.position = "bottom",
+                         axis.text.x = ggplot2::element_text(angle = 90,
+                                                             hjust = 1))
+        
+        return(p)
+      } else {
+        cli::cli_alert_danger("Can not create plot. No data available!")
+      }
     }
   ), # end public
   #---------------------------------------------------------------- private ----

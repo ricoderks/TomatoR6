@@ -390,6 +390,10 @@ DataImport <- R6::R6Class(
     #'
     plot_qc_rsd = function() {
       if(!is.null(self$tables$plot_rsd_data)) {
+        if(is.null(self$params$rsd$rsd_limit)) {
+          cli::cli_alert_info("No RSD limit set!")
+        }
+        
         p <- self$tables$plot_rsd_data |> 
           ggplot2::ggplot(ggplot2::aes(x = .data$rsd,
                                        fill = .data$polarity)) +
@@ -405,6 +409,8 @@ DataImport <- R6::R6Class(
           ggplot2::theme(legend.position = "bottom")
         
         return(p)
+      } else {
+        cli::cli_alert_danger("Can not create plot. No data available!")
       }
     },
     
@@ -437,6 +443,8 @@ DataImport <- R6::R6Class(
                                                              hjust = 1))
         
         return(p)
+      } else {
+        cli::cli_alert_danger("Can not create plot. No data available!")
       }
     }
   ), # end public
@@ -653,23 +661,39 @@ DataImport <- R6::R6Class(
     #
     calc_qcpool_rsd = function() {
       if(!is.null(self$tables$pool_data_long)) {
+        feature_data <- self$tables$feature_data
         pools_data <- self$tables$pool_data_long
         qcpool_index <- self$indices$index_pools
         
         pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
         
-        pools_data$rsd <- tapply(pools_data, list(pools_data[, "id"]), function(x) {
-          sd(x[, "peakArea"], na.rm = TRUE) / mean(x[, "peakArea"], na.rm = TRUE)
+        rsd_data <- tapply(pools_data, list(pools_data[, "id"]), function(x) {
+          rsd <- sd(x[, "peakArea"], na.rm = TRUE) / mean(x[, "peakArea"], na.rm = TRUE)
+          return(data.frame("id" = x[1, "id"],
+                            "rsd" = rsd))
         })
+        rsd_data <- do.call("rbind", rsd_data)
         
-        pools_data$polarity <- gsub(pattern = "(pos|neg).*",
-                                    replacement = "\\1",
-                                    x = pools_data$id)
-        no_keep <- pools_data$id[pools_data$rsd > self$params$rsd$rsd_limit]
+        rsd_data$polarity <- gsub(pattern = "(pos|neg).*",
+                                  replacement = "\\1",
+                                  x = rsd_data$id)
+        rsd_data <- merge(
+          x = rsd_data,
+          y = feature_data[, c("id", "Ontology")],
+          by = "id"
+        )
+        
+        if(is.null(self$params$rsd$rsd_limit)) {
+          cli::cli_alert_danger("No RSD filtering applied, because there is no RSD limit set!")
+          self$params$rsd$rsd_limit <- 0
+          private$add_log("No RSD limit set! Set to 0!")
+        }
+        
+        no_keep <- rsd_data$id[rsd_data$rsd > self$params$rsd$rsd_limit]
         self$tables$feature_data$keep_rsd <- self$tables$feature_data$id %in% no_keep
         private$check_filtering()
         
-        self$tables$plot_rsd_data <- pools_data
+        self$tables$plot_rsd_data <- rsd_data
       }
     },
     
