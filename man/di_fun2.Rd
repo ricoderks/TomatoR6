@@ -11,6 +11,9 @@ di_fun2(x, y)
 
 \item{y}{numeric()}
 }
+\value{
+the sum of x and y
+}
 \description{
 test function
 }

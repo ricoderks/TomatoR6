@@ -27,6 +27,7 @@ Yassene Mohammed
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun1"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun1'><code>TomatoR6::DataImport$fun1()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun2"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun2'><code>TomatoR6::DataImport$fun2()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun3"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun3'><code>TomatoR6::DataImport$fun3()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun4"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun4'><code>TomatoR6::DataImport$fun4()</code></a></span></li>
 </ul>
 </details>
 }}

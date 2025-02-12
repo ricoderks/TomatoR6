@@ -6,6 +6,9 @@
 \usage{
 di_fun1()
 }
+\value{
+the number 3
+}
 \description{
 test function
 }

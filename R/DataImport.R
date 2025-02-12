@@ -13,6 +13,7 @@ DataImport <- R6::R6Class(
     },
     #---------------------------------------------------------- global info ----
     name = NULL,
+    monkey = NULL,
     
     #------------------------------------------------------- some functions ----
     fun1 = function() {
@@ -23,6 +24,9 @@ DataImport <- R6::R6Class(
     },
     fun3 = function() {
       di_fun3(self)
+    },
+    fun4 = function() {
+      di_fun4(self)
     }
   )
 )

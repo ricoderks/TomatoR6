@@ -1,8 +1,6 @@
-dev <- FALSE
-if(dev) {
-  # library(TomatoR6)
+  library(TomatoR6)
   
-  # create object
+  # create data import object
   di_obj <- DataImport$new(name = "Testing")
   
   di_obj$fun1()
@@ -12,6 +10,11 @@ if(dev) {
   
   di_obj$fun3()
   
+  di_obj$monkey
+  di_obj$fun4()
+  di_obj$monkey
+  
+  # create untargeted lipidomics object
   unLip <- UntargetedLipidomics$new(name = "testing again")
   unLip
   
@@ -22,5 +25,7 @@ if(dev) {
   
   unLip$fun3()
   
-
-}
+  unLip$monkey
+  unLip$fun4()
+  unLip$monkey
+  
