@@ -21,13 +21,15 @@ E. Nevedomskaya
 \describe{
 \item{\code{name}}{character(1), containing a name.}
 
-\item{\code{filenames}}{character(), containing the full file names.}
-
-\item{\code{meta_filename}}{character(1), containing the full meta file name.}
+\item{\code{files}}{list(), containing all files.}
 
 \item{\code{tables}}{list() containing all data tables.}
 
 \item{\code{indices}}{list() containing all kind of indices.}
+
+\item{\code{params}}{list(), containing all kind of parameter settings for the methods.}
+
+\item{\code{history}}{data.frame() with the history of all steps.}
 }
 \if{html}{\out{</div>}}
 }
@@ -36,12 +38,15 @@ E. Nevedomskaya
 \itemize{
 \item \href{#method-DataImport-new}{\code{DataImport$new()}}
 \item \href{#method-DataImport-print}{\code{DataImport$print()}}
-\item \href{#method-DataImport-read_meta_data}{\code{DataImport$read_meta_data()}}
-\item \href{#method-DataImport-make_table_long}{\code{DataImport$make_table_long()}}
-\item \href{#method-DataImport-make_table_wide}{\code{DataImport$make_table_wide()}}
+\item \href{#method-DataImport-show_data_info}{\code{DataImport$show_data_info()}}
+\item \href{#method-DataImport-set_files}{\code{DataImport$set_files()}}
+\item \href{#method-DataImport-import}{\code{DataImport$import()}}
+\item \href{#method-DataImport-set_parameters}{\code{DataImport$set_parameters()}}
+\item \href{#method-DataImport-calc_qcpool}{\code{DataImport$calc_qcpool()}}
 \item \href{#method-DataImport-median_bc}{\code{DataImport$median_bc()}}
 \item \href{#method-DataImport-loess_bc}{\code{DataImport$loess_bc()}}
 \item \href{#method-DataImport-combat_bc}{\code{DataImport$combat_bc()}}
+\item \href{#method-DataImport-blank_filtering}{\code{DataImport$blank_filtering()}}
 \item \href{#method-DataImport-plot_qc_rsd}{\code{DataImport$plot_qc_rsd()}}
 \item \href{#method-DataImport-plot_qc_trend}{\code{DataImport$plot_qc_trend()}}
 \item \href{#method-DataImport-clone}{\code{DataImport$clone()}}
@@ -53,17 +58,13 @@ E. Nevedomskaya
 \subsection{Method \code{new()}}{
 Initialization function for DataImport class.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataImport$new(name = NA, filenames = NA, meta_filename = NA)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$new(name = NA)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{name}}{character(1), name.}
-
-\item{\code{filenames}}{character(), containing the full file names.}
-
-\item{\code{meta_filename}}{character(1), containing the full meta file name.}
 }
 \if{html}{\out{</div>}}
 }
@@ -86,50 +87,101 @@ Print a nice summary of the class.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataImport-read_meta_data"></a>}}
-\if{latex}{\out{\hypertarget{method-DataImport-read_meta_data}{}}}
-\subsection{Method \code{read_meta_data()}}{
-Read all kind of meta data files (.csv, .txt, .xlsx).
+\if{html}{\out{<a id="method-DataImport-show_data_info"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-show_data_info}{}}}
+\subsection{Method \code{show_data_info()}}{
+Show information about the data.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataImport$read_meta_data(file = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$show_data_info()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataImport-set_files"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-set_files}{}}}
+\subsection{Method \code{set_files()}}{
+Set the file names for data and meta data.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$set_files(data_files = NULL, meta_file = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{file}}{character(1), containing the full path to the meta data file.}
+\item{\code{data_files}}{character(), containing the full file names.}
+
+\item{\code{meta_file}}{character(1), containing the full meta file name.}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Returns}{
-data.frame containing the meta data.
-}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataImport-make_table_long"></a>}}
-\if{latex}{\out{\hypertarget{method-DataImport-make_table_long}{}}}
-\subsection{Method \code{make_table_long()}}{
-Function to pivot a data.frame into long (tidy) format.
+\if{html}{\out{<a id="method-DataImport-import"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-import}{}}}
+\subsection{Method \code{import()}}{
+This method imports all data and meta data.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataImport$make_table_long()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$import()}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-data.frame in long format.
-}
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-DataImport-make_table_wide"></a>}}
-\if{latex}{\out{\hypertarget{method-DataImport-make_table_wide}{}}}
-\subsection{Method \code{make_table_wide()}}{
-Function to pivot a data.frame into wide format.
+\if{html}{\out{<a id="method-DataImport-set_parameters"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-set_parameters}{}}}
+\subsection{Method \code{set_parameters()}}{
+Method to set all parameters
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{DataImport$make_table_wide()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$set_parameters(
+  ids = NULL,
+  columns = NULL,
+  regex = NULL,
+  rsd = NULL,
+  imputation = NULL,
+  batch_correction = NULL,
+  blank_filtering = NULL,
+  normalization = NULL
+)}\if{html}{\out{</div>}}
 }
 
-\subsection{Returns}{
-data.frame in wide format.
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{ids}}{list(), column names containing information about, sample id,
+feature id. Valid entries are: id_col_meta, id_col_data.}
+
+\item{\code{columns}}{list(), column names containing information about,
+sample type, group column, batch column. Valid entries are: id_col_meta, 
+id_col_sample, type_column, group_column, batch_column, order_column.}
+
+\item{\code{regex}}{list(), regular expressions to recognize blanks, qcs, qcpools and samples.
+Valid entries are blanks, qcs, qcpools and samples.}
+
+\item{\code{rsd}}{list(), set rsd filtering parameters.}
+
+\item{\code{imputation}}{list(), imputation parameters.}
+
+\item{\code{batch_correction}}{list(), batch correction parameters.}
+
+\item{\code{blank_filtering}}{list(), blank filtering parameters.}
+
+\item{\code{normalization}}{list(), normalization parameters.}
 }
+\if{html}{\out{</div>}}
+}
+\subsection{Details}{
+Run this function first before importing the data.
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataImport-calc_qcpool"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-calc_qcpool}{}}}
+\subsection{Method \code{calc_qcpool()}}{
+Run the QCpool calculations. Calculate RSD and Trend of all features.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$calc_qcpool()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataImport-median_bc"></a>}}
@@ -190,30 +242,46 @@ data.frame with combat batch corrected data.
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DataImport-blank_filtering"></a>}}
+\if{latex}{\out{\hypertarget{method-DataImport-blank_filtering}{}}}
+\subsection{Method \code{blank_filtering()}}{
+Perform sample blank / ratio filtering.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DataImport$blank_filtering()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataImport-plot_qc_rsd"></a>}}
 \if{latex}{\out{\hypertarget{method-DataImport-plot_qc_rsd}{}}}
 \subsection{Method \code{plot_qc_rsd()}}{
-A histogram showing the RSD distribution of all features.
+Show the histogram of RSD values.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataImport$plot_qc_rsd()}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{rsd_limit}}{numeric(1), set a limit between 0 and 1.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
-ggplot2 object, containing a histogram.
+ggplot2 object, RSD histogram.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-DataImport-plot_qc_trend"></a>}}
 \if{latex}{\out{\hypertarget{method-DataImport-plot_qc_trend}{}}}
 \subsection{Method \code{plot_qc_trend()}}{
-Trend plot showing how each feature behaves in the pooled samples compared 
-to the first pooled sample in the batch.
+Show the trend plot.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{DataImport$plot_qc_trend()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-ggplot2 object, containing a trend plot.
+ggplot2 object, RSD histogram.
 }
 }
 \if{html}{\out{<hr>}}
