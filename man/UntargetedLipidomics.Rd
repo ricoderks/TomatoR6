@@ -14,37 +14,19 @@ Yassene Mohammed
 \section{Super class}{
 \code{\link[TomatoR6:DataImport]{TomatoR6::DataImport}} -> \code{UntargetedLipidomics}
 }
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{msdial_files}}{list(), containing all file names / locations.}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-UntargetedLipidomics-new}{\code{UntargetedLipidomics$new()}}
-\item \href{#method-UntargetedLipidomics-set_files}{\code{UntargetedLipidomics$set_files()}}
-\item \href{#method-UntargetedLipidomics-run_msdial}{\code{UntargetedLipidomics$run_msdial()}}
-\item \href{#method-UntargetedLipidomics-plot_qc_rsd_class}{\code{UntargetedLipidomics$plot_qc_rsd_class()}}
 \item \href{#method-UntargetedLipidomics-clone}{\code{UntargetedLipidomics$clone()}}
 }
 }
 \if{html}{\out{
-<details><summary>Inherited methods</summary>
+<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="blank_filtering"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-blank_filtering'><code>TomatoR6::DataImport$blank_filtering()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="calc_qcpool"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-calc_qcpool'><code>TomatoR6::DataImport$calc_qcpool()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="combat_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-combat_bc'><code>TomatoR6::DataImport$combat_bc()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="import"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-import'><code>TomatoR6::DataImport$import()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="loess_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-loess_bc'><code>TomatoR6::DataImport$loess_bc()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="median_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-median_bc'><code>TomatoR6::DataImport$median_bc()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_rsd"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_rsd'><code>TomatoR6::DataImport$plot_qc_rsd()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_trend"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_trend'><code>TomatoR6::DataImport$plot_qc_trend()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="print"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-print'><code>TomatoR6::DataImport$print()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="set_parameters"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-set_parameters'><code>TomatoR6::DataImport$set_parameters()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="show_data_info"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-show_data_info'><code>TomatoR6::DataImport$show_data_info()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun1"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun1'><code>TomatoR6::DataImport$fun1()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun2"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun2'><code>TomatoR6::DataImport$fun2()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun3"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun3'><code>TomatoR6::DataImport$fun3()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -63,58 +45,6 @@ Initialization function for DataImport class.
 \item{\code{name}}{character(1), name.}
 }
 \if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-UntargetedLipidomics-set_files"></a>}}
-\if{latex}{\out{\hypertarget{method-UntargetedLipidomics-set_files}{}}}
-\subsection{Method \code{set_files()}}{
-Set the file names for data and meta data.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$set_files(
-  data_files = NULL,
-  meta_file = NULL,
-  msdial_folder = NULL,
-  msdial_parameter = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{data_files}}{character(), containing the full file names.}
-
-\item{\code{meta_file}}{character(1), containing the full meta file name.}
-
-\item{\code{msdial_folder}}{character(1), containing the folder with all MS data.}
-
-\item{\code{msdial_parameter}}{character(1), name of MSDIAL parameter file.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-UntargetedLipidomics-run_msdial"></a>}}
-\if{latex}{\out{\hypertarget{method-UntargetedLipidomics-run_msdial}{}}}
-\subsection{Method \code{run_msdial()}}{
-Running command line MSDIAL from R. MSDIAL needs to be installed to be 
-able to use this.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$run_msdial()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-UntargetedLipidomics-plot_qc_rsd_class"></a>}}
-\if{latex}{\out{\hypertarget{method-UntargetedLipidomics-plot_qc_rsd_class}{}}}
-\subsection{Method \code{plot_qc_rsd_class()}}{
-A violin plot showing the RSD of each lipid species per lipid class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$plot_qc_rsd_class()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-ggplot2 object containing a violin plot.
 }
 }
 \if{html}{\out{<hr>}}
