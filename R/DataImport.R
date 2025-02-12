@@ -13,6 +13,8 @@
 #' 
 #' @import R6
 #' @import cli
+#' @importFrom utils read.table read.csv
+#' @importFrom openxlsx2 read_xlsx
 #' 
 #' @author Rico Derks
 #' @author Yassene Mohammed
@@ -497,12 +499,12 @@ DataImport <- R6::R6Class(
       
       meta_df <- switch(
         extension,
-        "csv" = read.csv(file = self$files$meta_file,
-                         header = TRUE),
-        "txt" = read.table(file = self$files$meta_file,
-                           header = TRUE,
-                           sep = "\t"),
-        "xlsx" = openxlsx::read.xlsx(xlsxFile = self$files$meta_file)
+        "csv" = utils::read.csv(file = self$files$meta_file,
+                                header = TRUE),
+        "txt" = utils::read.table(file = self$files$meta_file,
+                                  header = TRUE,
+                                  sep = "\t"),
+        "xlsx" = openxlsx2::read_xlsx(file = self$files$meta_file)
       )
       
       self$tables$meta_data <- meta_df

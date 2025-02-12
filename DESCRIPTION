@@ -10,9 +10,11 @@ BugReports: https://github.com/ricoderks/TomatoR6/issues
 Imports:
     cli,
     ggplot2,
+    openxlsx2,
     R6,
     stats,
-    tidyr
+    tidyr,
+    utils
 Remotes:
     bioc::sva
 Encoding: UTF-8
