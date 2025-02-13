@@ -12,7 +12,7 @@ di_fun5(self, private)
 \item{private}{class object}
 }
 \value{
-self
+private
 }
 \description{
 Can I change a private property from here?

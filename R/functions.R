@@ -58,7 +58,7 @@ di_fun4 <- function(self) {
 #' @description
 #' Can I change a private property from here?
 #' 
-#' @returns self
+#' @returns private
 #' 
 di_fun5 <- function(self, private) {
   private$private_name <- "I'am a secret"

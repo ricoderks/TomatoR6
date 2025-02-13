@@ -7,13 +7,22 @@ NULL
 
 DataImport <- R6::R6Class(
   classname = "DataImport",
+  active = list(
+    monkey = function(value) {
+      if(missing(value)) {
+        self$.monkey
+      } else {
+        self$.monkey <- value
+      }
+    }
+  ),
   public = list(
     initialize = function(name = NA) {
       self$name <- name
     },
     #---------------------------------------------------------- global info ----
     name = NULL,
-    monkey = NULL,
+    .monkey = NULL,
     
     #------------------------------------------------------- some functions ----
     fun1 = function() {
