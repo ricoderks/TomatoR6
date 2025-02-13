@@ -11,11 +11,18 @@ if(dev) {
     "/home/ricoderks/Downloads/TomatoR6_data/20250123_140224_bile_neg_fixed.txt"
   )
   untar_lipids$file_meta <- "/home/ricoderks/Downloads/TomatoR6_data/metadata.xlsx"
-  untar_lipids$file_data
+  
+  untar_lipids$id_col_meta <- "sampleId"
+  
+  untar_lipids$regex_blanks <- "blank_"
+  untar_lipids$regex_pools <- "qcpool_"
+  untar_lipids$regex_samples <- "sample_"
+  
+  untar_lipids$import()
   
   untar_lipids$history  
   
   untar_lipids
   
-  untar_lipids$import()
+  
 }  

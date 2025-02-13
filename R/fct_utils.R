@@ -44,3 +44,23 @@ utils_file_show <-  function(self = NULL) {
   cli::cli_li(paste("Meta data file:", self$.file_meta))
   cli::cli_end()
 }
+
+
+#' @title Show the samples from DataImport class
+#' 
+#' @description
+#' Show the samples from DataImport class.
+#' 
+#' @param self self 
+#'
+#' @import cli
+#'
+utils_sample_show <-  function(self = NULL) {
+  cli::cli_ul()
+  cli::cli_li(paste("NUmber of blanks:", length(self$index_blanks)))
+  cli::cli_li(paste("NUmber of qcs:", length(self$index_qcs)))
+  cli::cli_li(paste("NUmber of pools:", length(self$index_pools)))
+  cli::cli_li(paste("NUmber of samples:", length(self$index_samples)))
+  cli::cli_end()
+}
+

@@ -4,13 +4,13 @@
 \alias{make_table_long}
 \title{Make data.frame long}
 \usage{
-make_table_long(data_wide = NULL)
+make_table_long(self = NULL)
 }
 \arguments{
-\item{data_wide}{data.frame in wide format.}
+\item{self}{data.frame in wide format.}
 }
 \value{
-data.frame in long format.
+self (invisible).
 }
 \description{
 Make data.frame long.

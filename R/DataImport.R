@@ -30,90 +30,57 @@ DataImport <- R6::R6Class(
                                          paste(self$.file_meta, collapse = ", ")))
       }
     },
-    table_metadata = function(value) {
+    id_col_meta = function(value) {
       if(missing(value)) {
-        self$.table_metadata
+        self$.id_col_meta
       } else {
-        self$.table_metadata <- value
+        self$.id_col_meta <- value
+        private$add_log(message = paste0("Set column ID meta data: '", 
+                                         self$.id_col_meta,
+                                         "'"))
       }
     },
-    table_rawdata = function(value) {
+    regex_blanks = function(value) {
       if(missing(value)) {
-        self$.table_rawdata
+        self$.regex_blanks
       } else {
-        self$.table_rawdata <- value
+        self$.regex_blanks <- value
+        private$add_log(message = paste0("Regular expression blank set: '", 
+                                        self$.regex_blanks,
+                                        "'"))
       }
     },
-    table_alldata = function(value) {
+    regex_qcs = function(value) {
       if(missing(value)) {
-        self$.table_alldata
+        self$.regex_qcs
       } else {
-        self$.table_alldata <- value
+        self$.regex_qcs <- value
+        private$add_log(message = paste0("Regular expression qcs set: '", 
+                                         self$.regex_qcs,
+                                         '"'))
       }
     },
-    table_blank = function(value) {
+    regex_pools = function(value) {
       if(missing(value)) {
-        self$.table_blank
+        self$.regex_pools
       } else {
-        self$.table_blank <- value
+        self$.regex_pools <- value
+        private$add_log(message = paste0("Regular expression pools set: '", 
+                                         self$.regex_pools,
+                                         "'"))
       }
     },
-    table_qc = function(value) {
+    regex_samples = function(value) {
       if(missing(value)) {
-        self$.table_qc
+        self$.regex_samples
       } else {
-        self$.table_qc <- value
-      }
-    },
-    table_pool = function(value) {
-      if(missing(value)) {
-        self$.table_pool
-      } else {
-        self$.table_pool <- value
-      }
-    },
-    table_sample = function(value) {
-      if(missing(value)) {
-        self$.table_sample
-      } else {
-        self$.table_sample <- value
-      }
-    },
-    table_alldata_long = function(value) {
-      if(missing(value)) {
-        self$.table_alldata_long
-      } else {
-        self$.table_alldata_long <- value
-      }
-    },
-    table_blank_long = function(value) {
-      if(missing(value)) {
-        self$.table_blank_long
-      } else {
-        self$.table_blank_long <- value
-      }
-    },
-    table_qc_long = function(value) {
-      if(missing(value)) {
-        self$.table_qc_long
-      } else {
-        self$.table_qc_long <- value
-      }
-    },
-    table_pool_long = function(value) {
-      if(missing(value)) {
-        self$.table_pool_long
-      } else {
-        self$.table_pool_long <- value
-      }
-    },
-    table_sample_long = function(value) {
-      if(missing(value)) {
-        self$.table_sample_long
-      } else {
-        self$.table_sample_long <- value
+        self$.regex_samples <- value
+        private$add_log(message = paste0("Regular expression samples set: '", 
+                                         self$.regex_samples,
+                                         "'"))
       }
     }
+    
   ),
   public = list(
     initialize = function(name = NA) {
@@ -127,55 +94,47 @@ DataImport <- R6::R6Class(
     .file_meta = NULL,
     
     #--------------------------------------------------------------- tables ----
-    .table_metadata = NULL,
-    .table_rawdata = NULL,
+    table_metadata = NULL,
+    table_rawdata = NULL,
     
     # wide data
-    .table_alldata = NULL,
-    .table_blank = NULL,
-    .table_qc = NULL,
-    .table_pool = NULL,
-    .table_sample = NULL,
+    table_alldata = NULL,
+    table_blank = NULL,
+    table_qc = NULL,
+    table_pool = NULL,
+    table_sample = NULL,
     
     # long data
-    .table_alldata_long = NULL,
-    .table_blank_long = NULL,
-    .table_qc_long = NULL,
-    .table_pool_long = NULL,
-    .table_sample_long = NULL,
+    table_alldata_long = NULL,
+    table_blank_long = NULL,
+    table_qc_long = NULL,
+    table_pool_long = NULL,
+    table_sample_long = NULL,
     
-    #--------------------------------------------------------------- tables ----
-    tables = list(
-      
-      feature_data = NULL,
-      
-      plot_rsd_data = NULL,
-      plot_trend_data = NULL
-      # Rico: What about the rt, m/z tables? Assuming that above tables contain
-      # peak areas.
-      # Rico: Do we also want to store normalized tables, batch corrected tables?
-      # Or do we keep track of which preprocessing we do and only store the end 
-      # result?
-    ),
+    table_featuredata = NULL,
     
-    
+    table_rsd_data = NULL,
+    table_trend_data = NULL,
     #-------------------------------------------------------------- indices ----
-    indices = list(
-      id_col_meta = NULL,
-      id_col_data = "sampleName",
-      id_col_feature = "id",
-      
-      type_column = NULL,
-      group_column = NULL,
-      batch_column = NULL,
-      order_column = NULL,
-      
-      index_blanks = NULL,
-      index_pools = NULL,
-      index_qcs = NULL,
-      index_samples = NULL
-    ),
+    .id_col_meta = NULL,
+    id_col_data = "sampleName",
+    id_col_feature = "id",
     
+    type_column = NULL,
+    group_column = NULL,
+    batch_column = NULL,
+    order_column = NULL,
+    
+    index_blanks = NULL,
+    index_pools = NULL,
+    index_qcs = NULL,
+    index_samples = NULL,
+    
+    #----------------------------------------------------- parameters regex ----
+    .regex_blanks = NULL,
+    .regex_qcs = NULL,
+    .regex_pools = NULL,
+    .regex_samples = NULL,
     
     #----------------------------------------------------------- parameters ----
     params = list(
@@ -215,7 +174,7 @@ DataImport <- R6::R6Class(
       cli::cli_h3("Files")
       private$file_show()
       cli::cli_h3("Sample types")
-      # private$samples_fun()
+      private$samples_show()
     },
     
     import = function() {
@@ -233,21 +192,18 @@ DataImport <- R6::R6Class(
       private$import_data()
       private$add_log(message = "Imported raw data.")
 
-      # # extracting indices
-      # cli::cli_li("extracting indices")
-      # private$add_log(message = "Extracting indices")
-      # private$extract_indices()
-      # 
-      # # extracting tables
-      # cli::cli_li("extracting tables")
-      # private$add_log(message = "Extracting tables")
-      # private$extract_tables()
+      # extracting indices
+      cli::cli_li("extracting indices")
+      private$extract_indices()
+      private$add_log(message = "Extracted indices.")
+      
+      # extracting tables
+      cli::cli_li("extracting tables")
+      private$extract_tables()
+      private$add_log(message = "Extracted tables.")
       
       cli::cli_alert_success("Done!")
     }
-    # fun1 = function() {
-    #   di_fun1()
-    # },
     
   ), # end public
   #---------------------------------------------------------------- private ----
@@ -260,8 +216,17 @@ DataImport <- R6::R6Class(
     file_show = function() {
       utils_file_show(self = self)
     },
+    samples_show = function() {
+      utils_sample_show(self = self)
+    },
     import_metadata = function() {
       import_read_metadata(self = self)
+    },
+    extract_indices = function() {
+      extract_indices(self = self)
+    },
+    extract_tables = function() {
+      extract_tables(self = self)
     }
   )
 )
