@@ -1,3 +1,5 @@
+dev <- FALSE
+if(dev) {
   library(TomatoR6)
   
   # create data import object
@@ -28,4 +30,4 @@
   unLip$monkey
   unLip$fun4()
   unLip$monkey
-  
+}  
