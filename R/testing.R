@@ -16,6 +16,10 @@ if(dev) {
   di_obj$fun4()
   di_obj$monkey
   
+  di_obj$show_name()
+  di_obj$fun5()
+  di_obj$show_name()
+  
   # create untargeted lipidomics object
   unLip <- UntargetedLipidomics$new(name = "testing again")
   unLip

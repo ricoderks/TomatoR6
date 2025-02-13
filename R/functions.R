@@ -49,3 +49,18 @@ di_fun4 <- function(self) {
   self$monkey <- "chimpanzee"
   invisible(self)
 }
+
+#' @title test function
+#' 
+#' @param self class object
+#' @param private class object
+#' 
+#' @description
+#' Can I change a private property from here?
+#' 
+#' @returns self
+#' 
+di_fun5 <- function(self, private) {
+  private$private_name <- "I'am a secret"
+  invisible(private)
+}

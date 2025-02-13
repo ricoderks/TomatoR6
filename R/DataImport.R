@@ -27,7 +27,18 @@ DataImport <- R6::R6Class(
     },
     fun4 = function() {
       di_fun4(self)
+    },
+    fun5 = function() {
+      di_fun5(self = self,
+              private = private)
+    },
+    show_name = function() {
+      print(private$private_name)
     }
+  ), # end public
+  #---------------------------------------------------------------- private ----
+  private = list(
+    private_name = NULL
   )
 )
 
