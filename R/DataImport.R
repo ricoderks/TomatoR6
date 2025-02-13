@@ -138,12 +138,6 @@ DataImport <- R6::R6Class(
     
     #----------------------------------------------------------- parameters ----
     params = list(
-      regex = list(
-        blanks = NULL,
-        qcs = NULL,
-        pools = NULL,
-        samples = NULL
-      ),
       rsd = list(
         rsd_limit = NULL
       ),

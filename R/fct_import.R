@@ -171,7 +171,7 @@ make_table_wide = function(self = NULL) {
       values_from = "peakArea"
     )
   
-  self$table_alldata <- data_wide
+  self$table_alldata <- as.data.frame(data_wide)
   
   invisible(self)
 }
@@ -277,7 +277,7 @@ extract_tables = function(self = self) {
     self$table_blank <- 
       self$table_alldata[self$table_alldata[, self$id_col_data] %in% self$index_blanks, ]
     self$table_blank_long <- 
-      self$tables$all_data_long[self$table_alldata_long[, self$id_col_data] %in% self$index_blanks, ]
+      self$table_alldata_long[self$table_alldata_long[, self$id_col_data] %in% self$index_blanks, ]
   }
   
   if(!is.null(self$index_qcs)) {
