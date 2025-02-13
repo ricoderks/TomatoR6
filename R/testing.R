@@ -3,35 +3,19 @@ if(dev) {
   library(TomatoR6)
   
   # create data import object
-  di_obj <- DataImport$new(name = "Testing")
+  untar_lipids <- UntargetedLipidomics$new(name = "Testing untargeted lipidomics")
+  untar_lipids
   
-  di_obj$fun1()
+  untar_lipids$file_data <- c(
+    "/home/ricoderks/Downloads/TomatoR6_data/20250123_124538_bile_pos_fixed.txt",
+    "/home/ricoderks/Downloads/TomatoR6_data/20250123_140224_bile_neg_fixed.txt"
+  )
+  untar_lipids$file_meta <- "/home/ricoderks/Downloads/TomatoR6_data/metadata.xlsx"
+  untar_lipids$file_data
   
-  di_obj$fun2(x = 100,
-              y = 300)
+  untar_lipids$history  
   
-  di_obj$fun3()
+  untar_lipids
   
-  di_obj$monkey
-  di_obj$fun4()
-  di_obj$monkey
-  
-  di_obj$show_name()
-  di_obj$fun5()
-  di_obj$show_name()
-  
-  # create untargeted lipidomics object
-  unLip <- UntargetedLipidomics$new(name = "testing again")
-  unLip
-  
-  unLip$fun1()
-  
-  unLip$fun2(x = 123,
-             y = 1234)
-  
-  unLip$fun3()
-  
-  unLip$monkey
-  unLip$fun4()
-  unLip$monkey
+  untar_lipids$import()
 }  

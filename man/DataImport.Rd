@@ -6,3 +6,8 @@
 \description{
 Defining the DataImport class
 }
+\author{
+Rico Derks
+
+Yassene Mohammed
+}

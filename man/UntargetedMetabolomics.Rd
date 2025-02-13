@@ -22,14 +22,10 @@ Yassene Mohammed
 }
 }
 \if{html}{\out{
-<details><summary>Inherited methods</summary>
+<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun1"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun1'><code>TomatoR6::DataImport$fun1()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun2"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun2'><code>TomatoR6::DataImport$fun2()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun3"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun3'><code>TomatoR6::DataImport$fun3()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun4"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun4'><code>TomatoR6::DataImport$fun4()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="fun5"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-fun5'><code>TomatoR6::DataImport$fun5()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="show_name"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-show_name'><code>TomatoR6::DataImport$show_name()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="import"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-import'><code>TomatoR6::DataImport$import()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="print"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-print'><code>TomatoR6::DataImport$print()</code></a></span></li>
 </ul>
 </details>
 }}

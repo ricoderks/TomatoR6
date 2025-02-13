@@ -8,7 +8,9 @@ License: GPL (>= 3)
 URL: https://github.com/ricoderks/TomatoR6
 BugReports: https://github.com/ricoderks/TomatoR6/issues
 Imports:
-    R6
+    openxlsx2,
+    R6,
+    utils
 Remotes:
     bioc::sva
 Encoding: UTF-8

@@ -23,5 +23,10 @@ UntargetedLipidomics <- R6::R6Class(
     initialize = function(name = NA) {
       super$initialize(name)
     }
+  ), # end public
+  private = list(
+    import_data = function() {
+      import_read_rawdata(self = self)
+    }
   )
 )
