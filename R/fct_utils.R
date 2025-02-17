@@ -57,10 +57,10 @@ utils_file_show <-  function(self = NULL) {
 #'
 utils_sample_show <-  function(self = NULL) {
   cli::cli_ul()
-  cli::cli_li(paste("NUmber of blanks:", length(self$index_blanks)))
-  cli::cli_li(paste("NUmber of qcs:", length(self$index_qcs)))
-  cli::cli_li(paste("NUmber of pools:", length(self$index_pools)))
-  cli::cli_li(paste("NUmber of samples:", length(self$index_samples)))
+  cli::cli_li(paste("Number of blanks:", length(self$index_blanks)))
+  cli::cli_li(paste("Number of qcs:", length(self$index_qcs)))
+  cli::cli_li(paste("Number of pools:", length(self$index_pools)))
+  cli::cli_li(paste("Number of samples:", length(self$index_samples)))
   cli::cli_end()
 }
 
