@@ -3,7 +3,7 @@
 #' @description
 #' Add log entry into the history.
 #' 
-#' @param self self 
+#' @param self object of class DataImport.
 #' @param message character(1), log message.
 #'
 #' @returns self
@@ -30,7 +30,7 @@ utils_add_log <- function(self = NULL,
 #' @description
 #' Show the files from DataImport class.
 #' 
-#' @param self self 
+#' @param self object of class DataImport. 
 #'
 #' @import cli
 #'
@@ -51,7 +51,7 @@ utils_file_show <-  function(self = NULL) {
 #' @description
 #' Show the samples from DataImport class.
 #' 
-#' @param self self 
+#' @param self object of class DataImport.
 #'
 #' @import cli
 #'
@@ -63,4 +63,49 @@ utils_sample_show <-  function(self = NULL) {
   cli::cli_li(paste("NUmber of samples:", length(self$index_samples)))
   cli::cli_end()
 }
+
+
+#' @title Determine which features to keep
+#' 
+#' @description
+#' Determine which features to keep depending on the filters used.
+#' 
+#' @param self object of class DataImport.
+#' 
+#' @returns self (invsible).
+#' 
+utils_analysis_features <- function(self = NULL) {
+  for(a in 1:nrow(self$table_featuredata)) {
+    self$table_featuredata$keep[a] <- all(
+      self$table_featuredata$keep_rsd[a], 
+      self$table_featuredata$keep_sample_blank[a]
+    )
+  }
+  
+  return(invisible(self))
+}
+
+
+#' @title Extract the sample data for further analysis
+#' 
+#' @description
+#' Exctract the sample data table for further analysis. All set filtering 
+#' steps have been applied on this table. 
+#' 
+#' @param self object of class DataImport.
+#'
+#' @returns self (invisible).
+#'
+utils_analysis_table <- function(self = NULL) {
+  keep_ids <- self$table_featuredata$id[self$table_featuredata$keep == TRUE]
+  
+  # wide format
+  self$table_analysis <- self$table_sample[, c("sampleName", keep_ids)]
+  
+  # long format
+  self$table_analysis_long <- self$table_sample_long[self$table_sample_long$id %in% keep_ids, ]
+  
+  return(invisible(self))
+}
+
 

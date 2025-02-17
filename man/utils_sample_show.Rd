@@ -7,7 +7,7 @@
 utils_sample_show(self = NULL)
 }
 \arguments{
-\item{self}{self}
+\item{self}{object of class DataImport.}
 }
 \description{
 Show the samples from DataImport class.

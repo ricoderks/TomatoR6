@@ -176,3 +176,23 @@ qc_plot_trend = function(self = NULL) {
     return(NULL)
   }
 }
+
+
+#' @title Apply the RSD filtering
+#' 
+#' @description
+#' Apply the RSD filtering.
+#' 
+#' @param self object of class DataImport.
+#' 
+#' @returns self (invisible).
+#' 
+qc_apply_rsd <- function(self = NULL) {
+  rsd_data <- self$table_rsd_data
+  rsd_limit <- self$qc_rsd_limit
+  
+  no_keep <- rsd_data$id[rsd_data$rsd <= rsd_limit]
+  self$table_featuredata$keep_rsd <- self$table_featuredata$id %in% no_keep
+  
+  return(invisible(self))
+}

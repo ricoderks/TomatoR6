@@ -7,7 +7,7 @@
 utils_file_show(self = NULL)
 }
 \arguments{
-\item{self}{self}
+\item{self}{object of class DataImport.}
 }
 \description{
 Show the files from DataImport class.

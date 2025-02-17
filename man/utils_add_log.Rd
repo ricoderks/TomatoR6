@@ -7,7 +7,7 @@
 utils_add_log(self = NULL, message = NULL)
 }
 \arguments{
-\item{self}{self}
+\item{self}{object of class DataImport.}
 
 \item{message}{character(1), log message.}
 }

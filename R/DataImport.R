@@ -71,6 +71,26 @@ DataImport <- R6::R6Class(
                                          "'"))
       }
     },
+    preprocessing_steps = function(value) {
+      if(missing(value)) {
+        self$.preprocessing_steps
+      } else {
+        if(all(value %in% private$steps_preprocessing)) {
+          self$.preprocessing_steps <- value
+          private$add_log(message = paste0("Pre-processing steps: ", 
+                                           paste(paste0("'", self$.preprocessing_steps, "'"),
+                                                 collapse = ", ")))
+        } else {
+          cli::cli_alert_danger("An unknown pre-processing step is specified!")
+          cli::cli_alert_info("Valid pre-processing steps are:")
+          steps <- cli::cli_ul()
+          for(a in private$steps_preprocessing) {
+            cli::cli_li(paste0("'", a, "'"))
+          }
+          cli::cli_end(steps)
+        }
+      }
+    },
     regex_samples = function(value) {
       if(missing(value)) {
         self$.regex_samples
@@ -88,6 +108,33 @@ DataImport <- R6::R6Class(
         self$.qc_rsd_limit <- value
         private$add_log(message = paste0("QC RSD limit set: ", 
                                          self$.qc_rsd_limit))
+      }
+    },
+    blank_ratio = function(value) {
+      if(missing(value)) {
+        self$.blank_ratio
+      } else {
+        self$.blank_ratio <- value
+        private$add_log(message = paste0("Sample / blank ratio set: ", 
+                                         self$.blank_ratio))
+      }
+    },
+    blank_threshold = function(value) {
+      if(missing(value)) {
+        self$.blank_threshold
+      } else {
+        self$.blank_threshold <- value
+        private$add_log(message = paste0("Sample threshold set: ", 
+                                         self$.blank_threshold))
+      }
+    },
+    blank_group_threshold = function(value) {
+      if(missing(value)) {
+        self$.blank_group_threshold
+      } else {
+        self$.blank_group_threshold <- value
+        private$add_log(message = paste0("Group threshold set: ", 
+                                         self$.blank_group_threshold))
       }
     }
     
@@ -115,6 +162,7 @@ DataImport <- R6::R6Class(
     table_qc = NULL,
     table_pool = NULL,
     table_sample = NULL,
+    table_analysis = NULL,
     
     # long data
     table_alldata_long = NULL,
@@ -122,11 +170,13 @@ DataImport <- R6::R6Class(
     table_qc_long = NULL,
     table_pool_long = NULL,
     table_sample_long = NULL,
+    table_analysis_long = NULL,
     
     table_featuredata = NULL,
     
     table_rsd_data = NULL,
     table_trend_data = NULL,
+    table_blank_filtering = NULL,
     #-------------------------------------------------------------- indices ----
     .id_col_meta = NULL,
     id_col_data = "sampleName",
@@ -149,7 +199,15 @@ DataImport <- R6::R6Class(
     .regex_samples = NULL,
     
     #-------------------------------------------------------- parameters QC ----
-    .qc_rsd_limit = NULL,
+    .qc_rsd_limit = NULL, # 0.3
+    
+    #--------------------------------------------- parameter pre-processing ----
+    .preprocessing_steps = NULL,
+    
+    #------------------------------------------- parameters blank filtering ----
+    .blank_ratio = NULL, # 5
+    .blank_threshold = NULL, # 0.8
+    .blank_group_threshold = NULL, # 0.8
     
     #----------------------------------------------------------- parameters ----
     params = list(
@@ -161,11 +219,6 @@ DataImport <- R6::R6Class(
       ),
       batch_correction = list(
         method = NULL
-      ),
-      blank_filtering = list(
-        sample_blank_ratio = 5,
-        sample_threshold = 0.8,
-        group_threshold = 0.8
       ),
       normalization = list(
         method = NULL
@@ -213,6 +266,23 @@ DataImport <- R6::R6Class(
       
       cli::cli_alert_success("Done!")
     },
+    preprocessing = function() {
+      cli::cli_h3("Pre-processing steps")
+      steps <- cli::cli_ul()
+      
+      for(a in self$preprocessing_steps) {
+        cli::cli_li(paste0("applying: '", a, "'"))
+        switch(
+          a,
+          "rsd_filter" = private$apply_rsd_filter(),
+          "blank_filter" = private$apply_blank_filter()
+        )
+      }
+      
+      cli::cli_end(steps)
+      cli::cli_alert_success("Done!")
+    },
+    
     #--------------------------------------------------------- qc functions ----
     calc_qc = function() {
       cli::cli_h3("Calculate QC")
@@ -257,6 +327,7 @@ DataImport <- R6::R6Class(
     },
     extract_tables = function() {
       extract_tables(self = self)
+      private$extract_analysis_table()
     },
     #------------------------------------------------------------------- qc ----
     calc_qcpool_rsd = function() {
@@ -265,6 +336,33 @@ DataImport <- R6::R6Class(
     },
     calc_qcpool_trend = function() {
       qc_calc_trend(self = self)
+    },
+    #------------------------------------------------------ blank filtering ----
+    calc_sample_blank_ratio = function() {
+      blank_calc_ratio(self = self)
+    },
+    #------------------------------------------------- pre-processing steps ----
+    steps_preprocessing = c(
+      "rsd_filter",
+      "blank_filter",
+      "total_normalisation",
+      "pqn_normalisation"
+    ),
+    apply_rsd_filter = function() {
+      qc_apply_rsd(self = self)
+      private$set_analysis_features()
+      private$extract_analysis_table()
+    },
+    apply_blank_filter = function() {
+      # blank_apply_filter(self = self)
+      private$set_analysis_features()
+      private$extract_analysis_table()
+    },
+    set_analysis_features = function() {
+      utils_analysis_features(self = self)
+    },
+    extract_analysis_table = function() {
+      utils_analysis_table(self = self)
     }
   )
 )
