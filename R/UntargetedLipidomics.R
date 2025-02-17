@@ -13,6 +13,7 @@ NULL
 UntargetedLipidomics <- R6::R6Class(
   inherit = DataImport,
   classname = "UntargetedLipidomics",
+  #----------------------------------------------------------------- public ----
   public = list(
     initialize = function(name = NA) {
       super$initialize(name)
@@ -22,6 +23,7 @@ UntargetedLipidomics <- R6::R6Class(
                         type = type)
     }
   ), # end public
+  #---------------------------------------------------------------- private ----
   private = list(
     import_data = function() {
       import_read_rawdata(self = self)
@@ -38,5 +40,5 @@ UntargetedLipidomics <- R6::R6Class(
     extract_featuredata = function() {
       extract_feature_data(self = self)
     }
-  )
+  ) # end private
 )
