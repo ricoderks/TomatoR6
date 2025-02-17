@@ -138,7 +138,7 @@ DataImport <- R6::R6Class(
       } else {
         self$.file_data <- value
         private$add_log(message = paste0("Added data files: ", 
-                                         paste(self$.file_data, collapse = ", ")))
+                                         paste(basename(self$.file_data), collapse = ", ")))
       }
     },
     file_meta = function(value) {
@@ -147,7 +147,7 @@ DataImport <- R6::R6Class(
       } else {
         self$.file_meta <- value
         private$add_log(message = paste0("Added data files: ", 
-                                         paste(self$.file_meta, collapse = ", ")))
+                                         paste(basename(self$.file_meta), collapse = ", ")))
       }
     },
     id_col_meta = function(value) {

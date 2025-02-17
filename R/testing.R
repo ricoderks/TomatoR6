@@ -4,7 +4,7 @@ if(dev) {
   
   # create data import object
   untar_lipids <- UntargetedLipidomics$new(name = "Testing untargeted lipidomics")
-  untar_lipids$history
+  untar_lipids
   
   untar_lipids$file_data <- c(
     "/home/ricoderks/Downloads/TomatoR6_data/20250123_124538_bile_pos_fixed.txt",
