@@ -37,6 +37,7 @@ if(dev) {
   
   # plot QC stuff
   obj$plot_qc_rsd()
+  obj$plot_qc_class_rsd()
   obj$plot_qc_trend()
   
   # do pre-processing

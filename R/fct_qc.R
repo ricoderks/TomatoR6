@@ -91,6 +91,50 @@ qc_plot_rsd <- function(self = NULL) {
 }
 
 
+#' @title A violin plot showing the RSD of each lipid species per lipid class
+#' 
+#' @description
+#' A violin plot showing the RSD of each lipid species per lipid class.
+#'
+#' @param self object of class DataImport.
+#'
+#' @return ggplot2 object containing a violin plot.
+#'
+#' @importFrom ggplot2 ggplot aes geom_violin .data theme_minimal labs
+#'     geom_hline guide_legend theme geom_jitter
+#'
+qc_plot_class_rsd <- function(self = NULL) {
+  if(!is.null(self$table_rsd_data)) {
+    if(is.null(self$qc_rsd_limit)) {
+      cli::cli_alert_info("No RSD limit set!")
+    }
+    
+    p <- self$table_rsd_data |> 
+      ggplot2::ggplot(ggplot2::aes(x = .data$Ontology,
+                                   y = .data$rsd)) +
+      ggplot2::geom_violin() +
+      ggplot2::geom_jitter(ggplot2::aes(colour = .data$polarity),
+                           alpha = 0.7) +
+      ggplot2::geom_hline(yintercept = self$qc_rsd_limit,
+                          color = "red",
+                          linetype = 2) +
+      ggplot2::guides(colour = ggplot2::guide_legend(title = "Polarity",
+                                                     override.aes = list(alpha = 1))) +
+      ggplot2::labs(x = "Class",
+                    y = "RSD") +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(legend.position = "bottom",
+                     axis.text.x = ggplot2::element_text(angle = 90,
+                                                         hjust = 1))
+    
+    return(p)
+  } else {
+    cli::cli_alert_danger("Can not create plot. No data available!")
+    return(NULL)
+  }
+}
+
+
 #' @title Calculate the trend of all features
 #'
 #' @description
