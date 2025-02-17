@@ -35,15 +35,15 @@ qc_calc_rsd <- function(self = NULL,
       by = "id"
     )
     
-    if(is.null(self$qc_rsd_limit)) {
-      self$qc_rsd_limit <- 0
-      private$add_log("No RSD limit set! Set to 0!")
-    }
-    
-    # store which features to keep, filtering NOT applied yet!
-    no_keep <- rsd_data$id[rsd_data$rsd > self$qc_rsd_limit]
-    self$table_featuredata$keep_rsd <- self$table_featuredata$id %in% no_keep
-    
+    # if(is.null(self$qc_rsd_limit)) {
+    #   self$qc_rsd_limit <- 0
+    #   private$add_log("No RSD limit set! Set to 0!")
+    # }
+    # 
+    # # store which features to keep, filtering NOT applied yet!
+    # no_keep <- rsd_data$id[rsd_data$rsd > self$qc_rsd_limit]
+    # self$table_featuredata$keep_rsd <- self$table_featuredata$id %in% no_keep
+    # 
     self$table_rsd_data <- rsd_data
     
     return(invisible(self))
