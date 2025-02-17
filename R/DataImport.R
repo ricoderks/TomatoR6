@@ -353,12 +353,14 @@ DataImport <- R6::R6Class(
       private$apply_rsd_filter()
       private$set_analysis_features()
       private$extract_analysis_table()
+      private$add_log("Applied RSD filtering.")
     },
     step_blank_filter = function() {
       private$calc_sample_blank_ratio()
       private$apply_blank_filter()
       private$set_analysis_features()
       private$extract_analysis_table()
+      private$add_log("Applied blank filtering.")
     },
     apply_rsd_filter = function() {
       qc_apply_rsd(self = self)

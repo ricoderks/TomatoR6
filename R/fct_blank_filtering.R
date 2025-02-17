@@ -40,8 +40,31 @@ blank_calc_ratio <- function(self = NULL) {
 
 
 blank_apply_filter <- function(self = NULL) {
-  if(!is.null(self$table_blank_data)) {
+  if(!is.null(self$table_blank_filtering)) {
+    blank_data <- self$table_blank_filtering
+    ratio <- self$blank_ratio
+    threshold <- self$blank_threshold
     
+    # blank_data <- obj$table_blank_filtering
+    # ratio <- obj$blank_ratio
+    # threshold <- obj$blank_threshold
+    
+    blank_data$keep <- blank_data$ratio >= ratio
+    blank_data$keep[is.na(blank_data$keep)] <- FALSE
+    
+    features <- tapply(blank_data, list(blank_data[, "id"]), function(x) {
+      prop <- mean(x[, "keep"])
+      return(data.frame( "id" = x[1, "id"],
+                        propertion = prop))
+    })
+    features <- do.call("rbind", features)
+    
+    keep <- features$id[features$propertion >= threshold]
+    self$table_featuredata$keep_sample_blank <- self$table_featuredata$id %in% keep
+    
+    return(invisible(self))
   }
-  
 }
+
+
+
