@@ -48,19 +48,32 @@ qc_calc_rsd <- function(self = NULL,
 #' Show the histogram of RSD values.
 #'
 #' @param self object of class DataImport.
+#' @param type character(1), all or filtered data.
 #'
 #' @return ggplot2 object, RSD histogram.
 #'
 #' @importFrom ggplot2 ggplot aes geom_histogram .data theme_minimal labs
 #'     geom_vline guide_legend theme .data
 #'
-qc_plot_rsd <- function(self = NULL) {
+qc_plot_rsd <- function(self = NULL,
+                        type = c("all", "filtered")) {
+  type <- match.arg(arg = type,
+                    choices = c("all", "filtered"))
+  
   if(!is.null(self$table_rsd_data)) {
     if(is.null(self$qc_rsd_limit)) {
       cli::cli_alert_info("No RSD limit set!")
     }
     
-    p <- self$table_rsd_data |> 
+    if(type == "filtered") {
+    plot_data <- self$table_rsd_data[
+      self$table_rsd_data$id %in% self$table_featuredata$id[self$table_featuredata$keep], 
+    ]
+    } else {
+      plot_data <- self$table_rsd_data
+    }
+    
+    p <- plot_data |> 
       ggplot2::ggplot(ggplot2::aes(x = .data$rsd,
                                    fill = .data$polarity)) +
       ggplot2::geom_histogram(binwidth = 0.01,
@@ -88,19 +101,32 @@ qc_plot_rsd <- function(self = NULL) {
 #' A violin plot showing the RSD of each lipid species per lipid class.
 #'
 #' @param self object of class DataImport.
+#' @param type character(1), all or filtered data.
 #'
 #' @return ggplot2 object containing a violin plot.
 #'
 #' @importFrom ggplot2 ggplot aes geom_violin .data theme_minimal labs
 #'     geom_hline guide_legend theme geom_jitter
 #'
-qc_plot_class_rsd <- function(self = NULL) {
+qc_plot_class_rsd <- function(self = NULL,
+                              type = c("all", "filtered")) {
+  type <- match.arg(arg = type,
+                    choices = c("all", "filtered"))
+  
   if(!is.null(self$table_rsd_data)) {
     if(is.null(self$qc_rsd_limit)) {
       cli::cli_alert_info("No RSD limit set!")
     }
     
-    p <- self$table_rsd_data |> 
+    if(type == "filtered") {
+      plot_data <- self$table_rsd_data[
+        self$table_rsd_data$id %in% self$table_featuredata$id[self$table_featuredata$keep], 
+      ]
+    } else {
+      plot_data <- self$table_rsd_data
+    }
+    
+    p <- plot_data |> 
       ggplot2::ggplot(ggplot2::aes(x = .data$Ontology,
                                    y = .data$rsd)) +
       ggplot2::geom_violin() +
@@ -179,15 +205,28 @@ qc_calc_trend = function(self = NULL) {
 #' Show the trend plot.
 #'
 #' @param self object of class DataImport.
+#' @param type character(1), all or filtered data.
 #'
 #' @return ggplot2 object, trend plot.
 #'
 #' @importFrom ggplot2 ggplot aes geom_line .data theme_minimal labs
 #'     guide_legend theme geom_hline .data
 #'
-qc_plot_trend = function(self = NULL) {
+qc_plot_trend = function(self = NULL,
+                         type = c("all", "filtered")) {
+  type <- match.arg(arg = type,
+                    choices = c("all", "filtered"))
+  
   if(!is.null(self$table_trend_data)) {
-    p <- self$table_trend_data |> 
+    if(type == "filtered") {
+      plot_data <- self$table_trend_data[
+        self$table_trend_data$id %in% self$table_featuredata$id[self$table_featuredata$keep], 
+      ]
+    } else {
+      plot_data <- self$table_trend_data
+    }
+    
+    p <- plot_data |> 
       ggplot2::ggplot(ggplot2::aes(x = .data$sampleName,
                                    y = .data$log2fc,
                                    group = .data$id,

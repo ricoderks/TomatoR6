@@ -56,7 +56,7 @@ Initialization function for DataImport class.
 \if{latex}{\out{\hypertarget{method-UntargetedLipidomics-plot_qc_class_rsd}{}}}
 \subsection{Method \code{plot_qc_class_rsd()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$plot_qc_class_rsd()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$plot_qc_class_rsd(type = NULL)}\if{html}{\out{</div>}}
 }
 
 }

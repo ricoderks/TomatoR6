@@ -296,11 +296,13 @@ DataImport <- R6::R6Class(
       
       cli::cli_alert_success("Done!")
     },
-    plot_qc_rsd = function() {
-      qc_plot_rsd(self = self)
+    plot_qc_rsd = function(type = NULL) {
+      qc_plot_rsd(self = self,
+                  type = type)
     },
-    plot_qc_trend = function() {
-      qc_plot_trend(self = self)
+    plot_qc_trend = function(type = NULL) {
+      qc_plot_trend(self = self,
+                    type = type)
     }
     
   ), # end public

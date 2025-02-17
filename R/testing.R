@@ -51,6 +51,9 @@ if(dev) {
   
   # do pre-processing
   obj$preprocessing()
+  obj$plot_qc_rsd(type = "filtered")
+  obj$plot_qc_class_rsd(type = "filtered")
+  obj$plot_qc_trend(type = "filtered")
   
   
   

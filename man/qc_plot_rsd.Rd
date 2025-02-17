@@ -4,10 +4,12 @@
 \alias{qc_plot_rsd}
 \title{Show RSD histogram}
 \usage{
-qc_plot_rsd(self = NULL)
+qc_plot_rsd(self = NULL, type = c("all", "filtered"))
 }
 \arguments{
 \item{self}{object of class DataImport.}
+
+\item{type}{character(1), all or filtered data.}
 }
 \value{
 ggplot2 object, RSD histogram.

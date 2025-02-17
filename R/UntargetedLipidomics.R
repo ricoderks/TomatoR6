@@ -23,8 +23,9 @@ UntargetedLipidomics <- R6::R6Class(
     initialize = function(name = NA) {
       super$initialize(name)
     },
-    plot_qc_class_rsd = function() {
-      qc_plot_class_rsd(self = self)
+    plot_qc_class_rsd = function(type = NULL) {
+      qc_plot_class_rsd(self = self,
+                        type = type)
     }
   ), # end public
   private = list(

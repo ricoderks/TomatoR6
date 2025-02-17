@@ -4,10 +4,12 @@
 \alias{qc_plot_trend}
 \title{Show the trend plot}
 \usage{
-qc_plot_trend(self = NULL)
+qc_plot_trend(self = NULL, type = c("all", "filtered"))
 }
 \arguments{
 \item{self}{object of class DataImport.}
+
+\item{type}{character(1), all or filtered data.}
 }
 \value{
 ggplot2 object, trend plot.

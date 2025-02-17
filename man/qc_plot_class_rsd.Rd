@@ -4,10 +4,12 @@
 \alias{qc_plot_class_rsd}
 \title{A violin plot showing the RSD of each lipid species per lipid class}
 \usage{
-qc_plot_class_rsd(self = NULL)
+qc_plot_class_rsd(self = NULL, type = c("all", "filtered"))
 }
 \arguments{
 \item{self}{object of class DataImport.}
+
+\item{type}{character(1), all or filtered data.}
 }
 \value{
 ggplot2 object containing a violin plot.
