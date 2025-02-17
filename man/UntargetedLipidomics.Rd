@@ -2,79 +2,12 @@
 % Please edit documentation in R/UntargetedLipidomics.R
 \name{UntargetedLipidomics}
 \alias{UntargetedLipidomics}
-\title{R6 untargeted lipidomics class}
+\title{Defining the Untargeted lipidomics class}
 \description{
-Untargeted lipidomics class. This is a child class from DataImport class.
+Defining the Untargeted lipidomics class
 }
 \author{
 Rico Derks
 
 Yassene Mohammed
-}
-\section{Super class}{
-\code{\link[TomatoR6:DataImport]{TomatoR6::DataImport}} -> \code{UntargetedLipidomics}
-}
-\section{Methods}{
-\subsection{Public methods}{
-\itemize{
-\item \href{#method-UntargetedLipidomics-new}{\code{UntargetedLipidomics$new()}}
-\item \href{#method-UntargetedLipidomics-plot_qc_class_rsd}{\code{UntargetedLipidomics$plot_qc_class_rsd()}}
-\item \href{#method-UntargetedLipidomics-clone}{\code{UntargetedLipidomics$clone()}}
-}
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
-<ul>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="calc_qc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-calc_qc'><code>TomatoR6::DataImport$calc_qc()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="import"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-import'><code>TomatoR6::DataImport$import()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_rsd"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_rsd'><code>TomatoR6::DataImport$plot_qc_rsd()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_trend"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_trend'><code>TomatoR6::DataImport$plot_qc_trend()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="preprocessing"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-preprocessing'><code>TomatoR6::DataImport$preprocessing()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="print"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-print'><code>TomatoR6::DataImport$print()</code></a></span></li>
-</ul>
-</details>
-}}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-UntargetedLipidomics-new"></a>}}
-\if{latex}{\out{\hypertarget{method-UntargetedLipidomics-new}{}}}
-\subsection{Method \code{new()}}{
-Initialization function for DataImport class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$new(name = NA)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{name}}{character(1), name.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-UntargetedLipidomics-plot_qc_class_rsd"></a>}}
-\if{latex}{\out{\hypertarget{method-UntargetedLipidomics-plot_qc_class_rsd}{}}}
-\subsection{Method \code{plot_qc_class_rsd()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$plot_qc_class_rsd(type = NULL)}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-UntargetedLipidomics-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-UntargetedLipidomics-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedLipidomics$clone(deep = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

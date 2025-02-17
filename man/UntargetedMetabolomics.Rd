@@ -26,6 +26,7 @@ Yassene Mohammed
 <ul>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="calc_qc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-calc_qc'><code>TomatoR6::DataImport$calc_qc()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="import"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-import'><code>TomatoR6::DataImport$import()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_cor"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_cor'><code>TomatoR6::DataImport$plot_qc_cor()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_rsd"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_rsd'><code>TomatoR6::DataImport$plot_qc_rsd()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_trend"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_trend'><code>TomatoR6::DataImport$plot_qc_trend()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="preprocessing"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-preprocessing'><code>TomatoR6::DataImport$preprocessing()</code></a></span></li>

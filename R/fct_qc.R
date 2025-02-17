@@ -270,3 +270,80 @@ qc_apply_rsd <- function(self = NULL) {
   
   return(invisible(self))
 }
+
+
+#' @title Calculate the correlation for all samples and qcpools
+#' 
+#' @description
+#' Calculate the correlation for all samples and qcpools.
+#' 
+#' @param self object of class DataImport.
+#' 
+#' @importFrom stats cor
+#' @importFrom tidyr pivot_longer
+#' 
+#' @returns self (invisible).
+#' 
+qc_calc_cor <- function(self = NULL) {
+  if(!is.null(self$table_alldata)) {
+    index_pools <- self$index_pools
+    index_samples <- self$index_samples
+    
+    data_df <- self$table_alldata[self$table_alldata$sampleName %in% c(index_pools, index_samples), ]
+    rownames(data_df) <- data_df$sampleName
+    data_df <- t(data_df[, -1])
+    
+    data_df[data_df == 0] <- 1
+    
+    cor_df <- as.data.frame(stats::cor(log10(data_df)))
+    cor_df$x <- rownames(cor_df)
+    
+    cor_df_long <- cor_df |> 
+      tidyr::pivot_longer(colnames(cor_df)[-ncol(cor_df)],
+                          names_to = "y",
+                          values_to = "cor")
+    
+    self$table_cor_data <- cor_df_long
+    
+    return(invisible(self))
+  }
+}
+
+
+#' @title Show correlation heatmap samples and qcpools
+#' 
+#' @description
+#' Show correlation heatmap samples and qcpools.
+#' 
+#' @param self object of class DataImport.
+#' 
+#' @importFrom ggplot2 ggplot aes .data geom_tile scale_fill_gradient
+#'     theme_minimal theme element_text element_blank guides guide_colourbar
+#' 
+#' @returns ggplot2, correlation heatmap.   
+#' 
+qc_plot_cor <- function(self = NULL) {
+  if(!is.null(self$table_cor_data)) {
+    p <- self$table_cor_data |>
+      ggplot2::ggplot(ggplot2::aes(x = .data$x,
+                                   y = .data$y)) +
+      ggplot2::geom_tile(ggplot2::aes(fill = .data$cor),
+                         color = "white",
+                         lwd = 0.1,
+                         linetype = 1) +
+      ggplot2::scale_fill_gradient(limits = c(-1, 1),
+                                   low = "blue",
+                                   high = "red") +
+      ggplot2::guides(fill = ggplot2::guide_colourbar(title = "Pearson corr.")) +
+      ggplot2::theme_minimal() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,
+                                                         hjust = 1),
+                     axis.title = ggplot2::element_blank())
+    
+    
+    return(p)
+  }
+}
+
+
+

@@ -176,6 +176,7 @@ DataImport <- R6::R6Class(
     
     table_rsd_data = NULL,
     table_trend_data = NULL,
+    table_cor_data = NULL,
     table_blank_filtering = NULL,
     #-------------------------------------------------------------- indices ----
     .id_col_meta = NULL,
@@ -211,9 +212,6 @@ DataImport <- R6::R6Class(
     
     #----------------------------------------------------------- parameters ----
     params = list(
-      rsd = list(
-        rsd_limit = NULL
-      ),
       imputation = list(
         method = NULL
       ),
@@ -294,6 +292,10 @@ DataImport <- R6::R6Class(
       private$calc_qcpool_trend()
       private$add_log("Calculated trend data qcpools!")
       
+      cli::cli_li("calculating correlation...")
+      private$calc_correlation()
+      private$add_log("Calculated sample/qcpools correlation!")
+      
       cli::cli_alert_success("Done!")
     },
     plot_qc_rsd = function(type = NULL) {
@@ -303,6 +305,9 @@ DataImport <- R6::R6Class(
     plot_qc_trend = function(type = NULL) {
       qc_plot_trend(self = self,
                     type = type)
+    },
+    plot_qc_cor = function(type = NULL) {
+      qc_plot_cor(self = self)
     }
     
   ), # end public
@@ -338,6 +343,9 @@ DataImport <- R6::R6Class(
     },
     calc_qcpool_trend = function() {
       qc_calc_trend(self = self)
+    },
+    calc_correlation = function() {
+      qc_calc_cor(self = self)
     },
     #------------------------------------------------------ blank filtering ----
     calc_sample_blank_ratio = function() {

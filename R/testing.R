@@ -46,6 +46,7 @@ if(dev) {
   obj$plot_qc_rsd()
   obj$plot_qc_class_rsd()
   obj$plot_qc_trend()
+  obj$plot_qc_cor()
   
   
   
