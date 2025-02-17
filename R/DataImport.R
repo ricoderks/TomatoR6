@@ -11,80 +11,10 @@ NULL
 
 DataImport <- R6::R6Class(
   classname = "DataImport",
-  active = list(
-    file_data = function(value) {
-      if(missing(value)) {
-        self$.file_data
-      } else {
-        self$.file_data <- value
-        private$add_log(message = paste0("Added data files: ", 
-                                         paste(self$.file_data, collapse = ", ")))
-      }
-    },
-    file_meta = function(value) {
-      if(missing(value)) {
-        self$.file_meta
-      } else {
-        self$.file_meta <- value
-        private$add_log(message = paste0("Added data files: ", 
-                                         paste(self$.file_meta, collapse = ", ")))
-      }
-    },
-    id_col_meta = function(value) {
-      if(missing(value)) {
-        self$.id_col_meta
-      } else {
-        self$.id_col_meta <- value
-        private$add_log(message = paste0("Set column ID meta data: '", 
-                                         self$.id_col_meta,
-                                         "'"))
-      }
-    },
-    regex_blanks = function(value) {
-      if(missing(value)) {
-        self$.regex_blanks
-      } else {
-        self$.regex_blanks <- value
-        private$add_log(message = paste0("Regular expression blank set: '", 
-                                        self$.regex_blanks,
-                                        "'"))
-      }
-    },
-    regex_qcs = function(value) {
-      if(missing(value)) {
-        self$.regex_qcs
-      } else {
-        self$.regex_qcs <- value
-        private$add_log(message = paste0("Regular expression qcs set: '", 
-                                         self$.regex_qcs,
-                                         '"'))
-      }
-    },
-    regex_pools = function(value) {
-      if(missing(value)) {
-        self$.regex_pools
-      } else {
-        self$.regex_pools <- value
-        private$add_log(message = paste0("Regular expression pools set: '", 
-                                         self$.regex_pools,
-                                         "'"))
-      }
-    },
-    regex_samples = function(value) {
-      if(missing(value)) {
-        self$.regex_samples
-      } else {
-        self$.regex_samples <- value
-        private$add_log(message = paste0("Regular expression samples set: '", 
-                                         self$.regex_samples,
-                                         "'"))
-      }
-    }
-    
-  ),
   public = list(
     initialize = function(name = NA) {
       self$name <- name
+      private$add_log(paste0("Created object: ", class(self)[1]))
     },
     #---------------------------------------------------------- global info ----
     name = NULL,
@@ -200,6 +130,78 @@ DataImport <- R6::R6Class(
     }
     
   ), # end public
+  #-------------------------------------------------------- active bindings ----
+  active = list(
+    file_data = function(value) {
+      if(missing(value)) {
+        self$.file_data
+      } else {
+        self$.file_data <- value
+        private$add_log(message = paste0("Added data files: ", 
+                                         paste(self$.file_data, collapse = ", ")))
+      }
+    },
+    file_meta = function(value) {
+      if(missing(value)) {
+        self$.file_meta
+      } else {
+        self$.file_meta <- value
+        private$add_log(message = paste0("Added data files: ", 
+                                         paste(self$.file_meta, collapse = ", ")))
+      }
+    },
+    id_col_meta = function(value) {
+      if(missing(value)) {
+        self$.id_col_meta
+      } else {
+        self$.id_col_meta <- value
+        private$add_log(message = paste0("Set column ID meta data: '", 
+                                         self$.id_col_meta,
+                                         "'"))
+      }
+    },
+    regex_blanks = function(value) {
+      if(missing(value)) {
+        self$.regex_blanks
+      } else {
+        self$.regex_blanks <- value
+        private$add_log(message = paste0("Regular expression blank set: '", 
+                                         self$.regex_blanks,
+                                         "'"))
+      }
+    },
+    regex_qcs = function(value) {
+      if(missing(value)) {
+        self$.regex_qcs
+      } else {
+        self$.regex_qcs <- value
+        private$add_log(message = paste0("Regular expression qcs set: '", 
+                                         self$.regex_qcs,
+                                         '"'))
+      }
+    },
+    regex_pools = function(value) {
+      if(missing(value)) {
+        self$.regex_pools
+      } else {
+        self$.regex_pools <- value
+        private$add_log(message = paste0("Regular expression pools set: '", 
+                                         self$.regex_pools,
+                                         "'"))
+      }
+    },
+    regex_samples = function(value) {
+      if(missing(value)) {
+        self$.regex_samples
+      } else {
+        self$.regex_samples <- value
+        private$add_log(message = paste0("Regular expression samples set: '", 
+                                         self$.regex_samples,
+                                         "'"))
+      }
+    }
+    
+  ),
   #---------------------------------------------------------------- private ----
   private = list(
     #------------------------------------------------------- some functions ----
