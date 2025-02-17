@@ -274,8 +274,8 @@ DataImport <- R6::R6Class(
         cli::cli_li(paste0("applying: '", a, "'"))
         switch(
           a,
-          "rsd_filter" = private$apply_rsd_filter(),
-          "blank_filter" = private$apply_blank_filter()
+          "rsd_filter" = private$step_rsd(),
+          "blank_filter" = private$step_blank_filter()
         )
       }
       
@@ -348,15 +348,23 @@ DataImport <- R6::R6Class(
       "total_normalisation",
       "pqn_normalisation"
     ),
-    apply_rsd_filter = function() {
-      qc_apply_rsd(self = self)
+    step_rsd = function() {
+      private$calc_qcpool_rsd()
+      private$apply_rsd_filter()
       private$set_analysis_features()
       private$extract_analysis_table()
     },
-    apply_blank_filter = function() {
-      # blank_apply_filter(self = self)
+    step_blank_filter = function() {
+      private$calc_sample_blank_ratio()
+      private$apply_blank_filter()
       private$set_analysis_features()
       private$extract_analysis_table()
+    },
+    apply_rsd_filter = function() {
+      qc_apply_rsd(self = self)
+    },
+    apply_blank_filter = function() {
+      blank_apply_filter(self = self)
     },
     set_analysis_features = function() {
       utils_analysis_features(self = self)
