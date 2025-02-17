@@ -11,126 +11,7 @@ NULL
 
 DataImport <- R6::R6Class(
   classname = "DataImport",
-  public = list(
-    initialize = function(name = NA) {
-      self$name <- name
-      private$add_log(paste0("Created object: ", class(self)[1]))
-    },
-    #---------------------------------------------------------- global info ----
-    name = NULL,
-    
-    #---------------------------------------------------------------- files ----
-    .file_data = NULL,
-    .file_meta = NULL,
-    
-    #--------------------------------------------------------------- tables ----
-    table_metadata = NULL,
-    table_rawdata = NULL,
-    
-    # wide data
-    table_alldata = NULL,
-    table_blank = NULL,
-    table_qc = NULL,
-    table_pool = NULL,
-    table_sample = NULL,
-    
-    # long data
-    table_alldata_long = NULL,
-    table_blank_long = NULL,
-    table_qc_long = NULL,
-    table_pool_long = NULL,
-    table_sample_long = NULL,
-    
-    table_featuredata = NULL,
-    
-    table_rsd_data = NULL,
-    table_trend_data = NULL,
-    #-------------------------------------------------------------- indices ----
-    .id_col_meta = NULL,
-    id_col_data = "sampleName",
-    id_col_feature = "id",
-    
-    type_column = NULL,
-    group_column = NULL,
-    batch_column = NULL,
-    order_column = NULL,
-    
-    index_blanks = NULL,
-    index_pools = NULL,
-    index_qcs = NULL,
-    index_samples = NULL,
-    
-    #----------------------------------------------------- parameters regex ----
-    .regex_blanks = NULL,
-    .regex_qcs = NULL,
-    .regex_pools = NULL,
-    .regex_samples = NULL,
-    
-    #----------------------------------------------------------- parameters ----
-    params = list(
-      rsd = list(
-        rsd_limit = NULL
-      ),
-      imputation = list(
-        method = NULL
-      ),
-      batch_correction = list(
-        method = NULL
-      ),
-      blank_filtering = list(
-        sample_blank_ratio = 5,
-        sample_threshold = 0.8,
-        group_threshold = 0.8
-      ),
-      normalization = list(
-        method = NULL
-      )
-    ),
-    
-    history = data.frame(id = NULL,
-                         datetime = NULL,
-                         message = NULL),
-    
-    
-    #------------------------------------------------------ generic methods ----
-    print = function(...) {
-      cli::cli_h2(self$name)
-      cli::cli_h3("Files")
-      private$file_show()
-      cli::cli_h3("Sample types")
-      private$samples_show()
-    },
-    
-    import = function() {
-      cli::cli_h3("Importing")
-      cli::cli_ul()
-      
-      # import meta data
-      cli::cli_li("meta data")
-      private$import_metadata()
-      private$add_log(message = "Imported meta data.")
-      
-      
-      # import data
-      cli::cli_li("experimental data")
-      private$import_data()
-      private$add_log(message = "Imported raw data.")
-
-      # extracting indices
-      cli::cli_li("extracting indices")
-      private$extract_indices()
-      private$add_log(message = "Extracted indices.")
-      
-      # extracting tables
-      cli::cli_li("extracting tables")
-      private$extract_tables()
-      private$add_log(message = "Extracted tables.")
-      
-      cli::cli_alert_success("Done!")
-    }
-    
-  ), # end public
-  #-------------------------------------------------------- active bindings ----
+  #-------------------------------------------------------- ACTIVE BINDINGS ----
   active = list(
     file_data = function(value) {
       if(missing(value)) {
@@ -199,22 +80,175 @@ DataImport <- R6::R6Class(
                                          self$.regex_samples,
                                          "'"))
       }
+    },
+    qc_rsd_limit = function(value) {
+      if(missing(value)) {
+        self$.qc_rsd_limit
+      } else {
+        self$.qc_rsd_limit <- value
+        private$add_log(message = paste0("QC RSD limit set: ", 
+                                         self$.qc_rsd_limit))
+      }
     }
     
-  ),
-  #---------------------------------------------------------------- private ----
+  ), # end active bindings
+  #----------------------------------------------------------------- PUBLIC ----
+  public = list(
+    initialize = function(name = NA) {
+      self$name <- name
+      private$add_log(paste0("Created object: ", class(self)[1]))
+    },
+    #---------------------------------------------------------- global info ----
+    name = NULL,
+    
+    #---------------------------------------------------------------- files ----
+    .file_data = NULL,
+    .file_meta = NULL,
+    
+    #--------------------------------------------------------------- tables ----
+    table_metadata = NULL,
+    table_rawdata = NULL,
+    
+    # wide data
+    table_alldata = NULL,
+    table_blank = NULL,
+    table_qc = NULL,
+    table_pool = NULL,
+    table_sample = NULL,
+    
+    # long data
+    table_alldata_long = NULL,
+    table_blank_long = NULL,
+    table_qc_long = NULL,
+    table_pool_long = NULL,
+    table_sample_long = NULL,
+    
+    table_featuredata = NULL,
+    
+    table_rsd_data = NULL,
+    table_trend_data = NULL,
+    #-------------------------------------------------------------- indices ----
+    .id_col_meta = NULL,
+    id_col_data = "sampleName",
+    id_col_feature = "id",
+    
+    type_column = NULL,
+    group_column = NULL,
+    batch_column = NULL,
+    order_column = NULL,
+    
+    index_blanks = NULL,
+    index_pools = NULL,
+    index_qcs = NULL,
+    index_samples = NULL,
+    
+    #----------------------------------------------------- parameters regex ----
+    .regex_blanks = NULL,
+    .regex_qcs = NULL,
+    .regex_pools = NULL,
+    .regex_samples = NULL,
+    
+    #-------------------------------------------------------- parameters QC ----
+    .qc_rsd_limit = NULL,
+    
+    #----------------------------------------------------------- parameters ----
+    params = list(
+      rsd = list(
+        rsd_limit = NULL
+      ),
+      imputation = list(
+        method = NULL
+      ),
+      batch_correction = list(
+        method = NULL
+      ),
+      blank_filtering = list(
+        sample_blank_ratio = 5,
+        sample_threshold = 0.8,
+        group_threshold = 0.8
+      ),
+      normalization = list(
+        method = NULL
+      )
+    ),
+    #-------------------------------------------------------------- history ----
+    history = data.frame(id = NULL,
+                         datetime = NULL,
+                         message = NULL),
+    
+    
+    #------------------------------------------------------ generic methods ----
+    print = function(...) {
+      cli::cli_h2(self$name)
+      cli::cli_h3("Files")
+      private$file_show()
+      cli::cli_h3("Sample types")
+      private$samples_show()
+    },
+    
+    import = function() {
+      cli::cli_h3("Importing")
+      cli::cli_ul()
+      
+      # import meta data
+      cli::cli_li("meta data")
+      private$import_metadata()
+      private$add_log(message = "Imported meta data.")
+      
+      
+      # import data
+      cli::cli_li("experimental data")
+      private$import_data()
+      private$add_log(message = "Imported raw data.")
+
+      # extracting indices
+      cli::cli_li("extracting indices")
+      private$extract_indices()
+      private$add_log(message = "Extracted indices.")
+      
+      # extracting tables
+      cli::cli_li("extracting tables")
+      private$extract_tables()
+      private$add_log(message = "Extracted tables.")
+      
+      cli::cli_alert_success("Done!")
+    },
+    #--------------------------------------------------------- qc functions ----
+    calc_qc = function() {
+      cli::cli_h3("Calculate QC")
+      cli::cli_li("calculating RSD...")
+      private$calc_qcpool_rsd()
+      private$add_log("Calculated RSD data qcpools!")
+      
+      cli::cli_li("calculating tend...")
+      private$calc_qcpool_trend()
+      private$add_log("Calculated trend data qcpools!")
+      
+      cli::cli_alert_success("Done!")
+    },
+    plot_qc_rsd = function() {
+      qc_plot_rsd(self = self)
+    },
+    plot_qc_trend = function() {
+      qc_plot_trend(self = self)
+    }
+    
+  ), # end public
+  #---------------------------------------------------------------- PRIVATE ----
   private = list(
     #------------------------------------------------------- some functions ----
     add_log = function(message = NULL) {
       utils_add_log(self = self,
                     message = message)
     },
+    #---------------------------------------------------------------- print ----
     file_show = function() {
       utils_file_show(self = self)
     },
     samples_show = function() {
       utils_sample_show(self = self)
     },
+    #--------------------------------------------------------------- import ----
     import_metadata = function() {
       import_read_metadata(self = self)
     },
@@ -223,6 +257,14 @@ DataImport <- R6::R6Class(
     },
     extract_tables = function() {
       extract_tables(self = self)
+    },
+    #------------------------------------------------------------------- qc ----
+    calc_qcpool_rsd = function() {
+      qc_calc_rsd(self = self,
+                  private = private)
+    },
+    calc_qcpool_trend = function() {
+      qc_calc_trend(self = self)
     }
   )
 )

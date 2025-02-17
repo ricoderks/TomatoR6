@@ -14,14 +14,32 @@ if(dev) {
   
   untar_lipids$id_col_meta <- "sampleId"
   
+  # set regex's
   untar_lipids$regex_blanks <- "blank_"
   untar_lipids$regex_pools <- "qcpool_"
   untar_lipids$regex_samples <- "sample_"
   
+  # set columns
+  untar_lipids$order_column <- "injOrder"
+  untar_lipids$type_column <- "sampleType"
+  untar_lipids$group_column <- "group"
+  
+  # set params
+  untar_lipids$qc_rsd_limit <- 0.3
+  
   untar_lipids$import()
   
-  untar_lipids$history  
+  # calculate QC stuff
+  untar_lipids$calc_qc()
   
-  untar_lipids
+  # plot QC stuff
+  untar_lipids$plot_qc_rsd()
+  untar_lipids$plot_qc_trend()
+  
+
+  
+  
+  
+  
   
 }  
