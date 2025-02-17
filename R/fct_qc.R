@@ -226,8 +226,8 @@ qc_apply_rsd <- function(self = NULL) {
   rsd_data <- self$table_rsd_data
   rsd_limit <- self$qc_rsd_limit
   
-  no_keep <- rsd_data$id[rsd_data$rsd <= rsd_limit]
-  self$table_featuredata$keep_rsd <- self$table_featuredata$id %in% no_keep
+  keep <- rsd_data$id[rsd_data$rsd <= rsd_limit]
+  self$table_featuredata$keep_rsd <- self$table_featuredata$id %in% keep
   
   return(invisible(self))
 }
