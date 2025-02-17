@@ -1,25 +1,19 @@
-#---------------------------------------------- Untargeted lipidomics class ----
-#' @title R6 untargeted lipidomics class
-#' 
-#' @description
-#' Untargeted lipidomics class. This is a child class from DataImport class.
-#' 
+#' Defining the Untargeted lipidomics class
+#'
 #' @import R6
+#'
+#' @author Rico Derks
+#' @author Yassene Mohammed
 #' 
 #' @export
 #' 
-#' @author Rico Derks
-#' @author Yassene Mohammed
-#'
+#' @name UntargetedLipidomics
+NULL
+
 UntargetedLipidomics <- R6::R6Class(
   inherit = DataImport,
   classname = "UntargetedLipidomics",
   public = list(
-    #' @description
-    #' Initialization function for DataImport class.
-    #' 
-    #' @param name character(1), name.
-    #' 
     initialize = function(name = NA) {
       super$initialize(name)
     },
