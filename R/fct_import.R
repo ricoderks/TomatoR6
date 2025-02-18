@@ -7,6 +7,8 @@
 #'
 #' @returns self
 #' 
+#' @noRd
+#' 
 #' @importFrom utils read.csv read.table
 #' @importFrom openxlsx2 read_xlsx
 #'
@@ -38,6 +40,8 @@ import_read_metadata <- function(self = NULL) {
 #' 
 #' @param self self 
 #'
+#' @noRd
+#'
 #' @returns self
 #' 
 import_read_rawdata <- function(self = NULL) {
@@ -63,6 +67,8 @@ import_read_rawdata <- function(self = NULL) {
 #' 
 #' @param file character(1), full path to result file.
 #' 
+#' @noRd
+#' 
 #' @returns data.frame with MSDIAL results.
 #' 
 #' @importFrom utils read.table
@@ -85,6 +91,8 @@ read_msdial = function(file = NULL) {
 #' Cleanup import MSDIAL results.
 #' 
 #' @param data_df data.frame, containing the raw imported MSIDAL results.
+#' 
+#' @noRd
 #' 
 #' @returns cleaned up data.frame
 #' 
@@ -116,6 +124,8 @@ cleanup = function(data_df = NULL) {
 #' 
 #' @param self data.frame in wide format.
 #' 
+#' @noRd
+#' 
 #' @returns self (invisible).
 #' 
 #' @importFrom tidyr pivot_longer
@@ -145,6 +155,8 @@ make_table_long = function(self = NULL) {
 #' 
 #' @param self data.frame in long format.
 #' 
+#' @noRd
+#' 
 #' @returns self (invisible).
 #' 
 #' @importFrom tidyr pivot_wider
@@ -172,6 +184,8 @@ make_table_wide = function(self = NULL) {
 #' Extract feature data.
 #' 
 #' @param self class object
+#' 
+#' @noRd
 #' 
 #' @returns self (invisible)
 #' 
@@ -216,6 +230,8 @@ extract_feature_data = function(self = NULL) {
 #' 
 #' @param self class object
 #' 
+#' @noRd
+#' 
 #' @returns self (invisible)
 #' 
 extract_indices <- function(self = self) {
@@ -251,19 +267,4 @@ extract_indices <- function(self = self) {
   
   return(invisible(self))
 }
-
-#' @title Extract tables from the data
-#' 
-#' @description
-#' Extract tables from the data.
-#' 
-#' @param self class object
-#' 
-#' @returns self (invisible)
-#' 
-extract_tables = function(self = self) {
-  
-  return(invisible(self))
-}
-
 

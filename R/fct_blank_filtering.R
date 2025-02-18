@@ -1,9 +1,11 @@
 #' @title Calculate the sample / blank ratio
 #' 
 #' @description
-#' Calculate sample / blank ratio..
+#' Calculate sample / blank ratio.
 #' 
 #' @param self object of class DataImport.
+#' 
+#' @noRd
 #' 
 #' @returns self (invisible).
 #' 
@@ -36,6 +38,17 @@ blank_calc_ratio <- function(self = NULL) {
 }
 
 
+#' @title Apply the blank filtering
+#' 
+#' @description
+#' Apply the blank filtering.
+#' 
+#' @param self object of class DataImport.
+#' 
+#' @noRd
+#' 
+#' @returns self (invisible).
+#' 
 blank_apply_filter <- function(self = NULL) {
   if(!is.null(self$table_blank_filtering)) {
     blank_data <- self$table_blank_filtering

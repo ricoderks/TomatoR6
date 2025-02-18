@@ -6,6 +6,8 @@
 #' @param self object of class DataImport.
 #' @param message character(1), log message.
 #'
+#' @noRd
+#'
 #' @returns self
 #' 
 utils_add_log <- function(self = NULL,
@@ -32,6 +34,8 @@ utils_add_log <- function(self = NULL,
 #' 
 #' @param self object of class DataImport. 
 #'
+#' @noRd
+#'
 #' @import cli
 #'
 utils_file_show <-  function(self = NULL) {
@@ -53,6 +57,8 @@ utils_file_show <-  function(self = NULL) {
 #' 
 #' @param self object of class DataImport.
 #'
+#' @noRd
+#'
 #' @import cli
 #'
 utils_sample_show <-  function(self = NULL) {
@@ -71,6 +77,8 @@ utils_sample_show <-  function(self = NULL) {
 #' Determine which features to keep depending on the filters used.
 #' 
 #' @param self object of class DataImport.
+#' 
+#' @noRd
 #' 
 #' @returns self (invsible).
 #' 
@@ -93,6 +101,8 @@ utils_analysis_features <- function(self = NULL) {
 #' steps have been applied on this table. 
 #' 
 #' @param self object of class DataImport.
+#'
+#' @noRd
 #'
 #' @returns self (invisible).
 #'
@@ -119,6 +129,8 @@ utils_analysis_table <- function(self = NULL) {
 #' Reset the analysis table and feature table. 
 #' 
 #' @param self object of class DataImport.
+#'
+#' @noRd
 #'
 #' @returns self (invisible).
 #'

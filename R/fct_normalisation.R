@@ -5,6 +5,8 @@
 #' 
 #' @param self object of class DataImport.
 #' 
+#' @noRd
+#' 
 #' @returns self (invisible)
 #' 
 norm_total_area <- function(self = NULL) {
@@ -46,6 +48,8 @@ norm_total_area <- function(self = NULL) {
 #' @param self object of class DataImport.
 #'
 #' @importFrom tidyr pivot_longer
+#'
+#' @noRd
 #'
 #' @returns self (invisible)
 #' 
@@ -89,6 +93,8 @@ norm_pqn <- function(self = NULL) {
 #' @details First a total area normalization should be done before PQN is applied.
 #' 
 #' @importFrom stats median
+#' 
+#' @noRd
 #'
 #' @author E. Nevedomskaya
 #' @author Rico Derks

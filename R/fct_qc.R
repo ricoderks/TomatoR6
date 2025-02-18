@@ -8,6 +8,8 @@
 #'
 #' @importFrom stats sd
 #'
+#' @noRd
+#'
 #' @returns self (invisible).
 #'
 qc_calc_rsd <- function(self = NULL,
@@ -51,6 +53,8 @@ qc_calc_rsd <- function(self = NULL,
 #' @param type character(1), all or filtered data.
 #'
 #' @return ggplot2 object, RSD histogram.
+#'
+#' @noRd
 #'
 #' @importFrom ggplot2 ggplot aes geom_histogram .data theme_minimal labs
 #'     geom_vline guide_legend theme .data
@@ -104,6 +108,8 @@ qc_plot_rsd <- function(self = NULL,
 #' @param type character(1), all or filtered data.
 #'
 #' @return ggplot2 object containing a violin plot.
+#'
+#' @noRd
 #'
 #' @importFrom ggplot2 ggplot aes geom_violin .data theme_minimal labs
 #'     geom_hline guide_legend theme geom_jitter
@@ -159,6 +165,8 @@ qc_plot_class_rsd <- function(self = NULL,
 #'
 #' @param self object of class DataImport.
 #'
+#' @noRd
+#'
 #' @returns self (invisible).
 #' 
 qc_calc_trend = function(self = NULL) {
@@ -208,6 +216,8 @@ qc_calc_trend = function(self = NULL) {
 #' @param type character(1), all or filtered data.
 #'
 #' @return ggplot2 object, trend plot.
+#'
+#' @noRd
 #'
 #' @importFrom ggplot2 ggplot aes geom_line .data theme_minimal labs
 #'     guide_legend theme geom_hline .data
@@ -259,6 +269,8 @@ qc_plot_trend = function(self = NULL,
 #' 
 #' @param self object of class DataImport.
 #' 
+#' @noRd
+#' 
 #' @returns self (invisible).
 #' 
 qc_apply_rsd <- function(self = NULL) {
@@ -281,6 +293,8 @@ qc_apply_rsd <- function(self = NULL) {
 #' 
 #' @importFrom stats cor
 #' @importFrom tidyr pivot_longer
+#' 
+#' @noRd
 #' 
 #' @returns self (invisible).
 #' 
@@ -320,6 +334,8 @@ qc_calc_cor <- function(self = NULL) {
 #' @importFrom ggplot2 ggplot aes .data geom_tile scale_fill_gradient
 #'     theme_minimal theme element_text element_blank guides guide_colourbar
 #' 
+#' @noRd
+#' 
 #' @returns ggplot2, correlation heatmap.   
 #' 
 qc_plot_cor <- function(self = NULL) {
@@ -344,6 +360,3 @@ qc_plot_cor <- function(self = NULL) {
     return(p)
   }
 }
-
-
-
