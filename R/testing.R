@@ -24,7 +24,7 @@ if(dev) {
   obj$group_column <- "group"
   
   # set preprocessing steps
-  obj$preprocessing_steps <- c("rsd_filter", "blank_filter")
+  obj$preprocessing_steps <- c("rsd_filter", "blank_filter", "total_normalisation")
   
   # set params
   # rsd

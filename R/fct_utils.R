@@ -113,3 +113,23 @@ utils_analysis_table <- function(self = NULL) {
 }
 
 
+#' @title Reset the analysis table and feature table
+#' 
+#' @description
+#' Reset the analysis table and feature table. 
+#' 
+#' @param self object of class DataImport.
+#'
+#' @returns self (invisible).
+#'
+utils_reset_tables <- function(self = NULL) {
+  self$table_featuredata$keep <- TRUE
+  self$table_featuredata$keep_rsd <- TRUE
+  self$table_featuredata$keep_sample_blank <- TRUE
+  
+  self$table_analysis <- self$table_alldata
+  self$table_analysis_long <- self$table_alldata_long
+  
+  return(invisible(self))
+}
+

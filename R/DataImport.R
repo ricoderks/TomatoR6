@@ -262,12 +262,15 @@ DataImport <- R6::R6Class(
       cli::cli_h3("Pre-processing steps")
       steps <- cli::cli_ul()
       
+      private$reset_tables()
+      
       for(a in self$preprocessing_steps) {
         cli::cli_li(paste0("applying: '", a, "'"))
         switch(
           a,
           "rsd_filter" = private$step_rsd(),
-          "blank_filter" = private$step_blank_filter()
+          "blank_filter" = private$step_blank_filter(),
+          "total_normalisation" = private$step_total_normalisation()
         )
       }
       
@@ -342,6 +345,9 @@ DataImport <- R6::R6Class(
       blank_calc_ratio(self = self)
     },
     #------------------------------------------------- pre-processing steps ----
+    reset_tables = function() {
+      utils_reset_tables(self = self)
+    },
     steps_preprocessing = c(
       "rsd_filter",
       "blank_filter",
@@ -361,6 +367,10 @@ DataImport <- R6::R6Class(
       private$set_analysis_features()
       private$extract_analysis_table()
       private$add_log("Applied blank filtering.")
+    },
+    step_total_normalisation = function() {
+      norm_total_area(self = self)
+      private$add_log("Applied total area normalisation.")
     },
     apply_rsd_filter = function() {
       qc_apply_rsd(self = self)
