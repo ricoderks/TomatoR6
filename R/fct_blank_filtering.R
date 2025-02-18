@@ -9,13 +9,10 @@
 #' 
 blank_calc_ratio <- function(self = NULL) {
   feature_data <- self$table_featuredata
-  blank_data <- self$table_blank_long
   blank_index <- self$index_blanks
-  sample_data <- self$table_sample_long
   sample_index <- self$index_samples
-  
-  # blank_data <- obj$table_blank_long
-  # sample_data <- obj$table_sample_long
+  blank_data <- self$table_analysis_long[self$table_analysis_long$sampleName %in% blank_index, ]
+  sample_data <- self$table_analysis_long[self$table_analysis_long$sampleName %in% sample_index, ]
   
   blank_data_avg <- tapply(blank_data, list(blank_data[, "id"]), function(x) {
     avg <- mean(x[, "peakArea"], na.rm = TRUE)
@@ -44,10 +41,6 @@ blank_apply_filter <- function(self = NULL) {
     blank_data <- self$table_blank_filtering
     ratio <- self$blank_ratio
     threshold <- self$blank_threshold
-    
-    # blank_data <- obj$table_blank_filtering
-    # ratio <- obj$blank_ratio
-    # threshold <- obj$blank_threshold
     
     blank_data$keep <- blank_data$ratio >= ratio
     blank_data$keep[is.na(blank_data$keep)] <- FALSE

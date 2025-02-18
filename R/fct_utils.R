@@ -97,13 +97,17 @@ utils_analysis_features <- function(self = NULL) {
 #' @returns self (invisible).
 #'
 utils_analysis_table <- function(self = NULL) {
-  keep_ids <- self$table_featuredata$id[self$table_featuredata$keep == TRUE]
+  features <- self$table_featuredata$id[self$table_featuredata$keep == TRUE]
+  observations <- c(self$index_blanks, self$index_qcs, self$index_pools, self$index_samples)
   
   # wide format
-  self$table_analysis <- self$table_sample[, c("sampleName", keep_ids)]
-  
+  self$table_analysis <- 
+    self$table_analysis[self$table_analysis$sampleName %in% observations, c("sampleName", features)]
+    
   # long format
-  self$table_analysis_long <- self$table_sample_long[self$table_sample_long$id %in% keep_ids, ]
+  self$table_analysis_long <- 
+    self$table_analysis_long[self$table_analysis_long$id %in% features &
+                               self$table_analysis_long$sampleName %in% observations, ]
   
   return(invisible(self))
 }
