@@ -24,7 +24,7 @@ if(dev) {
   obj$group_column <- "group"
   
   # set preprocessing steps
-  obj$preprocessing_steps <- c("rsd_filter", "blank_filter", "total_normalisation")
+  obj$preprocessing_steps <- c("rsd_filter", "blank_filter", "pqn_normalisation")
   
   # set params
   # rsd
@@ -33,6 +33,9 @@ if(dev) {
   obj$blank_ratio <- 5
   obj$blank_threshold <- 0.8
   obj$blank_group_threshold <- 0.8
+  # normalisation
+  # default is median
+  obj$norm_pqn_reference <- "median"
   
   # Import all data
   obj$import()

@@ -136,6 +136,17 @@ DataImport <- R6::R6Class(
         private$add_log(message = paste0("Group threshold set: ", 
                                          self$.blank_group_threshold))
       }
+    },
+    norm_pqn_reference = function(value) {
+      if(missing(value)) {
+        self$.norm_pqn_reference
+      } else {
+        value <- match.arg(arg = value,
+                           choices = c("median", "mean"))
+        self$.norm_pqn_reference <- value
+        private$add_log(message = paste0("PQN normalisation reference set: ", 
+                                         self$.norm_pqn_reference))
+      }
     }
     
   ), # end active bindings
@@ -210,6 +221,9 @@ DataImport <- R6::R6Class(
     .blank_threshold = NULL, # 0.8
     .blank_group_threshold = NULL, # 0.8
     
+    #--------------------------------------------- parameters normalisation ----
+    .norm_pqn_reference = NULL,
+    
     #----------------------------------------------------------- parameters ----
     params = list(
       imputation = list(
@@ -270,7 +284,8 @@ DataImport <- R6::R6Class(
           a,
           "rsd_filter" = private$step_rsd(),
           "blank_filter" = private$step_blank_filter(),
-          "total_normalisation" = private$step_total_normalisation()
+          "total_normalisation" = private$step_total_normalisation(),
+          "pqn_normalisation" = private$step_pqn_normalisation()
         )
       }
       
@@ -345,15 +360,15 @@ DataImport <- R6::R6Class(
       blank_calc_ratio(self = self)
     },
     #------------------------------------------------- pre-processing steps ----
-    reset_tables = function() {
-      utils_reset_tables(self = self)
-    },
     steps_preprocessing = c(
       "rsd_filter",
       "blank_filter",
       "total_normalisation",
       "pqn_normalisation"
     ),
+    reset_tables = function() {
+      utils_reset_tables(self = self)
+    },
     step_rsd = function() {
       private$calc_qcpool_rsd()
       private$apply_rsd_filter()
@@ -371,6 +386,11 @@ DataImport <- R6::R6Class(
     step_total_normalisation = function() {
       norm_total_area(self = self)
       private$add_log("Applied total area normalisation.")
+    },
+    step_pqn_normalisation = function() {
+      norm_total_area(self = self)
+      norm_pqn(self = self)
+      private$add_log("Applied PQN normalisation.")
     },
     apply_rsd_filter = function() {
       qc_apply_rsd(self = self)
