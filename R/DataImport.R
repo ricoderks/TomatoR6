@@ -169,18 +169,10 @@ DataImport <- R6::R6Class(
     
     # wide data
     table_alldata = NULL,
-    # table_blank = NULL,
-    # table_qc = NULL,
-    # table_pool = NULL,
-    # table_sample = NULL,
     table_analysis = NULL,
     
     # long data
     table_alldata_long = NULL,
-    # table_blank_long = NULL,
-    # table_qc_long = NULL,
-    # table_pool_long = NULL,
-    # table_sample_long = NULL,
     table_analysis_long = NULL,
     
     table_featuredata = NULL,
