@@ -7,15 +7,15 @@ if(dev) {
   
   # set files
   obj$file_data <- c(
-    "/home/ricoderks/Downloads/TomatoR6_data/20250123_124538_bile_pos_fixed.txt",
-    "/home/ricoderks/Downloads/TomatoR6_data/20250123_140224_bile_neg_fixed.txt"
+    "/home/rjederks/Downloads/TomatoR6_data/20250122_100040_bile_pos_fixed.txt",
+    "/home/rjederks/Downloads/TomatoR6_data/20250123_102728_bile_neg_fixed.txt"
   )
-  obj$file_meta <- "/home/ricoderks/Downloads/TomatoR6_data/metadata.xlsx"
+  obj$file_meta <- "/home/rjederks/Downloads/TomatoR6_data/metadata.xlsx"
   
   # set regex's
-  obj$regex_blanks <- "blank_"
-  obj$regex_pools <- "qcpool_"
-  obj$regex_samples <- "sample_"
+  obj$regex_blanks <- "blank"
+  obj$regex_pools <- "qcpool"
+  obj$regex_samples <- "sample"
   
   # set columns
   obj$id_col_meta <- "sampleId"

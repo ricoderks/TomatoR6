@@ -158,18 +158,18 @@ DataImport <- R6::R6Class(
     
     # wide data
     table_alldata = NULL,
-    table_blank = NULL,
-    table_qc = NULL,
-    table_pool = NULL,
-    table_sample = NULL,
+    # table_blank = NULL,
+    # table_qc = NULL,
+    # table_pool = NULL,
+    # table_sample = NULL,
     table_analysis = NULL,
     
     # long data
     table_alldata_long = NULL,
-    table_blank_long = NULL,
-    table_qc_long = NULL,
-    table_pool_long = NULL,
-    table_sample_long = NULL,
+    # table_blank_long = NULL,
+    # table_qc_long = NULL,
+    # table_pool_long = NULL,
+    # table_sample_long = NULL,
     table_analysis_long = NULL,
     
     table_featuredata = NULL,
@@ -246,21 +246,15 @@ DataImport <- R6::R6Class(
       private$import_metadata()
       private$add_log(message = "Imported meta data.")
       
-      
-      # import data
-      cli::cli_li("experimental data")
-      private$import_data()
-      private$add_log(message = "Imported raw data.")
-
       # extracting indices
       cli::cli_li("extracting indices")
       private$extract_indices()
       private$add_log(message = "Extracted indices.")
       
-      # extracting tables
-      cli::cli_li("extracting tables")
-      private$extract_tables()
-      private$add_log(message = "Extracted tables.")
+      # import data
+      cli::cli_li("experimental data")
+      private$import_data()
+      private$add_log(message = "Imported raw data.")
       
       cli::cli_alert_success("Done!")
     },
@@ -331,10 +325,6 @@ DataImport <- R6::R6Class(
     },
     extract_indices = function() {
       extract_indices(self = self)
-    },
-    extract_tables = function() {
-      extract_tables(self = self)
-      private$extract_analysis_table()
     },
     #------------------------------------------------------------------- qc ----
     calc_qcpool_rsd = function() {

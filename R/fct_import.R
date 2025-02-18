@@ -52,17 +52,6 @@ import_read_rawdata <- function(self = NULL) {
   data_df <- cleanup(data_df = data_df)
   self$table_rawdata <- data_df
   
-  # get the features and information
-  # feature_data <- extract_feature_data(data_df = data_df)
-  
-  # convert raw data table
-  # data_long <- make_table_long(data_wide = data_df)
-  # data_wide <- make_table_wide(data_long = data_long)
-  # 
-  # self$table_alldata_long <- data_long
-  # self$table_alldata <- data_wide
-  # self$table_featuredata <- feature_data
-  
   return(self)
 }
 
@@ -84,7 +73,8 @@ read_msdial = function(file = NULL) {
                                sep = "\t",
                                skip = 4,
                                comment.char = "",
-                               quote = "\"")
+                               quote = "\"",
+                               check.names = FALSE)
   
   return(data_df)
 }
@@ -101,15 +91,15 @@ read_msdial = function(file = NULL) {
 cleanup = function(data_df = NULL) {
   # add unique ID
   data_df$polarity <- ifelse(grepl(pattern = "\\+$",
-                                   x = data_df$Adduct.type),
+                                   x = data_df$`Adduct type`),
                              "pos",
                              "neg")
   
-  data_df$id <- paste0(data_df$polarity, "_", data_df$Alignment.ID)
+  data_df$id <- paste0(data_df$polarity, "_", data_df$`Alignment ID`)
   
   # remove unknowns and others
   data_df <- data_df[!(grepl(pattern = "(unknown|no MS2|low score)",
-                             x = data_df$Metabolite.name,
+                             x = data_df$`Metabolite name`,
                              ignore.case = TRUE) |
                          grepl(pattern = "(unknown|others)",
                                x = data_df$Ontology,
@@ -132,19 +122,17 @@ cleanup = function(data_df = NULL) {
 #' 
 make_table_long = function(self = NULL) {
   data_wide <- self$table_rawdata
+  sample_col_names <- c(self$index_blanks, self$index_qcs, self$index_pools, self$index_samples)
   
-  data_long <- data_wide[, c("id", colnames(data_wide)[grepl(pattern = "(blank|qcpool|sample)_",
-                                                             x = colnames(data_wide),
-                                                             ignore.case = TRUE)])] |> 
+  data_long <- data_wide[, c("id", sample_col_names)] |> 
     tidyr::pivot_longer(
-      cols = colnames(data_wide)[grepl(pattern = "(blank|qcpool|sample)_",
-                                       x = colnames(data_wide),
-                                       ignore.case = TRUE)],
+      cols = sample_col_names,
       names_to = "sampleName",
       values_to = "peakArea"
     )
   
   self$table_alldata_long <- as.data.frame(data_long)
+  self$table_analysis_long <- as.data.frame(data_long)
   
   invisible(self)
 }
@@ -172,6 +160,7 @@ make_table_wide = function(self = NULL) {
     )
   
   self$table_alldata <- as.data.frame(data_wide)
+  self$table_analysis <- as.data.frame(data_wide)
   
   invisible(self)
 }
@@ -189,8 +178,8 @@ make_table_wide = function(self = NULL) {
 extract_feature_data = function(self = NULL) {
   data_df <- self$table_rawdata
   
-  data_df <- data_df[, c("id", "Metabolite.name", "Ontology", "Adduct.type", "Average.Rt.min.", "Average.Mz")]
-  split_name <- strsplit(x = data_df$Metabolite.name,
+  data_df <- data_df[, c("id", "Metabolite name", "Ontology", "Adduct type", "Average Rt(min)", "Average Mz")]
+  split_name <- strsplit(x = data_df$`Metabolite name`,
                          split = "\\|")
   
   short <- vector(mode = "character",
@@ -216,7 +205,7 @@ extract_feature_data = function(self = NULL) {
   
   self$table_featuredata <- data_df
   
-  invisible(self)
+  return(invisible(self))
 }
 
 
@@ -234,33 +223,33 @@ extract_indices <- function(self = self) {
     if(!is.null(self$regex_blanks)) {
       self$index_blanks <- 
         self$table_metadata[grep(pattern = self$regex_blanks,
-                                 x = self$table_metadata[, self$id_col_meta],
+                                 x = self$table_metadata[, self$type_column], #should this now be type_column
                                  ignore.case = TRUE), self$id_col_meta]
     }
     
     if(!is.null(self$regex_qcs)) {
       self$index_qcs <- 
         self$table_metadata[grep(pattern = self$regex_qcs,
-                                 x = self$table_metadata[, self$id_col_meta],
+                                 x = self$table_metadata[, self$type_column],
                                  ignore.case = TRUE), self$id_col_meta]
     }
     
     if(!is.null(self$regex_pools)) {
       self$index_pools <- 
         self$table_metadata[grep(pattern = self$regex_pools,
-                                 x = self$table_metadata[, self$id_col_meta],
+                                 x = self$table_metadata[, self$type_column],
                                  ignore.case = TRUE), self$id_col_meta]
     }
     
     if(!is.null(self$regex_samples)) {
       self$index_samples <- 
         self$table_metadata[grep(pattern = self$regex_samples,
-                                 x = self$table_metadata[, self$id_col_meta],
+                                 x = self$table_metadata[, self$type_column],
                                  ignore.case = TRUE), self$id_col_meta]
     }
   }
   
-  invisible(self)
+  return(invisible(self))
 }
 
 #' @title Extract tables from the data
@@ -273,35 +262,8 @@ extract_indices <- function(self = self) {
 #' @returns self (invisible)
 #' 
 extract_tables = function(self = self) {
-  if(!is.null(self$index_blanks)) {
-    self$table_blank <- 
-      self$table_alldata[self$table_alldata[, self$id_col_data] %in% self$index_blanks, ]
-    self$table_blank_long <- 
-      self$table_alldata_long[self$table_alldata_long[, self$id_col_data] %in% self$index_blanks, ]
-  }
   
-  if(!is.null(self$index_qcs)) {
-    self$table_qc <- 
-      self$table_alldata[self$table_alldata[, self$id_col_data] %in% self$index_qcs, ]
-    self$table_qc_long <- 
-      self$table_alldata_long[self$table_alldata_long[, self$id_col_data] %in% self$index_qcs, ]
-  }
-  
-  if(!is.null(self$index_pools)) {
-    self$table_pool <- 
-      self$table_alldata[self$table_alldata[, self$id_col_data] %in% self$index_pools, ]
-    self$table_pool_long <- 
-      self$table_alldata_long[self$table_alldata_long[, self$id_col_data] %in% self$index_pools, ]
-  }
-  
-  if(!is.null(self$index_samples)) {
-    self$table_sample <- 
-      self$table_alldata[self$table_alldata[, self$id_col_data] %in% self$index_samples, ]
-    self$table_sample_long <- 
-      self$table_alldata_long[self$table_alldata_long[, self$id_col_data] %in% self$index_samples, ]
-  }
-  
-  invisible(self)
+  return(invisible(self))
 }
 
 

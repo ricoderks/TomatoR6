@@ -12,9 +12,9 @@
 #'
 qc_calc_rsd <- function(self = NULL,
                         private = NULL) {
-  if(!is.null(self$table_pool_long)) {
+  if(!is.null(self$table_analysis_long)) {
     feature_data <- self$table_featuredata
-    pools_data <- self$table_pool_long
+    pools_data <- self$table_analysis_long
     qcpool_index <- self$index_pools
     
     pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
@@ -162,10 +162,10 @@ qc_plot_class_rsd <- function(self = NULL,
 #' @returns self (invisible).
 #' 
 qc_calc_trend = function(self = NULL) {
-  if(!is.null(self$table_pool_long)) {
+  if(!is.null(self$table_analysis_long)) {
     id_col_meta <- self$id_col_meta
     meta_data <- self$table_metadata
-    pools_data <- self$table_pool_long
+    pools_data <- self$table_analysis_long
     qcpool_index <- self$index_pools
     
     pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
@@ -285,11 +285,11 @@ qc_apply_rsd <- function(self = NULL) {
 #' @returns self (invisible).
 #' 
 qc_calc_cor <- function(self = NULL) {
-  if(!is.null(self$table_alldata)) {
+  if(!is.null(self$table_analysis)) {
     index_pools <- self$index_pools
     index_samples <- self$index_samples
     
-    data_df <- self$table_alldata[self$table_alldata$sampleName %in% c(index_pools, index_samples), ]
+    data_df <- self$table_analysis[self$table_analysis$sampleName %in% c(index_pools, index_samples), ]
     rownames(data_df) <- data_df$sampleName
     data_df <- t(data_df[, -1])
     
