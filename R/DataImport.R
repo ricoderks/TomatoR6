@@ -288,15 +288,15 @@ DataImport <- R6::R6Class(
     #--------------------------------------------------------- qc functions ----
     calc_qc = function() {
       cli::cli_h3("Calculate QC")
-      cli::cli_li("calculating RSD...")
+      cli::cli_li("calculating 'RSD'")
       private$calc_qcpool_rsd()
       private$add_log("Calculated RSD data qcpools!")
       
-      cli::cli_li("calculating tend...")
+      cli::cli_li("calculating 'trend'")
       private$calc_qcpool_trend()
       private$add_log("Calculated trend data qcpools!")
       
-      cli::cli_li("calculating correlation...")
+      cli::cli_li("calculating 'correlation'")
       private$calc_correlation()
       private$add_log("Calculated sample/qcpools correlation!")
       
