@@ -2,6 +2,7 @@
 #'
 #' @import R6
 #' @import cli
+#' @importFrom stats median
 #'
 #' @author Rico Derks
 #' @author Yassene Mohammed
@@ -158,6 +159,17 @@ DataImport <- R6::R6Class(
         private$add_log(message = paste0("Imputation method set: ", 
                                          self$.imp_method))
       }
+    },
+    bc_method = function(value) {
+      if(missing(value)) {
+        self$.bc_method
+      } else {
+        value <- match.arg(arg = value,
+                           choices = private$bc_methods)
+        self$.bc_method <- value
+        private$add_log(message = paste0("Batch correction method set: ", 
+                                         self$.bc_method))
+      }
     }
     
   ), # end active bindings
@@ -230,18 +242,9 @@ DataImport <- R6::R6Class(
     #------------------------------------------------ parameters imputation ----
     .imp_method = NULL,
     
-    #----------------------------------------------------------- parameters ----
-    params = list(
-      imputation = list(
-        method = NULL
-      ),
-      batch_correction = list(
-        method = NULL
-      ),
-      normalization = list(
-        method = NULL
-      )
-    ),
+    #------------------------------------------ parameters batch correction ----
+    .bc_method = NULL,
+    
     #-------------------------------------------------------------- history ----
     history = data.frame(id = NULL,
                          datetime = NULL,
@@ -292,7 +295,9 @@ DataImport <- R6::R6Class(
           "blank_filter" = private$step_blank_filter(),
           "total_normalisation" = private$step_total_normalisation(),
           "pqn_normalisation" = private$step_pqn_normalisation(),
-          "imputation" = private$step_imputation()
+          "imputation" = private$step_imputation(),
+          "batch_correction" = private$step_batchcorrection(),
+          NULL
         )
       }
       
@@ -370,8 +375,14 @@ DataImport <- R6::R6Class(
     impute_methods = list(
       "max" = max,
       "mean" = mean,
-      "median" = median,
+      "median" = stats::median,
       "min" = min
+    ),
+    #----------------------------------------------------- batch correction ----
+    bc_methods = c(
+      "median",
+      "loess",
+      "combat"
     ),
     #------------------------------------------------- pre-processing steps ----
     steps_preprocessing = c(
@@ -379,7 +390,8 @@ DataImport <- R6::R6Class(
       "blank_filter",
       "total_normalisation",
       "pqn_normalisation",
-      "imputation"
+      "imputation",
+      "batch_correction"
     ),
     reset_tables = function() {
       utils_reset_tables(self = self)
@@ -411,6 +423,10 @@ DataImport <- R6::R6Class(
       impute_na(self = self,
                 private = private)
       private$add_log("Applied imputation.")
+    },
+    step_batchcorrection = function() {
+      batchcorrection(self = self)
+      private$add_log("Applied batch correction.")
     },
     apply_rsd_filter = function() {
       qc_apply_rsd(self = self)

@@ -145,3 +145,29 @@ utils_reset_tables <- function(self = NULL) {
   return(invisible(self))
 }
 
+
+#' @title Make analysis table long
+#' 
+#' @description
+#' make analysis table long.
+#' 
+#' @param df data.frame
+#' 
+#' @returns data.frame in long format
+#' 
+#' @importFrom tidyr pivot_longer
+#' 
+#' @noRd
+#' 
+utils_make_analysis_long <- function(df = NULL) {
+  df_long <- df |> 
+    tidyr::pivot_longer(
+      cols = colnames(df)[-1],
+      names_to = "id",
+      values_to = "peakArea"
+    )
+  
+  df_long <- as.data.frame(df_long)
+  
+  return(df_long)
+}

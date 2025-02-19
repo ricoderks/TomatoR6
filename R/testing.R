@@ -22,9 +22,10 @@ if(dev) {
   obj$order_column <- "injOrder"
   obj$type_column <- "sampleType"
   obj$group_column <- "group"
+  obj$batch_column <- "batch"
   
   # set preprocessing steps
-  obj$preprocessing_steps <- c("imputation")
+  obj$preprocessing_steps <- c("rsd_filter", "batch_correction")
   
   # set params
   # rsd
@@ -38,6 +39,8 @@ if(dev) {
   obj$norm_pqn_reference <- "median"
   # imputation
   obj$imp_method <- "min"
+  # batch correction
+  obj$bc_method <- "median"
   
   
   # Import all data
