@@ -220,7 +220,7 @@ qc_calc_trend = function(self = NULL) {
 #' @noRd
 #'
 #' @importFrom ggplot2 ggplot aes geom_line .data theme_minimal labs
-#'     guide_legend theme geom_hline .data
+#'     guide_legend theme geom_hline .data facet_wrap vars geom_point
 #'
 qc_plot_trend = function(self = NULL,
                          type = c("all", "filtered")) {
@@ -239,16 +239,36 @@ qc_plot_trend = function(self = NULL,
     p <- plot_data |> 
       ggplot2::ggplot(ggplot2::aes(x = .data$sampleName,
                                    y = .data$log2fc,
-                                   group = .data$id,
-                                   colour = .data$polarity)) +
-      ggplot2::geom_hline(yintercept = c(-1, 0, 1),
-                          colour = c("black", "grey", "black"),
-                          linetype = c(2, 1, 2)) +
-      ggplot2::geom_line(alpha = 0.5) +
-      ggplot2::guides(colour = ggplot2::guide_legend(title = "Polarity",
-                                                     override.aes = list(alpha = 1))) +
+                                   group = .data$id)) +
+      ggplot2::geom_hline(yintercept = -1,
+                          linetype = 2,
+                          colour = "black") +
+      ggplot2::geom_hline(yintercept = 1,
+                          linetype = 2,
+                          colour = "black") +
+      ggplot2::geom_hline(yintercept = 0,
+                          linetype = 1,
+                          colour = "grey")
+      if(is.null(obj$batch_column)) {
+        p <- p +
+          ggplot2::geom_line(ggplot2::aes(colour = .data$polarity),
+                             alpha = 0.3) +
+          ggplot2::geom_point(ggplot2::aes(colour = .data$polarity)) +
+          ggplot2::guides(colour = ggplot2::guide_legend(title = "Polarity",
+                                                         override.aes = list(alpha = 1)))
+      } else {
+        p <- p +
+          ggplot2::geom_line(ggplot2::aes(colour = as.factor(.data[[self$batch_column]])),
+                             alpha = 0.3) +
+          ggplot2::geom_point(ggplot2::aes(colour = as.factor(.data[[self$batch_column]]))) +
+          ggplot2::guides(colour = ggplot2::guide_legend(title = "Batch",
+                                                         override.aes = list(alpha = 1)))
+      }
+    p <- p +
       ggplot2::labs(x = "Sample id",
                     y = "Log2(fold change)") +
+      ggplot2::facet_wrap(ggplot2::vars(.data$polarity),
+                          nrow = 2) +
       ggplot2::theme_minimal() +
       ggplot2::theme(legend.position = "bottom",
                      axis.text.x = ggplot2::element_text(angle = 45,
