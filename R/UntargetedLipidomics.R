@@ -26,7 +26,7 @@ UntargetedLipidomics <- R6::R6Class(
   #---------------------------------------------------------------- private ----
   private = list(
     import_data = function() {
-      import_read_rawdata(self = self)
+      import_read_msdial(self = self)
       private$extract_featuredata()
       private$make_data_long()
       private$make_data_wide()

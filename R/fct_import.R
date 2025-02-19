@@ -44,7 +44,7 @@ import_read_metadata <- function(self = NULL) {
 #'
 #' @returns self
 #' 
-import_read_rawdata <- function(self = NULL) {
+import_read_msdial <- function(self = NULL) {
   data_df <- data.frame()
   
   for(a in 1:length(self$file_data)) {
