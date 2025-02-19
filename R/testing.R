@@ -24,7 +24,7 @@ if(dev) {
   obj$group_column <- "group"
   
   # set preprocessing steps
-  obj$preprocessing_steps <- c("rsd_filter", "blank_filter", "pqn_normalisation")
+  obj$preprocessing_steps <- c("imputation")
   
   # set params
   # rsd
@@ -36,6 +36,9 @@ if(dev) {
   # normalisation
   # default is median
   obj$norm_pqn_reference <- "median"
+  # imputation
+  obj$imp_method <- "min"
+  
   
   # Import all data
   obj$import()

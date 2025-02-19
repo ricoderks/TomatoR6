@@ -147,6 +147,17 @@ DataImport <- R6::R6Class(
         private$add_log(message = paste0("PQN normalisation reference set: ", 
                                          self$.norm_pqn_reference))
       }
+    },
+    imp_method = function(value) {
+      if(missing(value)) {
+        self$.imp_method
+      } else {
+        value <- match.arg(arg = value,
+                           choices = names(private$impute_methods))
+        self$.imp_method <- value
+        private$add_log(message = paste0("Imputation method set: ", 
+                                         self$.imp_method))
+      }
     }
     
   ), # end active bindings
@@ -216,6 +227,9 @@ DataImport <- R6::R6Class(
     #--------------------------------------------- parameters normalisation ----
     .norm_pqn_reference = NULL,
     
+    #------------------------------------------------ parameters imputation ----
+    .imp_method = NULL,
+    
     #----------------------------------------------------------- parameters ----
     params = list(
       imputation = list(
@@ -277,7 +291,8 @@ DataImport <- R6::R6Class(
           "rsd_filter" = private$step_rsd(),
           "blank_filter" = private$step_blank_filter(),
           "total_normalisation" = private$step_total_normalisation(),
-          "pqn_normalisation" = private$step_pqn_normalisation()
+          "pqn_normalisation" = private$step_pqn_normalisation(),
+          "imputation" = private$step_imputation()
         )
       }
       
@@ -351,12 +366,20 @@ DataImport <- R6::R6Class(
     calc_sample_blank_ratio = function() {
       blank_calc_ratio(self = self)
     },
+    #----------------------------------------------------------- imputation ----
+    impute_methods = list(
+      "max" = max,
+      "mean" = mean,
+      "median" = median,
+      "min" = min
+    ),
     #------------------------------------------------- pre-processing steps ----
     steps_preprocessing = c(
       "rsd_filter",
       "blank_filter",
       "total_normalisation",
-      "pqn_normalisation"
+      "pqn_normalisation",
+      "imputation"
     ),
     reset_tables = function() {
       utils_reset_tables(self = self)
@@ -383,6 +406,11 @@ DataImport <- R6::R6Class(
       norm_total_area(self = self)
       norm_pqn(self = self)
       private$add_log("Applied PQN normalisation.")
+    },
+    step_imputation = function() {
+      impute_na(self = self,
+                private = private)
+      private$add_log("Applied imputation.")
     },
     apply_rsd_filter = function() {
       qc_apply_rsd(self = self)
