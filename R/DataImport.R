@@ -170,6 +170,24 @@ DataImport <- R6::R6Class(
         private$add_log(message = paste0("Batch correction method set: ", 
                                          self$.bc_method))
       }
+    },
+    bc_loess_method = function(value) {
+      if(missing(value)) {
+        self$.bc_loess_method
+      } else {
+        self$.bc_loess_method <- value
+        private$add_log(message = paste0("Batch correction loess method set: ", 
+                                         self$.bc_loess_method))
+      }
+    },
+    bc_loess_span = function(value) {
+      if(missing(value)) {
+        self$.bc_loess_span
+      } else {
+        self$.bc_loess_span <- value
+        private$add_log(message = paste0("Batch correction loess span set: ", 
+                                         self$.bc_loess_span))
+      }
     }
     
   ), # end active bindings
@@ -244,6 +262,8 @@ DataImport <- R6::R6Class(
     
     #------------------------------------------ parameters batch correction ----
     .bc_method = NULL,
+    .bc_loess_method = NULL,
+    .bc_loess_span = NULL,
     
     #-------------------------------------------------------------- history ----
     history = data.frame(id = NULL,

@@ -40,7 +40,9 @@ if(dev) {
   # imputation
   obj$imp_method <- "min"
   # batch correction
-  obj$bc_method <- "median"
+  obj$bc_method <- "loess"
+  obj$bc_loess_method <- "batch"
+  obj$bc_loess_span <- 0.75
   
   
   # Import all data

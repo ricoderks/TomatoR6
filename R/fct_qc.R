@@ -249,7 +249,7 @@ qc_plot_trend = function(self = NULL,
       ggplot2::geom_hline(yintercept = 0,
                           linetype = 1,
                           colour = "grey")
-      if(is.null(obj$batch_column)) {
+      if(is.null(self$batch_column)) {
         p <- p +
           ggplot2::geom_line(ggplot2::aes(colour = .data$polarity),
                              alpha = 0.3) +
