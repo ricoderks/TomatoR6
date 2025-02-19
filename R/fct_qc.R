@@ -303,7 +303,7 @@ qc_calc_cor <- function(self = NULL) {
     index_pools <- self$index_pools
     index_samples <- self$index_samples
     
-    data_df <- self$table_analysis[self$table_analysis$sampleName %in% c(index_pools, index_samples), ]
+    data_df <- self$table_analysis[c(index_pools, index_samples), ]
     rownames(data_df) <- data_df$sampleName
     data_df <- t(data_df[, -1])
     
