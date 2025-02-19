@@ -170,9 +170,11 @@ make_table_wide = function(self = NULL) {
       names_from = "id",
       values_from = "peakArea"
     )
+  data_wide <- as.data.frame(data_wide)
+  rownames(data_wide) <- data_wide$sampleName
   
-  self$table_alldata <- as.data.frame(data_wide)
-  self$table_analysis <- as.data.frame(data_wide)
+  self$table_alldata <- data_wide
+  self$table_analysis <- data_wide
   
   invisible(self)
 }
