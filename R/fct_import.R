@@ -178,10 +178,10 @@ make_table_wide = function(self = NULL) {
 }
 
 
-#' @title Extract feature data
+#' @title Extract lipid feature data
 #' 
 #' @description
-#' Extract feature data.
+#' Extract lipid feature data.
 #' 
 #' @param self class object
 #' 
@@ -189,7 +189,7 @@ make_table_wide = function(self = NULL) {
 #' 
 #' @returns self (invisible)
 #' 
-extract_feature_data = function(self = NULL) {
+extract_lipid_data = function(self = NULL) {
   data_df <- self$table_rawdata
   
   data_df <- data_df[, c("id", "Metabolite name", "Ontology", "Adduct type", "Average Rt(min)", "Average Mz")]
@@ -212,6 +212,33 @@ extract_feature_data = function(self = NULL) {
   
   data_df$shortLipidName <- short
   data_df$longLipidname <- long
+  # for now keep all features
+  data_df$keep <- TRUE
+  data_df$keep_rsd <- TRUE
+  data_df$keep_sample_blank <- TRUE
+  
+  self$table_featuredata <- data_df
+  
+  return(invisible(self))
+}
+
+
+#' @title Extract metabolite data
+#' 
+#' @description
+#' Extract metabolite data.
+#' 
+#' @param self class object
+#' 
+#' @noRd
+#' 
+#' @returns self (invisible)
+#' 
+extract_metabolite_data = function(self = NULL) {
+  data_df <- self$table_rawdata
+  
+  data_df <- data_df[, c("id", "Metabolite name", "Ontology", "Adduct type", "Average Rt(min)", "Average Mz")]
+  
   # for now keep all features
   data_df$keep <- TRUE
   data_df$keep_rsd <- TRUE

@@ -38,7 +38,7 @@ UntargetedLipidomics <- R6::R6Class(
       make_table_wide(self = self)
     },
     extract_featuredata = function() {
-      extract_feature_data(self = self)
+      extract_lipid_data(self = self)
     }
   ) # end private
 )
