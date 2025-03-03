@@ -2,75 +2,12 @@
 % Please edit documentation in R/UntargetedMetabolomics.R
 \name{UntargetedMetabolomics}
 \alias{UntargetedMetabolomics}
-\title{R6 untargeted metabolomics class}
+\title{Defining the Untargeted metabolomics class}
 \description{
-Untargeted metabolomics class. This is a child class from DataImport class.
+Defining the Untargeted metabolomics class
 }
 \author{
 Rico Derks
 
 Yassene Mohammed
-}
-\section{Super class}{
-\code{\link[TomatoR6:DataImport]{TomatoR6::DataImport}} -> \code{UntargetedMetabolomics}
-}
-\section{Methods}{
-\subsection{Public methods}{
-\itemize{
-\item \href{#method-UntargetedMetabolomics-new}{\code{UntargetedMetabolomics$new()}}
-\item \href{#method-UntargetedMetabolomics-clone}{\code{UntargetedMetabolomics$clone()}}
-}
-}
-\if{html}{\out{
-<details><summary>Inherited methods</summary>
-<ul>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="blank_filtering"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-blank_filtering'><code>TomatoR6::DataImport$blank_filtering()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="calc_qcpool"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-calc_qcpool'><code>TomatoR6::DataImport$calc_qcpool()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="combat_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-combat_bc'><code>TomatoR6::DataImport$combat_bc()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="import"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-import'><code>TomatoR6::DataImport$import()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="loess_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-loess_bc'><code>TomatoR6::DataImport$loess_bc()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="median_bc"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-median_bc'><code>TomatoR6::DataImport$median_bc()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_rsd"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_rsd'><code>TomatoR6::DataImport$plot_qc_rsd()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="plot_qc_trend"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-plot_qc_trend'><code>TomatoR6::DataImport$plot_qc_trend()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="print"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-print'><code>TomatoR6::DataImport$print()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="set_files"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-set_files'><code>TomatoR6::DataImport$set_files()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="set_parameters"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-set_parameters'><code>TomatoR6::DataImport$set_parameters()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="TomatoR6" data-topic="DataImport" data-id="show_data_info"><a href='../../TomatoR6/html/DataImport.html#method-DataImport-show_data_info'><code>TomatoR6::DataImport$show_data_info()</code></a></span></li>
-</ul>
-</details>
-}}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-UntargetedMetabolomics-new"></a>}}
-\if{latex}{\out{\hypertarget{method-UntargetedMetabolomics-new}{}}}
-\subsection{Method \code{new()}}{
-Initialization function for DataImport class.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedMetabolomics$new(name = NA)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{name}}{character(1), name.}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-UntargetedMetabolomics-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-UntargetedMetabolomics-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{UntargetedMetabolomics$clone(deep = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

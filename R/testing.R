@@ -1,62 +1,74 @@
 dev <- FALSE
 if(dev) {
-  # library(TomatoR6)
+  library(TomatoR6)
   
-  # create object
-  data_obj <- UntargetedLipidomics$new(name = "Testing")
+  # create data import object
+  obj <- UntargetedLipidomics$new(name = "Testing untargeted lipidomics")
   
-  # set file names
-  data_obj$set_files(
-    data_files = c(
-      "/home/rjederks/Downloads/TomatoR6_data/20250122_100040_bile_pos_fixed.txt",
-      "/home/rjederks/Downloads/TomatoR6_data/20250123_102728_bile_neg_fixed.txt"
-    ),
-    meta_file = "/home/rjederks/Downloads/TomatoR6_data/meta_data.xlsx"
+  # set files
+  obj$file_data <- c(
+    "/home/rjederks/Downloads/TomatoR6_data/20250122_100040_bile_pos_fixed.txt",
+    "/home/rjederks/Downloads/TomatoR6_data/20250123_102728_bile_neg_fixed.txt"
   )
+  obj$file_meta <- "/home/rjederks/Downloads/TomatoR6_data/metadata.xlsx"
   
-  # set several parameters
-  data_obj$set_parameters(
-    ids = list(
-      id_col_meta = "sampleId",
-      id_col_data = "sampleName"
-    ),
-    columns = list(
-      type_column = "sampleTpe",
-      group_column = "group",
-      batch_column = "batch",
-      order_column = "injOrder"
-    ),
-    regex = list(
-      blanks = "blank_",
-      pools = "qcpool_",
-      samples = "sample_"
-    ),
-    rsd = list(
-      rsd_limit = 0.3
-    )
-  )
+  # set regex's
+  obj$regex_blanks <- "blank"
+  obj$regex_pools <- "qcpool"
+  obj$regex_samples <- "sample"
   
-  # import all data
-  data_obj$import()
+  # set columns
+  obj$id_col_meta <- "sampleId"
+  obj$order_column <- "injOrder"
+  obj$type_column <- "sampleType"
+  obj$group_column <- "group"
+  obj$batch_column <- "batch"
   
-  # calculate all qcpool things
-  data_obj$calc_qcpool()
+  # set preprocessing steps
+  obj$preprocessing_steps <- c("rsd_filter", "batch_correction")
   
-  data_obj
-  
-  # show the info
-  data_obj$show_data_info()
-  
-  # plots
-  data_obj$plot_qc_rsd()
-  data_obj$plot_qc_rsd_class()
-  data_obj$plot_qc_trend()
-  
-  # history
-  data_obj$history
-
+  # set params
+  # rsd
+  obj$qc_rsd_limit <- 0.3
+  # blank
+  obj$blank_ratio <- 5
+  obj$blank_threshold <- 0.8
+  obj$blank_group_threshold <- 0.8
+  # normalisation
+  # default is median
+  obj$norm_pqn_reference <- "median"
+  # imputation
+  obj$imp_method <- "min"
+  # batch correction
+  obj$bc_method <- "loess"
+  obj$bc_loess_method <- "batch"
+  obj$bc_loess_span <- 0.75
   
   
+  # Import all data
+  obj$import()
   
-    
-}
+  
+  ## View QC stuff
+  # calculate QC stuff
+  obj$calc_qc()
+  
+  # plot QC stuff
+  obj$plot_qc_rsd()
+  obj$plot_qc_class_rsd()
+  obj$plot_qc_trend()
+  obj$plot_qc_cor()
+  
+  
+  
+  # do pre-processing
+  obj$preprocessing()
+  obj$plot_qc_rsd(type = "filtered")
+  obj$plot_qc_class_rsd(type = "filtered")
+  obj$plot_qc_trend(type = "filtered")
+  
+  
+  
+  
+  
+}  
