@@ -3,7 +3,7 @@
 #' @description
 #' Import the meta data.
 #' 
-#' @param self self 
+#' @param self class object DataImport 
 #'
 #' @returns self
 #' 
@@ -38,7 +38,7 @@ import_read_metadata <- function(self = NULL) {
 #' @description
 #' Import raw data.
 #' 
-#' @param self self 
+#' @param self class object UntargetedLipidomics 
 #'
 #' @noRd
 #'
@@ -54,6 +54,32 @@ import_read_msdial <- function(self = NULL) {
   }
   
   data_df <- cleanup(data_df = data_df)
+  self$table_rawdata <- data_df
+  
+  return(self)
+}
+
+
+#' @title Import lipidyzer data
+#' 
+#' @description
+#' Import lipidyzer data from (multiple) file(s).
+#' 
+#' @param self class object TargetedLipidomics
+#' 
+#' @noRd
+#' 
+#' @returns self
+#' 
+import_lipidyzer <- function(self = self) {
+  data_df <- data.frame()
+  
+  for(a in 1:length(self$file_data)) {
+    tmp <- read_lipidyzer(file = self$file_data[a])
+    
+    data_df <- rbind.data.frame(data_df, tmp)
+  }
+  
   self$table_rawdata <- data_df
   
   return(self)
@@ -84,6 +110,32 @@ read_msdial = function(file = NULL) {
   
   return(data_df)
 }
+
+
+#' @title Read lipidyzer file
+#' 
+#' @description
+#' Read a lipidyzer result file.
+#' 
+#' @param file character(1) full path to result file
+#' 
+#' @noRd
+#' 
+#' @returns data.frame with lipidyzer results (Species Quant)
+#' 
+#' @importFrom openxlsx2 
+#' 
+read_lipidyzer <- function(file = NULL) {
+  data_df <- openxlsx2::read_xlsx(file = file,
+                                  sheet = 1,
+                                  row_names = FALSE,
+                                  col_names = TRUE,
+                                  na.strings = "",
+                                  check_names = FALSE)
+  
+  return(data_df)
+}
+
 
 #' @title Cleanup import MSDIAL results
 #' 

@@ -2,6 +2,7 @@ dev <- FALSE
 if(dev) {
   library(TomatoR6)
   
+  ################################################### untargeted lipidomics ####
   # create data import object
   obj <- UntargetedLipidomics$new(name = "Testing untargeted lipidomics")
   
@@ -67,7 +68,7 @@ if(dev) {
   obj$plot_qc_class_rsd(type = "filtered")
   obj$plot_qc_trend(type = "filtered")
   
-  
+  ##################################################### targeted lipidomics ####
   
   
   
