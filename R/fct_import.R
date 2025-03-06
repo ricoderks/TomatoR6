@@ -67,6 +67,11 @@ import_read_msdial <- function(self = NULL) {
 #' 
 #' @param self class object TargetedLipidomics
 #' 
+#' @details
+#' Multiple files means that these are results from multiple batches from the 
+#' same study. These need to be merged, but can have different amount of columns.
+#' This is fixed here.
+#' 
 #' @noRd
 #' 
 #' @returns self
@@ -77,9 +82,16 @@ import_lipidyzer <- function(self = self) {
   for(a in 1:length(self$file_data)) {
     tmp <- read_lipidyzer(file = self$file_data[a])
     
+    if(any(dim(data_df)[1L])) {
+      tmp[setdiff(names(data_df), names(tmp))] <- NA
+      data_df[setdiff(names(tmp), names(data_df))] <- NA
+    }
+    
     data_df <- rbind.data.frame(data_df, tmp)
   }
-  
+  colnames(data_df)[1] <- "sampleName"
+  order_cols <- sort(colnames(data_df)[-1])
+  data_df <- data_df[, c("sampleName", order_cols)]
   self$table_rawdata <- data_df
   
   return(self)
@@ -123,7 +135,7 @@ read_msdial = function(file = NULL) {
 #' 
 #' @returns data.frame with lipidyzer results (Species Quant)
 #' 
-#' @importFrom openxlsx2 
+#' @importFrom openxlsx2 read_xlsx
 #' 
 read_lipidyzer <- function(file = NULL) {
   data_df <- openxlsx2::read_xlsx(file = file,
@@ -132,6 +144,7 @@ read_lipidyzer <- function(file = NULL) {
                                   col_names = TRUE,
                                   na.strings = "",
                                   check_names = FALSE)
+  data_df[, -1] <- apply(data_df[, -1], 2, as.numeric)
   
   return(data_df)
 }
@@ -169,10 +182,10 @@ cleanup = function(data_df = NULL) {
 }
 
 
-#' @title Make data.frame long
+#' @title Make data.frame with MS-DIAL results long
 #' 
 #' @description
-#' Make data.frame long.
+#' Make data.frame with MS-DIAL results long.
 #' 
 #' @param self data.frame in wide format.
 #' 
@@ -180,15 +193,15 @@ cleanup = function(data_df = NULL) {
 #' 
 #' @returns self (invisible).
 #' 
-#' @importFrom tidyr pivot_longer
+#' @importFrom tidyr pivot_longer all_of
 #' 
-make_table_long = function(self = NULL) {
+make_table_long_msdial = function(self = NULL) {
   data_wide <- self$table_rawdata
   sample_col_names <- c(self$index_blanks, self$index_qcs, self$index_pools, self$index_samples)
   
   data_long <- data_wide[, c("id", sample_col_names)] |> 
     tidyr::pivot_longer(
-      cols = sample_col_names,
+      cols = tidyr::all_of(sample_col_names),
       names_to = "sampleName",
       values_to = "peakArea"
     )
@@ -196,14 +209,14 @@ make_table_long = function(self = NULL) {
   self$table_alldata_long <- as.data.frame(data_long)
   self$table_analysis_long <- as.data.frame(data_long)
   
-  invisible(self)
+  return(invisible(self))
 }
 
 
-#' @title Make data.frame wide
+#' @title Make data.frame with MS-DIAL results wide
 #' 
 #' @description
-#' Make data.frame wide.
+#' Make data.frame with MS-DIAL results wide.
 #' 
 #' @param self data.frame in long format.
 #' 
@@ -228,14 +241,51 @@ make_table_wide = function(self = NULL) {
   self$table_alldata <- data_wide
   self$table_analysis <- data_wide
   
-  invisible(self)
+  return(invisible(self))
 }
 
 
-#' @title Extract lipid feature data
+#' @title Make data.frame with lipidyzer results long
 #' 
 #' @description
-#' Extract lipid feature data.
+#' Make data.frame with lipidyzer results long.
+#' 
+#' @param self data.frame in wide format.
+#' 
+#' @noRd
+#' 
+#' @returns self (invisible).
+#' 
+#' @importFrom tidyr pivot_longer all_of
+#' 
+make_table_long_lipidyzer = function(self = NULL) {
+  data_wide <- self$table_rawdata
+  features <- colnames(data_wide)[-1]
+  
+  data_long <- data_wide |> 
+    tidyr::pivot_longer(
+      cols = tidyr::all_of(features),
+      names_to = "featureName",
+      values_to = "peakArea"
+    )
+  
+  data_long <- as.data.frame(data_long)
+  featureNames <- unique(data_long$featureName)
+  ids <- 1:length(featureNames)
+  names(ids) <- featureNames
+  data_long$id <- ids[data_long$featureName]
+  
+  self$table_alldata_long <- data_long
+  self$table_analysis_long <- data_long
+  
+  return(invisible(self))
+}
+
+
+#' @title Extract lipid feature data from MS-DIAL results
+#' 
+#' @description
+#' Extract lipid feature data from MS-DIAL results.
 #' 
 #' @param self class object
 #' 
@@ -243,11 +293,17 @@ make_table_wide = function(self = NULL) {
 #' 
 #' @returns self (invisible)
 #' 
-extract_lipid_data = function(self = NULL) {
+extract_lipid_data_msdial = function(self = NULL) {
   data_df <- self$table_rawdata
   
   data_df <- data_df[, c("id", "Metabolite name", "Ontology", "Adduct type", "Average Rt(min)", "Average Mz")]
-  split_name <- strsplit(x = data_df$`Metabolite name`,
+  colnames(data_df) <- c("featureId", "featureName", "class", "adductType", "averageRt", "averageMz")
+  data_df$polarity <- ifelse(grepl(x = data_df$adductType,
+                                   pattern = ".*\\+$"),
+                             "pos",
+                             "neg")
+  
+  split_name <- strsplit(x = data_df$featureName,
                          split = "\\|")
   
   short <- vector(mode = "character",
@@ -264,8 +320,49 @@ extract_lipid_data = function(self = NULL) {
     }
   }
   
-  data_df$shortLipidName <- short
-  data_df$longLipidname <- long
+  data_df$shortFeatureName <- short
+  data_df$longFeatureName <- long
+  # for now keep all features
+  data_df$keep <- TRUE
+  data_df$keep_rsd <- TRUE
+  data_df$keep_sample_blank <- TRUE
+  
+  self$table_featuredata <- data_df
+  
+  return(invisible(self))
+}
+
+
+#' @title Extract lipid feature data from lipidyzer results
+#' 
+#' @description
+#' Extract lipid feature data from lipidyzer results.
+#' 
+#' @param self class object.
+#' @param private private part of object.
+#' 
+#' @details
+#' The feature information is in the column names of the data.frame.
+#' 
+#' @noRd
+#' 
+#' @returns self (invisible)
+#' 
+extract_lipid_data_lipidyzer = function(self = NULL,
+                                        private = NULL) {
+  features <- colnames(self$table_rawdata)[-1]
+  
+  data_df <- data.frame("featureId" = 1:length(features),
+                        "featureName" = features)
+  
+  data_df$class <- gsub(x = data_df$featureName,
+                        pattern = "^([a-zA-Z]*)( d18:0| d18:1)? ?(P-|O-)?.*",
+                        replacement = "\\3\\1\\2")
+  
+  data_df$polarity <- ifelse(data_df$class %in% private$lipid_class_neg,
+                             "neg",
+                             "pos")
+  
   # for now keep all features
   data_df$keep <- TRUE
   data_df$keep_rsd <- TRUE
@@ -292,6 +389,7 @@ extract_metabolite_data = function(self = NULL) {
   data_df <- self$table_rawdata
   
   data_df <- data_df[, c("id", "Metabolite name", "Ontology", "Adduct type", "Average Rt(min)", "Average Mz")]
+  colnames(data_df) <- c("featureId", "featureName", "class", "adductType", "averageRt", "averageMz")
   
   # for now keep all features
   data_df$keep <- TRUE

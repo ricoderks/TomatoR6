@@ -107,7 +107,7 @@ utils_analysis_features <- function(self = NULL) {
 #' @returns self (invisible).
 #'
 utils_analysis_table <- function(self = NULL) {
-  features <- self$table_featuredata$id[self$table_featuredata$keep == TRUE]
+  features <- self$table_featuredata$featureId[self$table_featuredata$keep == TRUE]
   observations <- c(self$index_blanks, self$index_qcs, self$index_pools, self$index_samples)
   
   # wide format
@@ -155,14 +155,14 @@ utils_reset_tables <- function(self = NULL) {
 #' 
 #' @returns data.frame in long format
 #' 
-#' @importFrom tidyr pivot_longer
+#' @importFrom tidyr pivot_longer all_of
 #' 
 #' @noRd
 #' 
 utils_make_analysis_long <- function(df = NULL) {
   df_long <- df |> 
     tidyr::pivot_longer(
-      cols = colnames(df)[-1],
+      cols = tidyr::all_of(colnames(df)[-1]),
       names_to = "id",
       values_to = "peakArea"
     )

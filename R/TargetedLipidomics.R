@@ -27,18 +27,22 @@ TargetedLipidomics <- R6::R6Class(
   private = list(
     import_data = function() {
       import_lipidyzer(self = self)
-      # private$extract_featuredata()
-      # private$make_data_long()
-      # private$make_data_wide()
+      private$extract_featuredata()
+      private$make_data_long()
+      private$make_data_wide()
     },
     make_data_long = function() {
-      # make_table_long(self = self)
+      make_table_long_lipidyzer(self = self)
     },
     make_data_wide = function() {
-      # make_table_wide(self = self)
+      make_table_wide(self = self)
     },
     extract_featuredata = function() {
-      # extract_lipid_data(self = self)
-    }
+      extract_lipid_data_lipidyzer(self = self,
+                                   private = private)
+    },
+    lipid_class_pos = c("SM", "TG", "CE", "DG", "Cer d18:1", "Cer d18:0", 
+                         "HexCER d18:1", "LacCER d18:1", "PA", "LPC", "LPE"),
+    lipid_class_neg = c("FA", "PC", "PE", "P-PE", "PG", "PI", "PS")
   ) # end private
 )

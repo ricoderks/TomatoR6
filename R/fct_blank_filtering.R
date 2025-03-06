@@ -88,7 +88,7 @@ blank_apply_filter <- function(self = NULL) {
     keep_group <- rownames(features_groups)[features_groups$keep]
     
     keep_all <- union(keep, keep_group)
-    self$table_featuredata$keep_sample_blank <- self$table_featuredata$id %in% keep_all
+    self$table_featuredata$keep_sample_blank <- self$table_featuredata$featureId %in% keep_all
     
     return(invisible(self))
   }

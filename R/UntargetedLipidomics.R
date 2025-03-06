@@ -32,13 +32,13 @@ UntargetedLipidomics <- R6::R6Class(
       private$make_data_wide()
     },
     make_data_long = function() {
-      make_table_long(self = self)
+      make_table_long_msdial(self = self)
     },
     make_data_wide = function() {
       make_table_wide(self = self)
     },
     extract_featuredata = function() {
-      extract_lipid_data(self = self)
+      extract_lipid_data_msdial(self = self)
     }
   ) # end private
 )

@@ -28,13 +28,11 @@ qc_calc_rsd <- function(self = NULL,
     })
     rsd_data <- do.call("rbind", rsd_data)
     
-    rsd_data$polarity <- gsub(pattern = "(pos|neg).*",
-                              replacement = "\\1",
-                              x = rsd_data$id)
     rsd_data <- merge(
       x = rsd_data,
-      y = feature_data[, c("id", "Ontology")],
-      by = "id"
+      y = feature_data[, c("featureId", "class", "polarity")],
+      by.x = "id",
+      by.y = "featureId"
     )
     
     self$table_rsd_data <- rsd_data
@@ -71,7 +69,7 @@ qc_plot_rsd <- function(self = NULL,
     
     if(type == "filtered") {
     plot_data <- self$table_rsd_data[
-      self$table_rsd_data$id %in% self$table_featuredata$id[self$table_featuredata$keep], 
+      self$table_rsd_data$id %in% self$table_featuredata$featureId[self$table_featuredata$keep], 
     ]
     } else {
       plot_data <- self$table_rsd_data
@@ -126,14 +124,14 @@ qc_plot_class_rsd <- function(self = NULL,
     
     if(type == "filtered") {
       plot_data <- self$table_rsd_data[
-        self$table_rsd_data$id %in% self$table_featuredata$id[self$table_featuredata$keep], 
+        self$table_rsd_data$id %in% self$table_featuredata$featureId[self$table_featuredata$keep], 
       ]
     } else {
       plot_data <- self$table_rsd_data
     }
     
     p <- plot_data |> 
-      ggplot2::ggplot(ggplot2::aes(x = .data$Ontology,
+      ggplot2::ggplot(ggplot2::aes(x = .data$class,
                                    y = .data$rsd)) +
       ggplot2::geom_violin() +
       ggplot2::geom_jitter(ggplot2::aes(colour = .data$polarity),
@@ -171,6 +169,7 @@ qc_plot_class_rsd <- function(self = NULL,
 #' 
 qc_calc_trend = function(self = NULL) {
   if(!is.null(self$table_analysis_long)) {
+    feature_data <- self$table_featuredata
     id_col_meta <- self$id_col_meta
     meta_data <- self$table_metadata
     pools_data <- self$table_analysis_long
@@ -196,9 +195,13 @@ qc_calc_trend = function(self = NULL) {
     )
     
     merge_data$log2fc <- log2(merge_data$peakArea / merge_data$refPeakArea)
-    merge_data$polarity <- gsub(pattern = "(pos|neg).*",
-                                replacement = "\\1",
-                                x = merge_data$id)
+    
+    merge_data <- merge(
+      x = merge_data,
+      y = feature_data[, c("featureId", "polarity")],
+      by.x = "id",
+      by.y = "featureId"
+    )
     
     self$table_trend_data <- merge_data
     
@@ -230,7 +233,7 @@ qc_plot_trend = function(self = NULL,
   if(!is.null(self$table_trend_data)) {
     if(type == "filtered") {
       plot_data <- self$table_trend_data[
-        self$table_trend_data$id %in% self$table_featuredata$id[self$table_featuredata$keep], 
+        self$table_trend_data$id %in% self$table_featuredata$featureId[self$table_featuredata$keep], 
       ]
     } else {
       plot_data <- self$table_trend_data
@@ -298,7 +301,7 @@ qc_apply_rsd <- function(self = NULL) {
   rsd_limit <- self$qc_rsd_limit
   
   keep <- rsd_data$id[rsd_data$rsd <= rsd_limit]
-  self$table_featuredata$keep_rsd <- self$table_featuredata$id %in% keep
+  self$table_featuredata$keep_rsd <- self$table_featuredata$featureId %in% keep
   
   return(invisible(self))
 }
@@ -328,6 +331,7 @@ qc_calc_cor <- function(self = NULL) {
     data_df <- t(data_df[, -1])
     
     data_df[data_df == 0] <- 1
+    data_df[is.na(data_df)] <- 1
     
     cor_df <- as.data.frame(stats::cor(log10(data_df)))
     cor_df$x <- rownames(cor_df)
