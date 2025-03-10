@@ -447,3 +447,20 @@ extract_indices <- function(self = self) {
   return(invisible(self))
 }
 
+
+#' @title Check meta data column
+#' 
+#' @description
+#' Check if a column name is present in the meta data.
+#' 
+#' @param self class object.
+#' @param column_name character(), column name(s) to check.
+#' 
+#' @returns logical() indicating if a column name is present or not.
+#' 
+#' @noRd
+#' 
+check_meta_column <- function(self = NULL,
+                              column_name = NULL) {
+  
+}

@@ -92,7 +92,7 @@ if(dev) {
   obj2$batch_column <- "batch"
   
   # set preprocessing steps
-  obj2$preprocessing_steps <- c("rsd_filter", "blank_filter")
+  obj2$preprocessing_steps <- c("rsd_filter", "blank_filter", "total_normalisation")
   
   # set params
   # rsd
@@ -119,5 +119,12 @@ if(dev) {
   obj2$plot_qc_rsd(type = "filtered")
   obj2$plot_qc_class_rsd(type = "filtered")
   obj2$plot_qc_trend(type = "filtered")
+  
+  # show qc now with preprocessed data
+  obj2$calc_qc()
+  obj2$plot_qc_rsd()
+  obj2$plot_qc_class_rsd()
+  obj2$plot_qc_trend()
+  obj2$plot_qc_cor()
   
 }  
