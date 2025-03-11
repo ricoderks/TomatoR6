@@ -279,7 +279,8 @@ qc_plot_trend = function(self = NULL,
       ggplot2::labs(x = "Sample id",
                     y = "Log2(fold change)") +
       ggplot2::facet_wrap(ggplot2::vars(.data$polarity),
-                          nrow = 2) +
+                          nrow = 2,
+                          scales = "free_y") +
       ggplot2::theme_minimal() +
       ggplot2::theme(legend.position = "bottom",
                      axis.text.x = ggplot2::element_text(angle = 45,
