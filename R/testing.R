@@ -74,10 +74,10 @@ if(dev) {
   
   # set files
   obj2$file_data <- c(
-    "/home/ricoderks/Downloads/TomatoR6_data/Batch1_output_merge.xlsx",
-    "/home/ricoderks/Downloads/TomatoR6_data/Batch2_output_merge.xlsx"
+    "/home/rjederks/Downloads/TomatoR6_data/Batch1_output_merge.xlsx",
+    "/home/rjederks/Downloads/TomatoR6_data/Batch2_output_merge.xlsx"
   )
-  obj2$file_meta <- "/home/ricoderks/Downloads/TomatoR6_data/metadata_lipidyzer.xlsx"
+  obj2$file_meta <- "/home/rjederks/Downloads/TomatoR6_data/metadata_lipidyzer.xlsx"
   
   # set regex's
   obj2$regex_blanks <- "blank"

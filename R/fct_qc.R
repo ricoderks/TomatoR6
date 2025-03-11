@@ -185,6 +185,14 @@ qc_calc_trend = function(self = NULL) {
       by.y = id_col_meta
     )
     
+    # order the QC samples in measurment order for later plotting with ggplot2
+    unique_qc <- unique(merge_data$sampleName)
+    unique_order <- unique(merge_data[, self$order_column])
+    
+    merge_data$sampleName <- factor(x = merge_data$sampleName,
+                                    levels = unique_qc[order(unique_order)],
+                                    labels = unique_qc[order(unique_order)])
+    
     ref_data <- merge_data[merge_data[, self$order_column] == min(merge_data[, self$order_column]), c("id", "peakArea")]
     colnames(ref_data)[2] <- "refPeakArea"
     
