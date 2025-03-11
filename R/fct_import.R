@@ -454,13 +454,30 @@ extract_indices <- function(self = self) {
 #' Check if a column name is present in the meta data.
 #' 
 #' @param self class object.
-#' @param column_name character(), column name(s) to check.
 #' 
-#' @returns logical() indicating if a column name is present or not.
+#' @details
+#' Checking the column names for id, sample type, batch, injection order and 
+#' group.
+#' 
+#' @importFrom cli cli_abort
+#' 
+#' @returns logical(1) indicating if a column names are present.
 #' 
 #' @noRd
 #' 
-check_meta_column <- function(self = NULL,
-                              column_name = NULL) {
+check_meta_column <- function(self = NULL) {
+  column_names <- c(self$id_col_meta,
+                    self$type_column,
+                    self$batch_column,
+                    self$order_column,
+                    self$group_column)
   
+  res <- column_names %in% colnames(self$table_metadata)
+  
+  if(!all(res)) {
+      cli::cli_abort("Incorrect meta data column set!",
+                     call = NULL)
+  }
+  
+  return(all(res))
 }

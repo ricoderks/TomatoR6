@@ -8,10 +8,10 @@ if(dev) {
   
   # set files
   obj1$file_data <- c(
-    "/home/ricoderks/Downloads/TomatoR6_data/20250123_124538_pos.txt",
-    "/home/ricoderks/Downloads/TomatoR6_data/20250123_140224_neg.txt"
+    "/home/rjederks/Downloads/TomatoR6_data/20250123_124538_pos.txt",
+    "/home/rjederks/Downloads/TomatoR6_data/20250123_140224_neg.txt"
   )
-  obj1$file_meta <- "/home/ricoderks/Downloads/TomatoR6_data/metadata.xlsx"
+  obj1$file_meta <- "/home/rjederks/Downloads/TomatoR6_data/metadata.xlsx"
   
   # set regex's
   obj1$regex_blanks <- "blank"

@@ -42,6 +42,46 @@ DataImport <- R6::R6Class(
                                          "'"))
       }
     },
+    type_column = function(value) {
+      if(missing(value)) {
+        self$.type_column
+      } else {
+        self$.type_column <- value
+        private$add_log(message = paste0("Meta data `type` column set: '", 
+                                         self$.type_column,
+                                         "'"))
+      }
+    },
+    order_column = function(value) {
+      if(missing(value)) {
+        self$.order_column
+      } else {
+        self$.order_column <- value
+        private$add_log(message = paste0("Meta data `order` column set: '", 
+                                         self$.order_column,
+                                         "'"))
+      }
+    },
+    group_column = function(value) {
+      if(missing(value)) {
+        self$.group_column
+      } else {
+        self$.group_column <- value
+        private$add_log(message = paste0("Meta data `group` column set: '", 
+                                         self$.group_column,
+                                         "'"))
+      }
+    },
+    batch_column = function(value) {
+      if(missing(value)) {
+        self$.batch_column
+      } else {
+        self$.batch_column <- value
+        private$add_log(message = paste0("Meta data `batch` column set: '", 
+                                         self$.batch_column,
+                                         "'"))
+      }
+    },
     regex_blanks = function(value) {
       if(missing(value)) {
         self$.regex_blanks
@@ -227,10 +267,10 @@ DataImport <- R6::R6Class(
     id_col_data = "sampleName",
     id_col_feature = "id",
     
-    type_column = NULL,
-    group_column = NULL,
-    batch_column = NULL,
-    order_column = NULL,
+    .type_column = NULL,
+    .group_column = NULL,
+    .batch_column = NULL,
+    .order_column = NULL,
     
     index_blanks = NULL,
     index_pools = NULL,
@@ -372,6 +412,7 @@ DataImport <- R6::R6Class(
     #--------------------------------------------------------------- import ----
     import_metadata = function() {
       import_read_metadata(self = self)
+      check_meta_column(self = self)
     },
     extract_indices = function() {
       extract_indices(self = self)
