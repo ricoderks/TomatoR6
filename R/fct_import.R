@@ -418,7 +418,7 @@ extract_indices <- function(self = self) {
     if(!is.null(self$regex_blanks)) {
       self$index_blanks <- 
         self$table_metadata[grep(pattern = self$regex_blanks,
-                                 x = self$table_metadata[, self$type_column], #should this now be type_column
+                                 x = self$table_metadata[, self$type_column],
                                  ignore.case = TRUE), self$id_col_meta]
     }
     
