@@ -35,7 +35,23 @@ TargetedLipidomics <- R6::R6Class(
     plot_qc_class_rsd = function(type = NULL) {
       qc_plot_class_rsd(self = self,
                         type = type)
-    }
+    },
+    extract_additional_tables = function() {
+      cli::cli_h3("Extracting additional tables")
+      utils_extract_additional_tables(self = self)
+      private$add_log(message = "Extracted additional tables.")
+      cli::cli_alert_success("Done!")
+    },
+    #---------------------------------------------------------------- tables ---
+    # wide data
+    table_species_comp = NULL,
+    table_class_conc = NULL,
+    table_class_comp = NULL,
+    
+    # long data
+    table_species_comp_long = NULL,
+    table_class_conc_long = NULL,
+    table_class_comp_long = NULL
   ), # end public
   #---------------------------------------------------------------- private ----
   private = list(

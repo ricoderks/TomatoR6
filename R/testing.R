@@ -79,7 +79,7 @@ if(dev) {
   )
   obj2$file_meta <- "/home/rjederks/Downloads/TomatoR6_data/metadata_lipidyzer.xlsx"
   
-  obj2$lipidyzer_sheet <- 3
+  obj2$lipidyzer_sheet <- 1
   
   # set regex's
   obj2$regex_blanks <- "blank"
@@ -105,6 +105,7 @@ if(dev) {
   obj2$blank_group_threshold <- 0.8
   
   obj2$import()  
+  obj2$extract_additional_tables()
   
   ## View QC stuff
   # calculate QC stuff

@@ -171,3 +171,70 @@ utils_make_analysis_long <- function(df = NULL) {
   
   return(df_long)
 }
+
+
+#' @title Calculate the additional lipidyzer tables
+#' 
+#' @description
+#' Calculate the additional lipidyzer tables based on the Species concentration 
+#' sheet.
+#' 
+#' @param self class object.
+#' 
+#' @details
+#' To get correct results the Species Concentration sheet needs to be loaded. 
+#' The following sheets will be calculated: Species composition, Class 
+#' concentration, Class composition.
+#' This is specifically useful after the Species concentration tables has been 
+#' filtered, so use after `preprocessing()`.
+#' 
+#' @returns self (invisible), but with the extra tables added in wide and long format.
+#' 
+#' @importFrom cli cli_li
+#' 
+#' @noRd
+#' 
+utils_extract_additional_tables <- function(self = NULL) {
+  species_conc_wide <- self$table_analysis
+  feature_table <- self$table_featuredata
+  
+  # Species composition
+  cli::cli_li("Extracting 'Species Composition'.")
+  species_comp_wide <- species_conc_wide
+  for(class in unique(feature_table$class)) {
+    idx <- as.character(feature_table$featureId[feature_table$class == class])
+    species_comp_wide[, idx]  <- species_comp_wide[, idx] / rowSums(species_comp_wide[, idx], na.rm = TRUE) * 100
+  }
+  species_comp_long <- utils_make_analysis_long(df = species_comp_wide)
+  
+  # Class concentration
+  cli::cli_li("Extracting 'Class Concentration'.")
+  class_conc_wide <- data.frame(
+    matrix(NA,
+           nrow = nrow(species_conc_wide),
+           ncol = length(unique(feature_table$class)) + 1)
+  )
+  colnames(class_conc_wide) <- c("sampleName", unique(feature_table$class))
+  class_conc_wide$sampleName <- species_conc_wide$sampleName
+  for(class in unique(feature_table$class)) {
+    idx <- as.character(feature_table$featureId[feature_table$class == class])
+    class_conc_wide[, class]  <- rowSums(species_conc_wide[, idx], na.rm = TRUE)
+  }
+  class_conc_wide$TG <- class_conc_wide$TG / 3
+  class_conc_long <- utils_make_analysis_long(df = class_conc_wide)
+  
+  # Class composition
+  cli::cli_li("Extracting 'Class Composition'.")
+  class_comp_wide <- class_conc_wide
+  class_comp_wide[, -1] <- class_comp_wide[, -1] / rowSums(class_comp_wide[, -1], na.rm = TRUE) * 100
+  class_comp_long <- utils_make_analysis_long(df = class_comp_wide)
+  
+  self$table_species_comp <- species_comp_wide
+  self$table_class_conc <- class_conc_wide
+  self$table_class_comp <- class_comp_wide
+  self$table_species_comp_long <- species_comp_long
+  self$table_class_conc_long <- class_conc_long
+  self$table_class_comp_long <- class_comp_long
+  
+  return(invisible(self))
+}
