@@ -46,11 +46,32 @@ DataImport <- R6::R6Class(
       if(missing(value)) {
         private$.id_col_data
       } else {
-        cli::cli_alert_warning("In general you don't need to set this!")
-        private$.id_col_data <- value
-        private$add_log(message = paste0("Set ID column data: '", 
-                                         private$.id_col_data,
-                                         "'"))
+        cli::cli_alert_warning("In general you don't need to set this! Are you sure you want to continue (y/N) ?")
+        ans <- readline(prompt = "")
+        if(ans[1] == "y" | ans[1] == "Y") {
+          private$.id_col_data <- value
+          private$add_log(message = paste0("Set ID column data: '", 
+                                           private$.id_col_data,
+                                           "'"))
+        } else {
+          cli::cli_alert_info("'id_col_data' NOT changed!")
+        }
+      }
+    },
+    id_col_feature = function(value) {
+      if(missing(value)) {
+        private$.id_col_feature
+      } else {
+        cli::cli_alert_warning("In general you don't need to set this! Are you sure you want to continue (y/N) ?")
+        ans <- readline(prompt = "")
+        if(ans[1] == "y" | ans[1] == "Y") {
+          private$.id_col_feature <- value
+          private$add_log(message = paste0("Set ID column features: '", 
+                                           private$.id_col_feature,
+                                           "'"))
+        } else {
+          cli::cli_alert_info("'id_col_feature' NOT changed!")
+        }
       }
     },
     type_column = function(value) {
