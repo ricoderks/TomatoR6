@@ -119,7 +119,7 @@ DataImport <- R6::R6Class(
         private$.regex_blanks
       } else {
         private$.regex_blanks <- value
-        private$add_log(message = paste0("Regular expression blank set: '", 
+        private$add_log(message = paste0("Regular expression 'blank' set: '", 
                                          private$.regex_blanks,
                                          "'"))
       }
@@ -129,7 +129,7 @@ DataImport <- R6::R6Class(
         private$.regex_qcs
       } else {
         private$.regex_qcs <- value
-        private$add_log(message = paste0("Regular expression qcs set: '", 
+        private$add_log(message = paste0("Regular expression 'qcs' set: '", 
                                          private$.regex_qcs,
                                          '"'))
       }
@@ -139,7 +139,7 @@ DataImport <- R6::R6Class(
         private$.regex_pools
       } else {
         private$.regex_pools <- value
-        private$add_log(message = paste0("Regular expression pools set: '", 
+        private$add_log(message = paste0("Regular expression 'pools' set: '", 
                                          private$.regex_pools,
                                          "'"))
       }
@@ -149,7 +149,7 @@ DataImport <- R6::R6Class(
         private$.regex_samples
       } else {
         private$.regex_samples <- value
-        private$add_log(message = paste0("Regular expression samples set: '", 
+        private$add_log(message = paste0("Regular expression 'samples' set: '", 
                                          private$.regex_samples,
                                          "'"))
       }
