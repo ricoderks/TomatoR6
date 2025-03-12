@@ -16,21 +16,21 @@ TargetedLipidomics <- R6::R6Class(
   active = list(
     lipidyzer_sheet = function(value) {
       if(missing(value)) {
-        self$.lipidyzer_sheet
+        private$.lipidyzer_sheet
       } else {
-        self$.lipidyzer_sheet <- value
+        private$.lipidyzer_sheet <- value
         private$add_log(message = paste0("Set lipidyzer sheet : '", 
-                                         self$.lipidyzer_sheet, 
+                                         private$.lipidyzer_sheet, 
                                          "'"))
       }
     },
     split_PE = function(value) {
       if(missing(value)) {
-        self$.split_PE
+        private$.split_PE
       } else {
-        self$.split_PE <- value
+        private$.split_PE <- value
         private$add_log(message = paste0("Set split PE class : '", 
-                                         self$.split_PE, 
+                                         private$.split_PE, 
                                          "'"))
       }
     }
@@ -43,8 +43,6 @@ TargetedLipidomics <- R6::R6Class(
       self$lipidyzer_sheet <- 1
       self$split_PE <- FALSE
     },
-    .lipidyzer_sheet = NULL,
-    .split_PE = NULL,
     plot_qc_class_rsd = function(type = NULL) {
       qc_plot_class_rsd(self = self,
                         type = type)
@@ -68,6 +66,8 @@ TargetedLipidomics <- R6::R6Class(
   ), # end public
   #---------------------------------------------------------------- private ----
   private = list(
+    .lipidyzer_sheet = NULL,
+    .split_PE = NULL,
     import_data = function() {
       import_lipidyzer(self = self)
       private$extract_featuredata()
