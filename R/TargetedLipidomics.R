@@ -13,11 +13,25 @@ NULL
 TargetedLipidomics <- R6::R6Class(
   inherit = DataImport,
   classname = "TargetedLipidomics",
+  active = list(
+    lipidyzer_sheet = function(value) {
+      if(missing(value)) {
+        self$.lipidyzer_sheet
+      } else {
+        self$.lipidyzer_sheet <- value
+        private$add_log(message = paste0("Set lipidyzer sheet : '", 
+                                         self$.lipidyzer_sheet, 
+                                         "'"))
+      }
+    }
+  ),
   #----------------------------------------------------------------- public ----
   public = list(
     initialize = function(name = NA) {
       super$initialize(name)
+      self$lipidyzer_sheet <- 1
     },
+    .lipidyzer_sheet = NULL,
     plot_qc_class_rsd = function(type = NULL) {
       qc_plot_class_rsd(self = self,
                         type = type)

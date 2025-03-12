@@ -80,7 +80,8 @@ import_lipidyzer <- function(self = self) {
   data_df <- data.frame()
   
   for(a in 1:length(self$file_data)) {
-    tmp <- read_lipidyzer(file = self$file_data[a])
+    tmp <- read_lipidyzer(file = self$file_data[a],
+                          sheet = self$lipidyzer_sheet)
     
     if(any(dim(data_df)[1L])) {
       tmp[setdiff(names(data_df), names(tmp))] <- NA
@@ -129,17 +130,20 @@ read_msdial = function(file = NULL) {
 #' @description
 #' Read a lipidyzer result file.
 #' 
-#' @param file character(1) full path to result file
+#' @param file character(1) full path to result file.
+#' @param sheet numeric(1) which sheet to read.
 #' 
 #' @noRd
 #' 
-#' @returns data.frame with lipidyzer results (Species Quant)
+#' @returns data.frame with lipidyzer results.
 #' 
 #' @importFrom openxlsx2 read_xlsx
 #' 
-read_lipidyzer <- function(file = NULL) {
+read_lipidyzer <- function(file = NULL,
+                           sheet = 1) {
+  
   data_df <- openxlsx2::read_xlsx(file = file,
-                                  sheet = 1,
+                                  sheet = sheet,
                                   row_names = FALSE,
                                   col_names = TRUE,
                                   na.strings = "",
