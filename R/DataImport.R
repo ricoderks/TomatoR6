@@ -16,110 +16,131 @@ DataImport <- R6::R6Class(
   active = list(
     file_data = function(value) {
       if(missing(value)) {
-        self$.file_data
+        private$.file_data
       } else {
-        self$.file_data <- value
+        private$.file_data <- value
         private$add_log(message = paste0("Added data files: ", 
-                                         paste(basename(self$.file_data), collapse = ", ")))
+                                         paste(basename(private$.file_data), collapse = ", ")))
       }
     },
     file_meta = function(value) {
       if(missing(value)) {
-        self$.file_meta
+        private$.file_meta
       } else {
-        self$.file_meta <- value
+        private$.file_meta <- value
         private$add_log(message = paste0("Added data files: ", 
-                                         paste(basename(self$.file_meta), collapse = ", ")))
+                                         paste(basename(private$.file_meta), collapse = ", ")))
       }
     },
     id_col_meta = function(value) {
       if(missing(value)) {
-        self$.id_col_meta
+        private$.id_col_meta
       } else {
-        self$.id_col_meta <- value
+        private$.id_col_meta <- value
         private$add_log(message = paste0("Set column ID meta data: '", 
-                                         self$.id_col_meta,
+                                         private$.id_col_meta,
+                                         "'"))
+      }
+    },
+    id_col_data = function(value) {
+      if(missing(value)) {
+        private$.id_col_data
+      } else {
+        cli::cli_alert_warning("In general you don't need to set this!")
+        private$.id_col_data <- value
+        private$add_log(message = paste0("Set ID column data: '", 
+                                         private$.id_col_data,
                                          "'"))
       }
     },
     type_column = function(value) {
       if(missing(value)) {
-        self$.type_column
+        private$.type_column
       } else {
-        self$.type_column <- value
+        private$.type_column <- value
         private$add_log(message = paste0("Meta data `type` column set: '", 
-                                         self$.type_column,
+                                         private$.type_column,
                                          "'"))
       }
     },
     order_column = function(value) {
       if(missing(value)) {
-        self$.order_column
+        private$.order_column
       } else {
-        self$.order_column <- value
+        private$.order_column <- value
         private$add_log(message = paste0("Meta data `order` column set: '", 
-                                         self$.order_column,
+                                         private$.order_column,
                                          "'"))
       }
     },
     group_column = function(value) {
       if(missing(value)) {
-        self$.group_column
+        private$.group_column
       } else {
-        self$.group_column <- value
+        private$.group_column <- value
         private$add_log(message = paste0("Meta data `group` column set: '", 
-                                         self$.group_column,
+                                         private$.group_column,
                                          "'"))
       }
     },
     batch_column = function(value) {
       if(missing(value)) {
-        self$.batch_column
+        private$.batch_column
       } else {
-        self$.batch_column <- value
+        private$.batch_column <- value
         private$add_log(message = paste0("Meta data `batch` column set: '", 
-                                         self$.batch_column,
+                                         private$.batch_column,
                                          "'"))
       }
     },
     regex_blanks = function(value) {
       if(missing(value)) {
-        self$.regex_blanks
+        private$.regex_blanks
       } else {
-        self$.regex_blanks <- value
+        private$.regex_blanks <- value
         private$add_log(message = paste0("Regular expression blank set: '", 
-                                         self$.regex_blanks,
+                                         private$.regex_blanks,
                                          "'"))
       }
     },
     regex_qcs = function(value) {
       if(missing(value)) {
-        self$.regex_qcs
+        private$.regex_qcs
       } else {
-        self$.regex_qcs <- value
+        private$.regex_qcs <- value
         private$add_log(message = paste0("Regular expression qcs set: '", 
-                                         self$.regex_qcs,
+                                         private$.regex_qcs,
                                          '"'))
       }
     },
     regex_pools = function(value) {
       if(missing(value)) {
-        self$.regex_pools
+        private$.regex_pools
       } else {
-        self$.regex_pools <- value
+        private$.regex_pools <- value
         private$add_log(message = paste0("Regular expression pools set: '", 
-                                         self$.regex_pools,
+                                         private$.regex_pools,
+                                         "'"))
+      }
+    },
+    regex_samples = function(value) {
+      if(missing(value)) {
+        private$.regex_samples
+      } else {
+        private$.regex_samples <- value
+        private$add_log(message = paste0("Regular expression samples set: '", 
+                                         private$.regex_samples,
                                          "'"))
       }
     },
     preprocessing_steps = function(value) {
       if(missing(value)) {
-        self$.preprocessing_steps
+        private$.preprocessing_steps
       } else {
         if(all(value %in% private$steps_preprocessing)) {
-          self$.preprocessing_steps <- value
+          private$.preprocessing_steps <- value
           private$add_log(message = paste0("Pre-processing steps: ", 
-                                           paste(paste0("'", self$.preprocessing_steps, "'"),
+                                           paste(paste0("'", private$.preprocessing_steps, "'"),
                                                  collapse = ", ")))
         } else {
           cli::cli_alert_danger("An unknown pre-processing step is specified!")
@@ -132,101 +153,91 @@ DataImport <- R6::R6Class(
         }
       }
     },
-    regex_samples = function(value) {
-      if(missing(value)) {
-        self$.regex_samples
-      } else {
-        self$.regex_samples <- value
-        private$add_log(message = paste0("Regular expression samples set: '", 
-                                         self$.regex_samples,
-                                         "'"))
-      }
-    },
     qc_rsd_limit = function(value) {
       if(missing(value)) {
-        self$.qc_rsd_limit
+        private$.qc_rsd_limit
       } else {
-        self$.qc_rsd_limit <- value
+        private$.qc_rsd_limit <- value
         private$add_log(message = paste0("QC RSD limit set: ", 
-                                         self$.qc_rsd_limit))
+                                         private$.qc_rsd_limit))
       }
     },
     blank_ratio = function(value) {
       if(missing(value)) {
-        self$.blank_ratio
+        private$.blank_ratio
       } else {
-        self$.blank_ratio <- value
+        private$.blank_ratio <- value
         private$add_log(message = paste0("Sample / blank ratio set: ", 
-                                         self$.blank_ratio))
+                                         private$.blank_ratio))
       }
     },
     blank_threshold = function(value) {
       if(missing(value)) {
-        self$.blank_threshold
+        private$.blank_threshold
       } else {
-        self$.blank_threshold <- value
+        private$.blank_threshold <- value
         private$add_log(message = paste0("Sample threshold set: ", 
-                                         self$.blank_threshold))
+                                         private$.blank_threshold))
       }
     },
     blank_group_threshold = function(value) {
       if(missing(value)) {
-        self$.blank_group_threshold
+        private$.blank_group_threshold
       } else {
-        self$.blank_group_threshold <- value
+        private$.blank_group_threshold <- value
         private$add_log(message = paste0("Group threshold set: ", 
-                                         self$.blank_group_threshold))
+                                         private$.blank_group_threshold))
       }
     },
     norm_pqn_reference = function(value) {
       if(missing(value)) {
-        self$.norm_pqn_reference
+        private$.norm_pqn_reference
       } else {
         value <- match.arg(arg = value,
                            choices = c("median", "mean"))
-        self$.norm_pqn_reference <- value
+        private$.norm_pqn_reference <- value
         private$add_log(message = paste0("PQN normalisation reference set: ", 
-                                         self$.norm_pqn_reference))
+                                         private$.norm_pqn_reference))
       }
     },
     imp_method = function(value) {
       if(missing(value)) {
-        self$.imp_method
+        private$.imp_method
       } else {
         value <- match.arg(arg = value,
                            choices = names(private$impute_methods))
-        self$.imp_method <- value
+        private$.imp_method <- value
         private$add_log(message = paste0("Imputation method set: ", 
-                                         self$.imp_method))
+                                         private$.imp_method))
       }
     },
     bc_method = function(value) {
       if(missing(value)) {
-        self$.bc_method
+        private$.bc_method
       } else {
         value <- match.arg(arg = value,
                            choices = private$bc_methods)
-        self$.bc_method <- value
+        private$.bc_method <- value
         private$add_log(message = paste0("Batch correction method set: ", 
-                                         self$.bc_method))
+                                         private$.bc_method))
       }
     },
     bc_loess_method = function(value) {
       if(missing(value)) {
-        self$.bc_loess_method
+        private$.bc_loess_method
       } else {
-        self$.bc_loess_method <- value
+        private$.bc_loess_method <- value
         private$add_log(message = paste0("Batch correction loess method set: ", 
-                                         self$.bc_loess_method))
+                                         private$.bc_loess_method))
       }
     },
     bc_loess_span = function(value) {
       if(missing(value)) {
-        self$.bc_loess_span
+        private$.bc_loess_span
       } else {
-        self$.bc_loess_span <- value
+        private$.bc_loess_span <- value
         private$add_log(message = paste0("Batch correction loess span set: ", 
-                                         self$.bc_loess_span))
+                                         private$.bc_loess_span))
       }
     }
     
@@ -239,10 +250,6 @@ DataImport <- R6::R6Class(
     },
     #---------------------------------------------------------- global info ----
     name = NULL,
-    
-    #---------------------------------------------------------------- files ----
-    .file_data = NULL,
-    .file_meta = NULL,
     
     #--------------------------------------------------------------- tables ----
     table_metadata = NULL,
@@ -263,47 +270,10 @@ DataImport <- R6::R6Class(
     table_cor_data = NULL,
     table_blank_filtering = NULL,
     #-------------------------------------------------------------- indices ----
-    .id_col_meta = NULL,
-    id_col_data = "sampleName",
-    id_col_feature = "id",
-    
-    .type_column = NULL,
-    .group_column = NULL,
-    .batch_column = NULL,
-    .order_column = NULL,
-    
     index_blanks = NULL,
     index_pools = NULL,
     index_qcs = NULL,
     index_samples = NULL,
-    
-    #----------------------------------------------------- parameters regex ----
-    .regex_blanks = NULL,
-    .regex_qcs = NULL,
-    .regex_pools = NULL,
-    .regex_samples = NULL,
-    
-    #-------------------------------------------------------- parameters QC ----
-    .qc_rsd_limit = NULL, # 0.3
-    
-    #--------------------------------------------- parameter pre-processing ----
-    .preprocessing_steps = NULL,
-    
-    #------------------------------------------- parameters blank filtering ----
-    .blank_ratio = NULL, # 5
-    .blank_threshold = NULL, # 0.8
-    .blank_group_threshold = NULL, # 0.8
-    
-    #--------------------------------------------- parameters normalisation ----
-    .norm_pqn_reference = NULL,
-    
-    #------------------------------------------------ parameters imputation ----
-    .imp_method = NULL,
-    
-    #------------------------------------------ parameters batch correction ----
-    .bc_method = NULL,
-    .bc_loess_method = NULL,
-    .bc_loess_span = NULL,
     
     #-------------------------------------------------------------- history ----
     history = data.frame(id = NULL,
@@ -397,6 +367,48 @@ DataImport <- R6::R6Class(
   ), # end public
   #---------------------------------------------------------------- PRIVATE ----
   private = list(
+    #---------------------------------------------------------------- files ----
+    .file_data = NULL,
+    .file_meta = NULL,
+    
+    #-------------------------------------------------------------- indices ----
+    .id_col_meta = NULL,
+    .id_col_data = "sampleName",
+    .id_col_feature = "id",
+    
+    .type_column = NULL,
+    .group_column = NULL,
+    .batch_column = NULL,
+    .order_column = NULL,
+    
+    #----------------------------------------------------- parameters regex ----
+    .regex_blanks = NULL,
+    .regex_qcs = NULL,
+    .regex_pools = NULL,
+    .regex_samples = NULL,
+    
+    #-------------------------------------------------------- parameters QC ----
+    .qc_rsd_limit = NULL,
+    
+    #--------------------------------------------- parameter pre-processing ----
+    .preprocessing_steps = NULL,
+    
+    #------------------------------------------- parameters blank filtering ----
+    .blank_ratio = NULL, # 5
+    .blank_threshold = NULL, # 0.8
+    .blank_group_threshold = NULL, # 0.8
+    
+    #--------------------------------------------- parameters normalisation ----
+    .norm_pqn_reference = NULL,
+    
+    #------------------------------------------------ parameters imputation ----
+    .imp_method = NULL,
+    
+    #------------------------------------------ parameters batch correction ----
+    .bc_method = NULL,
+    .bc_loess_method = NULL,
+    .bc_loess_span = NULL,
+    
     #------------------------------------------------------- some functions ----
     add_log = function(message = NULL) {
       utils_add_log(self = self,

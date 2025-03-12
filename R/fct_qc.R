@@ -80,7 +80,7 @@ qc_plot_rsd <- function(self = NULL,
                                    fill = .data$polarity)) +
       ggplot2::geom_histogram(binwidth = 0.01,
                               alpha = 0.5) +
-      ggplot2::geom_vline(xintercept = self$.qc_rsd_limit,
+      ggplot2::geom_vline(xintercept = self$qc_rsd_limit,
                           color = "red",
                           linetype = 2) +
       ggplot2::guides(fill = ggplot2::guide_legend(title = "Polarity",
