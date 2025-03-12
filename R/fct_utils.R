@@ -42,10 +42,34 @@ utils_file_show <-  function(self = NULL) {
   cli::cli_ul()
   cli::cli_li("Data files:")
   li_files <- cli::cli_ul()
-  for(a in 1:length(self$.file_data))
+  for(a in 1:length(self$file_data))
+    cli::cli_li(self$file_data[a])
+  cli::cli_end(li_files)
+  cli::cli_li(paste("Meta data file:", self$file_meta))
+  cli::cli_end()
+}
+
+
+#' @title Show the files from MultiQuant class
+#' 
+#' @description
+#' Show the files from DataImport class.
+#' 
+#' @param self object of class DataImport. 
+#'
+#' @noRd
+#'
+#' @import cli
+#'
+utils_file_show_mq <-  function(self = NULL) {
+  cli::cli_ul()
+  cli::cli_li("Data files:")
+  li_files <- cli::cli_ul()
+  for(a in 1:length(self$file_data))
     cli::cli_li(self$.file_data[a])
   cli::cli_end(li_files)
-  cli::cli_li(paste("Meta data file:", self$.file_meta))
+  cli::cli_li(paste("Meta data file:", self$file_meta))
+  cli::cli_li(paste("Curation file:", self$file_curation))
   cli::cli_end()
 }
 

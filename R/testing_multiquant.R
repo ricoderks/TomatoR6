@@ -8,9 +8,17 @@ if(dev) {
   
   # set files
   obj3$file_data <- c(
-    "/home/rjederks/Downloads/TomatoR6_data/Batch1_output_merge.xlsx",
-    "/home/rjederks/Downloads/TomatoR6_data/Batch2_output_merge.xlsx"
+    "/home/rjederks/Downloads/TomatoR6_data/MQ_data.txt"
   )
-  obj3$file_meta <- "/home/rjederks/Downloads/TomatoR6_data/metadata_lipidyzer.xlsx"
+  obj3$file_meta <- "/home/rjederks/Downloads/TomatoR6_data/MQ_metadata.xlsx"
+  obj3$file_curation <- "/home/rjederks/Downloads/TomatoR6_data/MQ_curation.xlsx"
+  
+  obj3$import()
+  
+  
+  
+  
+  
+  
   
 }  

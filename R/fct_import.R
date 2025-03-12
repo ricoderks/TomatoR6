@@ -5,7 +5,7 @@
 #' 
 #' @param self class object DataImport 
 #'
-#' @returns self
+#' @returns self (invisible).
 #' 
 #' @noRd
 #' 
@@ -29,7 +29,7 @@ import_read_metadata <- function(self = NULL) {
   
   self$table_metadata <- meta_df
   
-  return(self)
+  return(invisible(self))
 }
 
 
@@ -42,7 +42,7 @@ import_read_metadata <- function(self = NULL) {
 #'
 #' @noRd
 #'
-#' @returns self
+#' @returns self (invisible).
 #' 
 import_read_msdial <- function(self = NULL) {
   data_df <- data.frame()
@@ -56,7 +56,7 @@ import_read_msdial <- function(self = NULL) {
   data_df <- cleanup(data_df = data_df)
   self$table_rawdata <- data_df
   
-  return(self)
+  return(invisible(self))
 }
 
 
@@ -74,7 +74,7 @@ import_read_msdial <- function(self = NULL) {
 #' 
 #' @noRd
 #' 
-#' @returns self
+#' @returns self (invisible).
 #' 
 import_lipidyzer <- function(self = self) {
   data_df <- data.frame()
@@ -95,7 +95,72 @@ import_lipidyzer <- function(self = self) {
   data_df <- data_df[, c("sampleName", order_cols)]
   self$table_rawdata <- data_df
   
-  return(self)
+  return(invisible(self))
+}
+
+
+#' @title Import MultiQuant data
+#' 
+#' @description
+#' Import MulitQuant data.
+#' 
+#' @param self class object.
+#' 
+#' @returns self (invisible).
+#' 
+#' @noRd
+#' 
+import_multiquant <- function(self = NULL) {
+  keep_columns <- c(
+    "Index", "Sample Index", "Sample Name", "Sample ID", "Sample Type",
+    "Acquisition Date & Time", "Dilution Factor", "IS", "Component Name",
+    "Component Index", "IS Name", "IS Area", "Actual Concentration",
+    "Area", "Area Ratio", "Height", "Retention Time", "Signal / Noise",
+    "Relative RT", "Used", "Calculated Concentration", "Accuracy",
+    "Width at 10%"
+  )
+  
+  data_df <- read.table(
+    file = self$file_data,
+    header = TRUE,
+    sep = "\t",
+    colClasses = c(
+      "Index" = "integer",
+      "Sample Index" = "integer",
+      "Sample Name"= "character",
+      "Sample ID" = "character",
+      "Sample Type" = "factor",
+      "Acquisition Date & Time" = "character",
+      "Dilution Factor" = "numeric",
+      "IS" = "logical",
+      "Component Name" = "character",
+      "Component Index" = "integer",
+      "IS Name" = "factor",
+      "IS Area" = "numeric",
+      "Actual Concentration" = "numeric",
+      "Area" = "numeric",
+      "Area Ratio" = "numeric",
+      "Height" = "numeric",
+      "Retention Time" = "numeric",
+      "Signal / Noise" = "numeric",
+      "Relative RT" = "numeric",
+      "Used" = "logical",
+      "Calculated Concentration" = "character",
+      "Accuracy" = "numeric",
+      "Width at 10%" = "numeric"
+    ),
+    na.strings = c("N/A"),
+    check.names = FALSE
+  )
+  
+  data_df <- data_df[, keep_columns]
+  colnames(data_df) <- mq_fix_column_names(col_names = colnames(data_df))
+  data_df$Acquisition_Date_and_Time <- as.POSIXct(data_df$Acquisition_Date_and_Time,
+                                                  format = "%m/%d/%Y %H:%M:%OS",
+                                                  tz = Sys.timezone())
+  self$table_rawdata <- data_df
+  
+  return(invisible(self))
 }
 
 
@@ -493,4 +558,36 @@ check_meta_column <- function(self = NULL) {
   }
   
   return(all(res))
+}
+
+
+#' @title Fix the column names of the MultiQuant data.frame
+#' 
+#' @description
+#' Fix the column names of the MultiQuant data.frame.
+#' 
+#' @param col_names character(), with the column names.
+#' 
+#' @returns character(), with corrected column names.
+#' 
+#' @noRd
+#' 
+mq_fix_column_names <- function(col_names = NULL) {
+  col_names <- gsub(x = col_names,
+                    pattern = " ",
+                    replacement = "_")
+  col_names <- gsub(x = col_names,
+                    pattern = "&",
+                    replacement = "and")
+  col_names <- gsub(x = col_names,
+                    pattern = "/",
+                    replacement = "to")
+  col_names <- gsub(x = col_names,
+                    pattern = "%",
+                    replacement = "percent")
+  col_names <- gsub(x = col_names,
+                    pattern = "#",
+                    replacement = "number")
+  
+  return(col_names)
 }
