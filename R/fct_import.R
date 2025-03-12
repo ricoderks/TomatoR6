@@ -359,9 +359,18 @@ extract_lipid_data_lipidyzer = function(self = NULL,
   data_df <- data.frame("featureId" = 1:length(features),
                         "featureName" = features)
   
+  if(self$split_PE) {
+    class_pattern <- "^([a-zA-Z]*)( d18:0| d18:1)? ?(P-|O-)?.*"
+    class_replacement <- "\\3\\1\\2"
+    
+  } else {
+    class_pattern <- "^([a-zA-Z]*)( d18:0| d18:1)?.*"
+    class_replacement <- "\\1\\2"
+  }
+  
   data_df$class <- gsub(x = data_df$featureName,
-                        pattern = "^([a-zA-Z]*)( d18:0| d18:1)? ?(P-|O-)?.*",
-                        replacement = "\\3\\1\\2")
+                        pattern = class_pattern,
+                        replacement = class_replacement)
   
   data_df$polarity <- ifelse(data_df$class %in% private$lipid_class_neg,
                              "neg",

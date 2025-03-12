@@ -23,15 +23,28 @@ TargetedLipidomics <- R6::R6Class(
                                          self$.lipidyzer_sheet, 
                                          "'"))
       }
+    },
+    split_PE = function(value) {
+      if(missing(value)) {
+        self$.split_PE
+      } else {
+        self$.split_PE <- value
+        private$add_log(message = paste0("Set split PE class : '", 
+                                         self$.split_PE, 
+                                         "'"))
+      }
     }
   ),
   #----------------------------------------------------------------- public ----
   public = list(
     initialize = function(name = NA) {
       super$initialize(name)
+      # default settings
       self$lipidyzer_sheet <- 1
+      self$split_PE <- FALSE
     },
     .lipidyzer_sheet = NULL,
+    .split_PE = NULL,
     plot_qc_class_rsd = function(type = NULL) {
       qc_plot_class_rsd(self = self,
                         type = type)

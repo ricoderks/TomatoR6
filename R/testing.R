@@ -79,7 +79,7 @@ if(dev) {
   )
   obj2$file_meta <- "/home/rjederks/Downloads/TomatoR6_data/metadata_lipidyzer.xlsx"
   
-  obj2$lipidyzer_sheet <- 1
+  # obj2$lipidyzer_sheet <- 1
   
   # set regex's
   obj2$regex_blanks <- "blank"
