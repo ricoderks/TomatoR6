@@ -203,7 +203,9 @@ utils_extract_additional_tables <- function(self = NULL) {
   species_comp_wide <- species_conc_wide
   for(class in unique(feature_table$class)) {
     idx <- as.character(feature_table$featureId[feature_table$class == class])
-    species_comp_wide[, idx]  <- species_comp_wide[, idx] / rowSums(species_comp_wide[, idx], na.rm = TRUE) * 100
+    species_comp_wide[, idx] <- 
+      species_comp_wide[, idx] / 
+      rowSums(species_comp_wide[, idx, drop = FALSE], na.rm = TRUE) * 100
   }
   species_comp_long <- utils_make_analysis_long(df = species_comp_wide)
   
