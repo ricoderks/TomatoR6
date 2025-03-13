@@ -330,8 +330,10 @@ DataImport <- R6::R6Class(
       private$import_data()
       private$add_log(message = "Imported raw data.")
       
+      cli::cli_end()
       cli::cli_alert_success("Done!")
     },
+    
     preprocessing = function() {
       cli::cli_h3("Pre-processing steps")
       steps <- cli::cli_ul()

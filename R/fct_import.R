@@ -164,6 +164,29 @@ import_multiquant <- function(self = NULL) {
 }
 
 
+#' @title Import MultiQuant curation data
+#' 
+#' @description
+#' Import MulitQuant curation data.
+#' 
+#' @param self class object.
+#' 
+#' @returns self (invisible).
+#' 
+#' @importFrom openxlsx2 read_xlsx
+#' 
+#' @noRd
+#' 
+import_curation_mq <- function(self = NULL) {
+  data_df <- openxlsx2::read_xlsx(file = self$file_curation,
+                                  sheet = 1)
+  
+  self$table_curation <- data_df
+  
+  return(invisible(self))
+}
+
+
 #' @title Read a MSDIAL report file
 #' 
 #' @description
@@ -468,6 +491,33 @@ extract_metabolite_data = function(self = NULL) {
   
   data_df <- data_df[, c("id", "Metabolite name", "Ontology", "Adduct type", "Average Rt(min)", "Average Mz")]
   colnames(data_df) <- c("featureId", "featureName", "class", "adductType", "averageRt", "averageMz")
+  
+  # for now keep all features
+  data_df$keep <- TRUE
+  data_df$keep_rsd <- TRUE
+  data_df$keep_sample_blank <- TRUE
+  
+  self$table_featuredata <- data_df
+  
+  return(invisible(self))
+}
+
+
+#' @title Extract features from MultiQuant
+#' 
+#' @description
+#' Extract featrues from MultiQuant
+#' 
+#' @param self class object.
+#' 
+#' @returns self (invissible).
+#' 
+#' @noRd
+#' 
+extract_features_mq <- function(self = NULL) {
+  data_df <- self$table_rawdata
+  
+  data_df <- unique(data_df[, c("Component_Index", "Component_Name", "IS", "IS_Name")])
   
   # for now keep all features
   data_df$keep <- TRUE
