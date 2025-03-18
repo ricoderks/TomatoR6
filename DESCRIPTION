@@ -7,7 +7,7 @@ Authors@R:
              family = "Derks", 
              email = "r.j.e.derks@lumc.nl", 
              role = c("cre", "aut"),
-             comment = c(ORCID = "0000-0002-8920-7133 ")),
+             comment = c(ORCID = "0000-0002-8920-7133")),
       person(given = "Yassene",
              family = "Mohammed", 
              email = "y.mohammed@lumc.nl",
@@ -17,7 +17,7 @@ Authors@R:
              family = "Heijink",
              email = "m.heijink@lumc.nl",
              role = c("aut"),
-             comment = c(ORCID = "0000-0002-5999-2513 "))
+             comment = c(ORCID = "0000-0002-5999-2513"))
       )
 Description: This packages contain the R6 classes for the Tomato package.
 License: GPL (>= 3)
