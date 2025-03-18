@@ -186,10 +186,10 @@ qc_calc_trend = function(self = NULL) {
     )
     
     # order the QC samples in measurment order for later plotting with ggplot2
-    unique_qc <- unique(merge_data$sampleName)
+    unique_qc <- unique(merge_data$sampleId)
     unique_order <- unique(merge_data[, self$order_column])
     
-    merge_data$sampleName <- factor(x = merge_data$sampleId,
+    merge_data$sampleId <- factor(x = merge_data$sampleId,
                                     levels = unique_qc[order(unique_order)],
                                     labels = unique_qc[order(unique_order)])
     
