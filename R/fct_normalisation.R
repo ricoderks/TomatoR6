@@ -21,19 +21,19 @@ norm_total_area <- function(self = NULL) {
   # long
   data_long <- self$table_analysis_long
   
-  tot_area <- as.data.frame(tapply(data_long$peakArea, list(data_long$sampleName), sum, na.rm = TRUE))
-  tot_area$sampleName <- rownames(tot_area)
-  colnames(tot_area)[1] <- "totalPeakArea"
+  tot_value <- as.data.frame(tapply(data_long$value, list(data_long$sampleId), sum, na.rm = TRUE))
+  tot_value$sampleId <- rownames(tot_value)
+  colnames(tot_value)[1] <- "totalValue"
   
   data_long <- merge(
     x = data_long,
-    y = tot_area,
-    by = "sampleName"
+    y = tot_value,
+    by = "sampleId"
   )
   
-  data_long$normPeakArea <- data_long$peakArea / data_long$totalPeakArea
-  data_long <- data_long[, c("id", "sampleName", "normPeakArea")]
-  colnames(data_long)[3] <- "peakArea"
+  data_long$normValue <- data_long$value / data_long$totalValue
+  data_long <- data_long[, c("featureId", "sampleId", "normValue")]
+  colnames(data_long)[3] <- "value"
   
   self$table_analysis_long <- data_long
   
@@ -59,7 +59,7 @@ norm_pqn <- function(self = NULL) {
   
   data_wide <- self$table_analysis
   data_norm <- data_wide
-  rownames(data_wide) <- data_wide$sampleName
+  rownames(data_wide) <- data_wide$sampleId
   
     
   QC <- which(rownames(data_wide) %in% self$index_pools)
@@ -71,7 +71,7 @@ norm_pqn <- function(self = NULL) {
   
   self$table_analysis_long <- data_norm |> 
     tidyr::pivot_longer(cols = colnames(data_norm)[-1],
-                        names_to = "id",
+                        names_to = "featureId",
                         values_to = "peakArea")
   
   return(invisible(self))

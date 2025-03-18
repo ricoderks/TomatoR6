@@ -1,6 +1,6 @@
 Package: TomatoR6
 Title: This defines the class for the Tomato package
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: 
     c(
       person(given = "Rico", 

@@ -13,24 +13,24 @@ blank_calc_ratio <- function(self = NULL) {
   feature_data <- self$table_featuredata
   blank_index <- self$index_blanks
   sample_index <- self$index_samples
-  blank_data <- self$table_analysis_long[self$table_analysis_long$sampleName %in% blank_index, ]
-  sample_data <- self$table_analysis_long[self$table_analysis_long$sampleName %in% sample_index, ]
+  blank_data <- self$table_analysis_long[self$table_analysis_long$sampleId %in% blank_index, ]
+  sample_data <- self$table_analysis_long[self$table_analysis_long$sampleId %in% sample_index, ]
   
-  blank_data_avg <- tapply(blank_data, list(blank_data[, "id"]), function(x) {
-    avg <- mean(x[, "peakArea"], na.rm = TRUE)
+  blank_data_avg <- tapply(blank_data, list(blank_data[, "featureId"]), function(x) {
+    avg <- mean(x[, "value"], na.rm = TRUE)
     
-    return(data.frame("id" = x[1, "id"],
-                      "avgPeakArea" = avg))
+    return(data.frame("featureId" = x[1, "featureId"],
+                      "avgValue" = avg))
   })
   blank_data_avg <- do.call("rbind", blank_data_avg)
   
   sample_data <- merge(
     x = sample_data,
     y = blank_data_avg,
-    by = "id"
+    by = "featureId"
   )
   
-  sample_data$ratio <- sample_data$peakArea / sample_data$avgPeakArea
+  sample_data$ratio <- sample_data$value / sample_data$avgValue
   
   self$table_blank_filtering <- sample_data
   
@@ -62,7 +62,7 @@ blank_apply_filter <- function(self = NULL) {
     blank_data <- merge(
       x = blank_data,
       y = meta_data,
-      by.x = "sampleName",
+      by.x = "sampleId",
       by.y = id_col_meta
     )
     
@@ -70,16 +70,16 @@ blank_apply_filter <- function(self = NULL) {
     blank_data$keep <- blank_data$ratio >= ratio
     blank_data$keep[is.na(blank_data$keep)] <- FALSE
     
-    features <- tapply(blank_data, list(blank_data[, "id"]), function(x) {
+    features <- tapply(blank_data, list(blank_data[, "featureId"]), function(x) {
       prop <- mean(x[, "keep"])
-      return(data.frame( "id" = x[1, "id"],
+      return(data.frame( "featureId" = x[1, "featureId"],
                         propertion = prop))
     })
     features <- do.call("rbind", features)
     keep <- features$id[features$propertion >= threshold]
     
     # groups
-    features_groups <- as.data.frame(tapply(blank_data, list(blank_data[, "id"], blank_data[, group_column]), function(x) {
+    features_groups <- as.data.frame(tapply(blank_data, list(blank_data[, "featureId"], blank_data[, group_column]), function(x) {
       prop <- mean(x[, "keep"])
     }))
     features_groups$keep <- apply(features_groups, 1, function(x) {

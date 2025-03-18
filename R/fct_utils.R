@@ -136,12 +136,12 @@ utils_analysis_table <- function(self = NULL) {
   
   # wide format
   self$table_analysis <- 
-    self$table_analysis[self$table_analysis$sampleName %in% observations, c("sampleName", features)]
+    self$table_analysis[self$table_analysis$sampleId %in% observations, c("sampleId", features)]
     
   # long format
   self$table_analysis_long <- 
-    self$table_analysis_long[self$table_analysis_long$id %in% features &
-                               self$table_analysis_long$sampleName %in% observations, ]
+    self$table_analysis_long[self$table_analysis_long$featureId %in% features &
+                               self$table_analysis_long$sampleId %in% observations, ]
   
   return(invisible(self))
 }

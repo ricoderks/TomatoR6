@@ -260,7 +260,7 @@ cleanup <- function(data_df = NULL) {
                              "pos",
                              "neg")
   
-  data_df$id <- paste0(data_df$polarity, "_", data_df$`Alignment ID`)
+  data_df$featureId <- paste0(data_df$polarity, "_", data_df$`Alignment ID`)
   
   # remove unknowns and others
   data_df <- data_df[!(grepl(pattern = "(unknown|no MS2|low score)",
@@ -291,11 +291,11 @@ make_table_long_msdial <- function(self = NULL) {
   data_wide <- self$table_rawdata
   sample_col_names <- c(self$index_blanks, self$index_qcs, self$index_pools, self$index_samples)
   
-  data_long <- data_wide[, c("id", sample_col_names)] |> 
+  data_long <- data_wide[, c("featureId", sample_col_names)] |> 
     tidyr::pivot_longer(
       cols = tidyr::all_of(sample_col_names),
-      names_to = "sampleName",
-      values_to = "peakArea"
+      names_to = "sampleId",
+      values_to = "value"
     )
   
   self$table_alldata_long <- as.data.frame(data_long)
@@ -323,9 +323,9 @@ make_table_wide <- function(self = NULL) {
   
   data_wide <- data_long |> 
     tidyr::pivot_wider(
-      id_cols = "sampleName",
-      names_from = "id",
-      values_from = "peakArea"
+      id_cols = "sampleId",
+      names_from = "featureId",
+      values_from = "value"
     )
   data_wide <- as.data.frame(data_wide)
   rownames(data_wide) <- data_wide$sampleName
@@ -357,8 +357,8 @@ make_table_long_lipidyzer <- function(self = NULL) {
   data_long <- data_wide |> 
     tidyr::pivot_longer(
       cols = tidyr::all_of(features),
-      names_to = "featureName",
-      values_to = "peakArea"
+      names_to = "featureId",
+      values_to = "value"
     )
   
   data_long <- as.data.frame(data_long)
@@ -414,7 +414,7 @@ extract_table_long_mq <- function(self = NULL) {
 extract_lipid_data_msdial <- function(self = NULL) {
   data_df <- self$table_rawdata
   
-  data_df <- data_df[, c("id", "Metabolite name", "Ontology", "Adduct type", "Average Rt(min)", "Average Mz")]
+  data_df <- data_df[, c("featureId", "Metabolite name", "Ontology", "Adduct type", "Average Rt(min)", "Average Mz")]
   colnames(data_df) <- c("featureId", "featureName", "class", "adductType", "averageRt", "averageMz")
   data_df$polarity <- ifelse(grepl(x = data_df$adductType,
                                    pattern = ".*\\+$"),
@@ -544,6 +544,7 @@ extract_features_mq <- function(self = NULL) {
   data_df <- self$table_rawdata
   
   data_df <- unique(data_df[, c("Component_Index", "Component_Name", "IS", "IS_Name")])
+  colnames(data_df) <- c("featureId", "featureName", "istdId", "istdName")
   
   # for now keep all features
   data_df$keep <- TRUE

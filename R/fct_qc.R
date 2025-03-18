@@ -19,11 +19,11 @@ qc_calc_rsd <- function(self = NULL,
     pools_data <- self$table_analysis_long
     qcpool_index <- self$index_pools
     
-    pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
+    pools_data <- pools_data[pools_data[, "sampleId"] %in% qcpool_index, ]
     
-    rsd_data <- tapply(pools_data, list(pools_data[, "id"]), function(x) {
-      rsd <- stats::sd(x[, "peakArea"], na.rm = TRUE) / mean(x[, "peakArea"], na.rm = TRUE)
-      return(data.frame("id" = x[1, "id"],
+    rsd_data <- tapply(pools_data, list(pools_data[, "featureId"]), function(x) {
+      rsd <- stats::sd(x[, "value"], na.rm = TRUE) / mean(x[, "value"], na.rm = TRUE)
+      return(data.frame("featureId" = x[1, "featureId"],
                         "rsd" = rsd))
     })
     rsd_data <- do.call("rbind", rsd_data)
@@ -31,7 +31,7 @@ qc_calc_rsd <- function(self = NULL,
     rsd_data <- merge(
       x = rsd_data,
       y = feature_data[, c("featureId", "class", "polarity")],
-      by.x = "id",
+      by.x = "featureId",
       by.y = "featureId"
     )
     
@@ -69,7 +69,7 @@ qc_plot_rsd <- function(self = NULL,
     
     if(type == "filtered") {
     plot_data <- self$table_rsd_data[
-      self$table_rsd_data$id %in% self$table_featuredata$featureId[self$table_featuredata$keep], 
+      self$table_rsd_data$featureId %in% self$table_featuredata$featureId[self$table_featuredata$keep], 
     ]
     } else {
       plot_data <- self$table_rsd_data
@@ -124,7 +124,7 @@ qc_plot_class_rsd <- function(self = NULL,
     
     if(type == "filtered") {
       plot_data <- self$table_rsd_data[
-        self$table_rsd_data$id %in% self$table_featuredata$featureId[self$table_featuredata$keep], 
+        self$table_rsd_data$featureId %in% self$table_featuredata$featureId[self$table_featuredata$keep], 
       ]
     } else {
       plot_data <- self$table_rsd_data
@@ -175,13 +175,13 @@ qc_calc_trend = function(self = NULL) {
     pools_data <- self$table_analysis_long
     qcpool_index <- self$index_pools
     
-    pools_data <- pools_data[pools_data[, "sampleName"] %in% qcpool_index, ]
+    pools_data <- pools_data[pools_data[, "sampleId"] %in% qcpool_index, ]
     meta_data <- meta_data[meta_data[, id_col_meta] %in% qcpool_index, ]
     
     merge_data <- merge(
       x = pools_data,
       y = meta_data,
-      by.x = "sampleName",
+      by.x = "sampleId",
       by.y = id_col_meta
     )
     
@@ -189,25 +189,25 @@ qc_calc_trend = function(self = NULL) {
     unique_qc <- unique(merge_data$sampleName)
     unique_order <- unique(merge_data[, self$order_column])
     
-    merge_data$sampleName <- factor(x = merge_data$sampleName,
+    merge_data$sampleName <- factor(x = merge_data$sampleId,
                                     levels = unique_qc[order(unique_order)],
                                     labels = unique_qc[order(unique_order)])
     
-    ref_data <- merge_data[merge_data[, self$order_column] == min(merge_data[, self$order_column]), c("id", "peakArea")]
-    colnames(ref_data)[2] <- "refPeakArea"
+    ref_data <- merge_data[merge_data[, self$order_column] == min(merge_data[, self$order_column]), c("featureId", "value")]
+    colnames(ref_data)[2] <- "refValue"
     
     merge_data <- merge(
       x = merge_data,
       y = ref_data,
-      by = "id"
+      by = "featureId"
     )
     
-    merge_data$log2fc <- log2(merge_data$peakArea / merge_data$refPeakArea)
+    merge_data$log2fc <- log2(merge_data$value / merge_data$refValue)
     
     merge_data <- merge(
       x = merge_data,
       y = feature_data[, c("featureId", "polarity")],
-      by.x = "id",
+      by.x = "featureId",
       by.y = "featureId"
     )
     
@@ -241,16 +241,16 @@ qc_plot_trend = function(self = NULL,
   if(!is.null(self$table_trend_data)) {
     if(type == "filtered") {
       plot_data <- self$table_trend_data[
-        self$table_trend_data$id %in% self$table_featuredata$featureId[self$table_featuredata$keep], 
+        self$table_trend_data$featureId %in% self$table_featuredata$featureId[self$table_featuredata$keep], 
       ]
     } else {
       plot_data <- self$table_trend_data
     }
     
     p <- plot_data |> 
-      ggplot2::ggplot(ggplot2::aes(x = .data$sampleName,
+      ggplot2::ggplot(ggplot2::aes(x = .data$sampleId,
                                    y = .data$log2fc,
-                                   group = .data$id)) +
+                                   group = .data$featureId)) +
       ggplot2::geom_hline(yintercept = -1,
                           linetype = 2,
                           colour = "black") +
@@ -309,7 +309,7 @@ qc_apply_rsd <- function(self = NULL) {
   rsd_data <- self$table_rsd_data
   rsd_limit <- self$qc_rsd_limit
   
-  keep <- rsd_data$id[rsd_data$rsd <= rsd_limit]
+  keep <- rsd_data$featureId[rsd_data$rsd <= rsd_limit]
   self$table_featuredata$keep_rsd <- self$table_featuredata$featureId %in% keep
   
   return(invisible(self))
@@ -335,8 +335,8 @@ qc_calc_cor <- function(self = NULL) {
     index_pools <- self$index_pools
     index_samples <- self$index_samples
     
-    data_df <- self$table_analysis[c(index_pools, index_samples), ]
-    rownames(data_df) <- data_df$sampleName
+    data_df <- self$table_analysis[self$table_analysis$sampleId %in% c(index_pools, index_samples), ]
+    rownames(data_df) <- data_df$sampleId
     data_df <- t(data_df[, -1])
     
     data_df[data_df == 0] <- 1
