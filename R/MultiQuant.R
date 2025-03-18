@@ -25,6 +25,18 @@ MultiQuant <- R6::R6Class(
                                          "'"))
       }
     },
+    data_to_extract = function(value) {
+      if(missing(value)) {
+        private$.data_to_extract
+      } else {
+        value <- match.arg(arg = value,
+                           choices = c("Area", "Area_Ratio"))
+        private$.data_to_extract <- value
+        private$add_log(message = paste0("Data extracted: '", 
+                                         private$.data_to_extract,
+                                         "'"))
+      }
+    },
     regex_standards = function(value) {
       if(missing(value)) {
         private$.regex_standards
@@ -36,6 +48,7 @@ MultiQuant <- R6::R6Class(
       }
     }
   ),
+  #----------------------------------------------------------------- PUBLIC ----
   public = list(
     initialize = function(name = NA) {
       super$initialize(name)
@@ -75,16 +88,20 @@ MultiQuant <- R6::R6Class(
     #--------------------------------------------------------------- tables ----
     table_curation = NULL
   ),
+  #---------------------------------------------------------------- PRIVATE ----
   private = list(
-    #---------------------------------------------------------------- print ----
-    file_show = function() {
-      utils_file_show_mq(self = self)
-    },
+    #----------------------------------------------------------------- data ----
+    .data_to_extract = NULL,
     #-------------------------------------------------------------- indices ----
     .id_col_data = "Sample_Name",
     
     #----------------------------------------------------- parameters regex ----
     .regex_standards = NULL,
+    
+    #---------------------------------------------------------------- print ----
+    file_show = function() {
+      utils_file_show_mq(self = self)
+    },
     
     #----------------------------------------------------- import functions ----
     import_data = function() {

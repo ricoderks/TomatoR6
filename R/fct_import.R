@@ -200,7 +200,7 @@ import_curation_mq <- function(self = NULL) {
 #' 
 #' @importFrom utils read.table
 #'
-read_msdial = function(file = NULL) {
+read_msdial <- function(file = NULL) {
   data_df <- utils::read.table(file = file,
                                header = TRUE,
                                sep = "\t",
@@ -253,7 +253,7 @@ read_lipidyzer <- function(file = NULL,
 #' 
 #' @returns cleaned up data.frame
 #' 
-cleanup = function(data_df = NULL) {
+cleanup <- function(data_df = NULL) {
   # add unique ID
   data_df$polarity <- ifelse(grepl(pattern = "\\+$",
                                    x = data_df$`Adduct type`),
@@ -287,7 +287,7 @@ cleanup = function(data_df = NULL) {
 #' 
 #' @importFrom tidyr pivot_longer all_of
 #' 
-make_table_long_msdial = function(self = NULL) {
+make_table_long_msdial <- function(self = NULL) {
   data_wide <- self$table_rawdata
   sample_col_names <- c(self$index_blanks, self$index_qcs, self$index_pools, self$index_samples)
   
@@ -318,7 +318,7 @@ make_table_long_msdial = function(self = NULL) {
 #' 
 #' @importFrom tidyr pivot_wider
 #' 
-make_table_wide = function(self = NULL) {
+make_table_wide <- function(self = NULL) {
   data_long <- self$table_alldata_long
   
   data_wide <- data_long |> 
@@ -350,7 +350,7 @@ make_table_wide = function(self = NULL) {
 #' 
 #' @importFrom tidyr pivot_longer all_of
 #' 
-make_table_long_lipidyzer = function(self = NULL) {
+make_table_long_lipidyzer <- function(self = NULL) {
   data_wide <- self$table_rawdata
   features <- colnames(data_wide)[-1]
   
@@ -374,6 +374,32 @@ make_table_long_lipidyzer = function(self = NULL) {
 }
 
 
+#' @title Make data.frame with lipidyzer results long
+#' 
+#' @description
+#' Make data.frame with lipidyzer results long.
+#' 
+#' @param self data.frame in wide format.
+#' 
+#' @noRd
+#' 
+#' @returns self (invisible).
+#' 
+#' @importFrom tidyr pivot_longer all_of
+#' 
+extract_table_long_mq <- function(self = NULL) {
+  data_long <- self$table_rawdata
+
+  data_long <- data_long[, c("Component_Index", "Sample_Index", "Area")]
+  # colnames(data_long) <- 
+
+  self$table_alldata_long <- data_long
+  self$table_analysis_long <- data_long
+  
+  return(invisible(self))
+}
+
+
 #' @title Extract lipid feature data from MS-DIAL results
 #' 
 #' @description
@@ -385,7 +411,7 @@ make_table_long_lipidyzer = function(self = NULL) {
 #' 
 #' @returns self (invisible)
 #' 
-extract_lipid_data_msdial = function(self = NULL) {
+extract_lipid_data_msdial <- function(self = NULL) {
   data_df <- self$table_rawdata
   
   data_df <- data_df[, c("id", "Metabolite name", "Ontology", "Adduct type", "Average Rt(min)", "Average Mz")]
@@ -440,7 +466,7 @@ extract_lipid_data_msdial = function(self = NULL) {
 #' 
 #' @returns self (invisible)
 #' 
-extract_lipid_data_lipidyzer = function(self = NULL,
+extract_lipid_data_lipidyzer <- function(self = NULL,
                                         private = NULL) {
   features <- colnames(self$table_rawdata)[-1]
   
@@ -486,7 +512,7 @@ extract_lipid_data_lipidyzer = function(self = NULL,
 #' 
 #' @returns self (invisible)
 #' 
-extract_metabolite_data = function(self = NULL) {
+extract_metabolite_data <- function(self = NULL) {
   data_df <- self$table_rawdata
   
   data_df <- data_df[, c("id", "Metabolite name", "Ontology", "Adduct type", "Average Rt(min)", "Average Mz")]
