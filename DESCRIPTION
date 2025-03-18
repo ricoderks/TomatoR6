@@ -2,7 +2,23 @@ Package: TomatoR6
 Title: This defines the class for the Tomato package
 Version: 0.0.3
 Authors@R: 
-    person("Rico", "Derks", , "r.j.e.derks@lumc.nl", role = c("cre", "aut"))
+    c(
+      person(given = "Rico", 
+             family = "Derks", 
+             email = "r.j.e.derks@lumc.nl", 
+             role = c("cre", "aut"),
+             comment = c(ORCID = "0000-0002-8920-7133 ")),
+      person(given = "Yassene",
+             family = "Mohammed", 
+             email = "y.mohammed@lumc.nl",
+             role = c("aut"),
+             comment = c(ORCID = "0000-0003-3265-3332")),
+      person(given = "Marieke",
+             family = "Heijink",
+             email = "m.heijink@lumc.nl",
+             role = c("aut"),
+             comment = c(ORCID = "0000-0002-5999-2513 "))
+      )
 Description: This packages contain the R6 classes for the Tomato package.
 License: GPL (>= 3)
 URL: https://github.com/ricoderks/TomatoR6
