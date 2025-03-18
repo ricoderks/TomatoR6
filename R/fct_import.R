@@ -90,9 +90,9 @@ import_lipidyzer <- function(self = self) {
     
     data_df <- rbind.data.frame(data_df, tmp)
   }
-  colnames(data_df)[1] <- "sampleName"
+  colnames(data_df)[1] <- "sampleId"
   order_cols <- sort(colnames(data_df)[-1])
-  data_df <- data_df[, c("sampleName", order_cols)]
+  data_df <- data_df[, c("sampleId", order_cols)]
   self$table_rawdata <- data_df
   
   return(invisible(self))
@@ -362,10 +362,10 @@ make_table_long_lipidyzer <- function(self = NULL) {
     )
   
   data_long <- as.data.frame(data_long)
-  featureNames <- unique(data_long$featureName)
-  ids <- 1:length(featureNames)
-  names(ids) <- featureNames
-  data_long$id <- ids[data_long$featureName]
+  featureId <- unique(data_long$featureId)
+  ids <- 1:length(featureId)
+  names(ids) <- featureId
+  data_long$featureId <- ids[data_long$featureId]
   
   self$table_alldata_long <- data_long
   self$table_analysis_long <- data_long
