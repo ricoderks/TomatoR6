@@ -26,7 +26,7 @@ if(dev) {
   obj1$batch_column <- "batch"
   
   # set preprocessing steps
-  obj1$preprocessing_steps <- c("rsd_filter", "blank_filter")
+  obj1$preprocessing_steps <- c("rsd_filter", "blank_filter", "total_normalisation")
   
   # set params
   # rsd
