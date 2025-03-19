@@ -15,7 +15,7 @@ blank_calc_ratio <- function(self = NULL) {
   blank_index <- self$index_blanks
   if(length(blank_index) == 0) {
     cli::cli_abort(message = "No blanks specified!",
-                   call = "")
+                   call = NULL)
   }
   feature_data <- self$table_featuredata
   sample_index <- self$index_samples
