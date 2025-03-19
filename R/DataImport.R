@@ -447,7 +447,7 @@ DataImport <- R6::R6Class(
     #--------------------------------------------------------------- import ----
     import_metadata = function() {
       import_read_metadata(self = self)
-      check_meta_column(self = self)
+      # check_meta_column(self = self)
     },
     extract_indices = function() {
       extract_indices(self = self)

@@ -108,16 +108,17 @@ import_lipidyzer <- function(self = self) {
 #' 
 #' @returns self (invisible).
 #' 
+#' @importFrom stats na.omit
+#' 
 #' @noRd
 #' 
 import_multiquant <- function(self = NULL) {
   keep_columns <- c(
-    "Index", "Sample Index", "Sample Name", "Sample ID", "Sample Type",
-    "Acquisition Date & Time", "Dilution Factor", "IS", "Component Name",
-    "Component Index", "IS Name", "IS Area", "Actual Concentration",
-    "Area", "Area Ratio", "Height", "Retention Time", "Signal / Noise",
-    "Relative RT", "Used", "Calculated Concentration", "Accuracy",
-    "Width at 10%"
+    "Sample Index", "Sample Name", "Sample Type",
+    "Acquisition Date & Time", "Component Name", "Component Index", "Polarity",
+    "IS", "IS Name", "IS Retention Time", "IS Area", "Actual Concentration",
+    "Area", "Area Ratio", "Height", "Retention Time", "Relative RT", 
+    "Calculated Concentration"
   )
   
   data_df <- read.table(
@@ -126,38 +127,77 @@ import_multiquant <- function(self = NULL) {
     sep = "\t",
     colClasses = c(
       "Index" = "integer",
-      "Sample Index" = "integer",
+      "Sample Index" = "character",
       "Sample Name"= "character",
-      "Sample ID" = "character",
-      "Sample Type" = "factor",
+      "Sample Type" = "character",
       "Acquisition Date & Time" = "character",
-      "Dilution Factor" = "numeric",
-      "IS" = "logical",
       "Component Name" = "character",
       "Component Index" = "integer",
-      "IS Name" = "factor",
+      "Polarity" = "character",
+      "IS" = "logical",
+      "IS Name" = "character",
+      "IS Retention Time" = "numeric",
       "IS Area" = "numeric",
       "Actual Concentration" = "numeric",
       "Area" = "numeric",
       "Area Ratio" = "numeric",
       "Height" = "numeric",
       "Retention Time" = "numeric",
-      "Signal / Noise" = "numeric",
       "Relative RT" = "numeric",
-      "Used" = "logical",
-      "Calculated Concentration" = "character",
-      "Accuracy" = "numeric",
-      "Width at 10%" = "numeric"
+      "Calculated Concentration" = "character"
     ),
-    na.strings = c("N/A"),
+    na.strings = c("", "NA", "N/A"),
     check.names = FALSE
   )
   
   data_df <- data_df[, keep_columns]
-  colnames(data_df) <- mq_fix_column_names(col_names = colnames(data_df))
-  data_df$Acquisition_Date_and_Time <- as.POSIXct(data_df$Acquisition_Date_and_Time,
-                                                  format = "%m/%d/%Y %H:%M:%OS",
-                                                  tz = Sys.timezone())
+  colnames(data_df) <- c("sampleId", "sampleName", "sampleType", "acqDateTime",
+                         "featureName", "featureId", "polarity", "istd", 
+                         "istdFeatureName", "istdRt", "istdPeakArea", "actualConc", 
+                         "peakArea", "areaRatio", "peakHeight", "rt", "relativeRt",
+                         "calculatedConc")
+  data_df$acqDateTime <- as.POSIXct(data_df$acqDateTime,
+                                    format = "%m/%d/%Y %H:%M:%OS",
+                                    tz = "UTC")
+  # some fixes
+  data_df$calculatedConc <- as.numeric(gsub(x = data_df$calculatedConc,
+                                            pattern = "^(\\d*\\.\\d*)?.*$",
+                                            replacement = "\\1"))
+  data_df$polarity <- ifelse(data_df$polarity == "Negative",
+                             "neg",
+                             "pos")
+  data_df$rt <- data_df$rt * 60
+  data_df$mz <- NA_real_
+  
+  # internal standard stuff
+  data_df <- data_df[!data_df$istd, ]
+  data_df$istdFeatureName[data_df$istdFeatureName == "(No IS)"] <- NA
+  
+  istd_df <- data.frame(
+    istdFeatureName = stats::na.omit(unique(data_df$istdFeatureName))
+  )
+  if(nrow(istd_df) > 0) {
+    istd_df$istdFeatureId <- 1:nrow(istd_df)
+    
+    data_df <- merge(
+      x = data_df,
+      y = istd_df,
+      by = "istdFeatureName",
+      all.x = TRUE
+    )
+  } else {
+    data_df$istdFeatureId <- NA
+  }
+  
+  # injection order
+  sampleIds <- unique(data_df$sampleId[order(data_df$acqDateTime)])
+  for(a in 1:length(sampleIds)) {
+    data_df$injOrder[data_df$sampleId == sampleIds[a]] <- as.integer(a)
+  }
+  
+  # final cleanup
+  data_df$istd <- NULL
+  
   self$table_rawdata <- data_df
   
   return(invisible(self))
@@ -180,6 +220,7 @@ import_multiquant <- function(self = NULL) {
 import_curation_mq <- function(self = NULL) {
   data_df <- openxlsx2::read_xlsx(file = self$file_curation,
                                   sheet = 1)
+  colnames(data_df)[5:6] <- c("cl", "clComments")
   
   self$table_curation <- data_df
   
@@ -328,7 +369,7 @@ make_table_wide <- function(self = NULL) {
       values_from = "value"
     )
   data_wide <- as.data.frame(data_wide)
-  rownames(data_wide) <- data_wide$sampleName
+  rownames(data_wide) <- data_wide$sampleId
   
   self$table_alldata <- data_wide
   self$table_analysis <- data_wide
@@ -390,8 +431,15 @@ make_table_long_lipidyzer <- function(self = NULL) {
 extract_table_long_mq <- function(self = NULL) {
   data_long <- self$table_rawdata
 
-  data_long <- data_long[, c("Component_Index", "Sample_Index", "Area")]
-  # colnames(data_long) <- 
+  data_col <- switch(
+    self$data_to_extract,
+    "Area" = "peakArea",
+    "Area_Ratio" = "areaRatio",
+    "peakArea"
+  )
+  
+  data_long <- data_long[, c("featureId", "sampleId", data_col)]
+  colnames(data_long)[3] <- "value"
 
   self$table_alldata_long <- data_long
   self$table_analysis_long <- data_long
@@ -543,8 +591,8 @@ extract_metabolite_data <- function(self = NULL) {
 extract_features_mq <- function(self = NULL) {
   data_df <- self$table_rawdata
   
-  data_df <- unique(data_df[, c("Component_Index", "Component_Name", "IS", "IS_Name")])
-  colnames(data_df) <- c("featureId", "featureName", "istdId", "istdName")
+  data_df <- unique(data_df[, c("featureId", "featureName", "polarity", "istdFeatureName")])
+  data_df$class <- NA
   
   # for now keep all features
   data_df$keep <- TRUE
@@ -667,4 +715,32 @@ mq_fix_column_names <- function(col_names = NULL) {
                     replacement = "number")
   
   return(col_names)
+}
+
+
+#' @title Extract meta data from MultiQuant data
+#' 
+#' @description
+#' Extract meta data from MultiQuant data.
+#' 
+#' @details
+#' The raw data is used to extract to injection order based on the acquisition 
+#' date and time.
+#' 
+#' @param self  class object.
+#' 
+#' @returns self (invisible).
+#' 
+#' @noRd
+#' 
+extract_meta_from_raw <- function(self = NULL) {
+  
+  self$table_metadata <- merge(
+    x = self$table_metadata,
+    y = unique(self$table_rawdata[, c("sampleId", "sampleName", "injOrder")]),
+    by = "sampleName",
+    all.x = TRUE
+  )
+  
+  return(invisible(self))  
 }

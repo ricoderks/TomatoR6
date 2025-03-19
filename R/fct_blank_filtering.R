@@ -9,9 +9,15 @@
 #' 
 #' @returns self (invisible).
 #' 
+#' @importFrom cli cli_abort
+#' 
 blank_calc_ratio <- function(self = NULL) {
-  feature_data <- self$table_featuredata
   blank_index <- self$index_blanks
+  if(length(blank_index) == 0) {
+    cli::cli_abort(message = "No blanks specified!",
+                   call = "")
+  }
+  feature_data <- self$table_featuredata
   sample_index <- self$index_samples
   blank_data <- self$table_analysis_long[self$table_analysis_long$sampleId %in% blank_index, ]
   sample_data <- self$table_analysis_long[self$table_analysis_long$sampleId %in% sample_index, ]
