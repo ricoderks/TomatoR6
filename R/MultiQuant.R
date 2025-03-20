@@ -41,6 +41,11 @@ MultiQuant <- R6::R6Class(
       if(missing(value)) {
         private$.extract_metadata
       } else {
+        if(value) { 
+          cli::cli_alert_info("Do **NOT** change the fields: ")
+          cli::cli_li("`id_col_meta`")
+          cli::cli_li("`order_column")
+        }
         private$.extract_metadata <- value
         self$id_col_meta <- "sampleId"
         self$order_column <- "injOrder"
@@ -134,6 +139,9 @@ MultiQuant <- R6::R6Class(
     },
     import_curation = function() {
       import_curation_mq(self = self)
+      filter_curation_mq(self = self)
+      private$set_analysis_features()
+      private$extract_analysis_table()
     },
     extract_featuredata = function() {
       extract_features_mq(self = self)
