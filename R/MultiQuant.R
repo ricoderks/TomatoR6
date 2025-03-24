@@ -125,7 +125,9 @@ MultiQuant <- R6::R6Class(
       private$add_log("Calculated normalized area ratio!")
       cli::cli_alert_success("Done!")
     },
-    
+    plot_norm_totalarea = function() {
+      plot_norm_arearatio(self = self)
+    },
     #---------------------------------------------------------------- files ----
     .file_curation = NULL,
     

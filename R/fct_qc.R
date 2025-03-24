@@ -449,8 +449,8 @@ qc_calc_norm_arearatio <- function(self = NULL) {
 plot_norm_arearatio <- function(self = NULL) {
   p <- self$table_norm_arearatio_long |> 
     ggplot2::ggplot(ggplot2::aes(x = .data$value, 
-                                 y = .data[[obj3$type_column]], 
-                                 color = .data[[obj3$type_column]])) +
+                                 y = .data[[self$type_column]], 
+                                 color = .data[[self$type_column]])) +
     ggplot2::geom_jitter(height = 0.3, 
                          width = 0) +
     ggplot2::scale_x_continuous(trans = "log10") +
