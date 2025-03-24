@@ -8,10 +8,10 @@ if(dev) {
   
   # set files
   obj3$file_data <- c(
-    "/home/rjederks/Downloads/TomatoR6_data/sciex_mq_example_4_noIS.txt"
+    "/home/ricoderks/Downloads/TomatoR6_data/sciex_mq_example_4_noIS.txt"
   )
-  obj3$file_meta <- "/home/rjederks/Downloads/TomatoR6_data/sciex_mq_example_4_noIS_metadata.xlsx"
-  obj3$file_curation <- "/home/rjederks/Downloads/TomatoR6_data/sciex_mq_example_4_noIS_notes-integration.xlsx"
+  obj3$file_meta <- "/home/ricoderks/Downloads/TomatoR6_data/sciex_mq_example_4_noIS_metadata.xlsx"
+  obj3$file_curation <- "/home/ricoderks/Downloads/TomatoR6_data/sciex_mq_example_4_noIS_notes-integration.xlsx"
   
   # set regex's
   # obj3$regex_blanks <- "blank"
@@ -40,7 +40,7 @@ if(dev) {
   obj3$blank_group_threshold <- 0.8
   
   # set preprocessing steps
-  obj3$preprocessing_steps <- c("blank_filter")
+  obj3$preprocessing_steps <- c("rsd_filter")
   
   
   #----------

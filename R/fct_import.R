@@ -207,7 +207,7 @@ import_multiquant <- function(self = NULL) {
 #' @title Import MultiQuant curation data
 #' 
 #' @description
-#' Import MulitQuant curation data.
+#' Import MultiQuant curation data.
 #' 
 #' @param self class object.
 #' 
@@ -221,6 +221,16 @@ import_curation_mq <- function(self = NULL) {
   data_df <- openxlsx2::read_xlsx(file = self$file_curation,
                                   sheet = 1)
   colnames(data_df)[5:6] <- c("cl", "clComments")
+  
+  data_df$cl[is.na(data_df$cl)] <- FALSE
+  
+  # extract lloq and uloq, do I need this?
+  data_df$lloq <- as.numeric(gsub(x = data_df$clComments,
+                                  pattern = "^[a-zA-Z ]*([0-9]*) ?- ?([0-9]*)$",
+                                  replacement = "\\1"))
+  data_df$uloq <- as.numeric(gsub(x = data_df$clComments,
+                                  pattern = "^[a-zA-Z ]*([0-9]*) ?- ?([0-9]*)$",
+                                  replacement = "\\2"))
   
   self$table_curation <- data_df
   
@@ -734,7 +744,6 @@ mq_fix_column_names <- function(col_names = NULL) {
 #' @noRd
 #' 
 extract_meta_from_raw <- function(self = NULL) {
-  
   self$table_metadata <- merge(
     x = self$table_metadata,
     y = unique(self$table_rawdata[, c("sampleId", "sampleName", "injOrder")]),
@@ -753,12 +762,23 @@ extract_meta_from_raw <- function(self = NULL) {
 #' 
 #' @param self class object.
 #' 
+#' @details
+#' Set the column `keep_curation` in the curation table.
+#' 
 #' @returns self (invisible).
 #' 
 #' @noRd
 #' 
 filter_curation_mq <- function(self = NULL) {
+  curation_data <- self$table_curation
+  feature_data <- self$table_featuredata
   
+  keep_features <- curation_data$componentName[curation_data$integrated == "yes" &
+                                                 curation_data$cl == TRUE]
+  
+  feature_data$keep_curation <- feature_data$featureName %in% keep_features
+  
+  self$table_featuredata <- feature_data
   
   return(invisible(self))
 }

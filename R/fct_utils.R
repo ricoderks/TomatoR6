@@ -102,15 +102,21 @@ utils_sample_show <-  function(self = NULL) {
 #' 
 #' @param self object of class DataImport.
 #' 
+#' @details
+#' All columns starting with `keep_` will be evaluated and the result is stored
+#' in the `keep` column.
+#' 
 #' @noRd
 #' 
-#' @returns self (invsible).
+#' @returns self (invisible).
 #' 
 utils_analysis_features <- function(self = NULL) {
+  keep_cols <- colnames(self$table_featuredata)[grepl(x = colnames(self$table_featuredata),
+                                                      pattern = "^keep_.*")]
+  
   for(a in 1:nrow(self$table_featuredata)) {
     self$table_featuredata$keep[a] <- all(
-      self$table_featuredata$keep_rsd[a], 
-      self$table_featuredata$keep_sample_blank[a]
+      self$table_featuredata[a, keep_cols]
     )
   }
   
