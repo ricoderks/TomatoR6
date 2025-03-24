@@ -23,7 +23,7 @@ if(dev) {
   # these two will be overriden when obj3$extract_metadata is set to TRUE
   # obj3$id_col_meta <- "sampleId"
   # obj3$order_column <- "injOrder"
-  obj3$data_to_extract <- "Area"
+  obj3$data_to_extract <- "Area_Ratio"
   obj3$type_column <- "sampleType"
   obj3$group_column <- "blocks"
   obj3$batch_column <- "batch"

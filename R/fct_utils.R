@@ -187,8 +187,8 @@ utils_make_analysis_long <- function(df = NULL) {
   df_long <- df |> 
     tidyr::pivot_longer(
       cols = tidyr::all_of(colnames(df)[-1]),
-      names_to = "id",
-      values_to = "peakArea"
+      names_to = "featureId",
+      values_to = "value"
     )
   
   df_long <- as.data.frame(df_long)

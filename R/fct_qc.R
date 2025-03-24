@@ -393,3 +393,73 @@ qc_plot_cor <- function(self = NULL) {
     return(p)
   }
 }
+
+
+#' @title Calculate the area ratio normalized to the mean
+#' 
+#' @description
+#' Calculate the area ratio normalized to the mean.
+#' 
+#' @param self object of class DataImport.
+#' 
+#' @noRd
+#' 
+#' @returns self (invisible).
+#' 
+qc_calc_norm_arearatio <- function(self = NULL) {
+  data_df <- self$table_analysis
+  data_long_df <- self$table_analysis_long
+  meta_data <- self$table_metadata
+  idx_qcs <- self$index_qcs
+  idx_pools <- self$index_pools
+  
+  idx_all <- c(idx_qcs, idx_pools)
+  
+  norm_data <- data_df[data_df$sampleId %in% idx_all, ]
+  norm_data[, -1] <- t(t(norm_data[, -1]) / colMeans(norm_data[, -1], na.rm = TRUE))
+  
+  norm_data_long <- utils_make_analysis_long(df = norm_data)
+  norm_data_long <- merge(
+    x = norm_data_long,
+    y = meta_data,
+    by = "sampleId"
+  )
+  
+  self$table_norm_arearatio <- norm_data
+  self$table_norm_arearatio_long <- norm_data_long
+  
+  return(invisible(self))
+}
+
+
+#' @title Create normalized area ratio plot
+#' 
+#' @description
+#' Create normalized area ratio plot.
+#' 
+#' @param self class object.
+#' 
+#' @returns normalized area ratio plot (ggplot2 object).
+#' 
+#' @importFrom ggplot2 aes .data geom_jitter scale_x_continuous facet_grid vars 
+#'     labs theme element_blank element_text
+#' 
+#' @noRd
+#' 
+plot_norm_arearatio <- function(self = NULL) {
+  p <- self$table_norm_arearatio_long |> 
+    ggplot2::ggplot(ggplot2::aes(x = .data$value, 
+                                 y = .data[[obj3$type_column]], 
+                                 color = .data[[obj3$type_column]])) +
+    ggplot2::geom_jitter(height = 0.3, 
+                         width = 0) +
+    ggplot2::scale_x_continuous(trans = "log10") +
+    ggplot2::facet_grid(rows = ggplot2::vars(.data$featureId)) +
+    ggplot2::labs(title = "Comparison signal over samples",
+                  subtitle = "area ratio normalized to average") +
+    ggplot2::theme(axis.text.y = ggplot2::element_blank(),
+                   axis.title.y = ggplot2::element_blank(),
+                   strip.text.y = ggplot2::element_text(angle = 0))
+  
+  return(p)
+}

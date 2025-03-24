@@ -744,3 +744,21 @@ extract_meta_from_raw <- function(self = NULL) {
   
   return(invisible(self))  
 }
+
+
+#' @title Filter the data based on curation data
+#' 
+#' @description
+#' Filter the data based on the data in the curation file.
+#' 
+#' @param self class object.
+#' 
+#' @returns self (invisible).
+#' 
+#' @noRd
+#' 
+filter_curation_mq <- function(self = NULL) {
+  
+  
+  return(invisible(self))
+}

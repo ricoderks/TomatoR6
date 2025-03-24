@@ -101,12 +101,33 @@ MultiQuant <- R6::R6Class(
       cli::cli_end()
       cli::cli_alert_success("Done!")
     },
+    calc_qc = function() {
+      cli::cli_h3("Calculate QC")
+      cli::cli_li("calculating 'RSD'")
+      private$calc_qcpool_rsd()
+      private$add_log("Calculated RSD data qcpools!")
+      
+      cli::cli_li("calculating 'trend'")
+      private$calc_qcpool_trend()
+      private$add_log("Calculated trend data qcpools!")
+      
+      cli::cli_li("calculating 'correlation'")
+      private$calc_correlation()
+      private$add_log("Calculated sample/qcpools correlation!")
+      
+      cli::cli_li("calculating 'normalized area ratio'")
+      private$calc_norm_arearatio()
+      private$add_log("Calculated normalized area ratio!")
+      cli::cli_alert_success("Done!")
+    },
     
     #---------------------------------------------------------------- files ----
     .file_curation = NULL,
     
     #--------------------------------------------------------------- tables ----
-    table_curation = NULL
+    table_curation = NULL,
+    table_norm_arearatio = NULL,
+    table_norm_arearatio_long = NULL
   ),
   #---------------------------------------------------------------- PRIVATE ----
   private = list(
@@ -134,6 +155,7 @@ MultiQuant <- R6::R6Class(
     },
     import_curation = function() {
       import_curation_mq(self = self)
+      filter_curation_mq(self = self)
     },
     extract_featuredata = function() {
       extract_features_mq(self = self)
@@ -146,6 +168,9 @@ MultiQuant <- R6::R6Class(
     },
     make_data_wide = function() {
       make_table_wide(self = self)
+    },
+    calc_norm_arearatio = function() {
+      qc_calc_norm_arearatio(self = self)
     }
   )
 )
