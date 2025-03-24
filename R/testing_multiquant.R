@@ -51,7 +51,7 @@ if(dev) {
   obj3$plot_qc_rsd()
   obj3$plot_qc_cor()
   obj3$plot_qc_trend()
-  obj3$plot
+  obj3$plot_norm_totalarea()
   
   obj3$preprocessing()
   
